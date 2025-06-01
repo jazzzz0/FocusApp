@@ -1,0 +1,37 @@
+# Archivos y directorios generales
+.DS_Store      
+.env          
+*.env
+*.log
+.vscode/       
+
+# Backend Django
+###################
+/backend/env/
+/backend/__pycache__/
+**/__pycache__/
+/backend/*.sqlite3
+/backend/media/
+/backend/static/
+/backend/.pytest_cache/
+/backend/.coverage
+/backend/celerybeat-schedule
+/backend/site.prod.ini
+/backend/local_settings.py
+
+# Frontend React
+###################
+/frontend/node_modules/
+/frontend/build/
+/frontend/.parcel-cache/
+/frontend/.yarn/cache/
+/frontend/.next/
+/frontend/dist/
+
+# Archivos específicos de sistemas operativos o editores
+Thumbs.db
+ehthumbs.db
+.Trash-1000
+*.swp
+*.swo
+*~
