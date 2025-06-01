@@ -29,7 +29,7 @@ Para comenzar a trabajar en el proyecto, sigue estos pasos:
 
 Primero, clona el repositorio a tu máquina local:
 ```
-git clone <URL_DEL_REPOSITORIO>
+git clone https://github.com/jazzzz0/FocusApp.git
 cd FocusApp
 ```
 
