@@ -6,8 +6,8 @@
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
+  height: 15%;
+  padding: 2em;
   will-change: filter;
   transition: filter 300ms;
 }
@@ -39,4 +39,143 @@
 
 .read-the-docs {
   color: #888;
+}
+/* Estilos básicos para el formulario */
+:root {
+  --azul-logo: #007bff;
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 400px;
+  margin: 2rem auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.logo {
+  width: 180px;
+  max-width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  color: var(--azul-logo);
+  font-size: 1.7rem;
+  margin-bottom: 0.3rem;
+}
+.subtitle {
+  margin: 0;
+  color: #777;
+  font-size: 0.9rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-top: 1.5rem;
+}
+
+form input {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid var(--azul-logo);
+  background-color: #fff;
+  border-radius: 6px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+form input:focus {
+  border-color: #0056b3;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+button[type="submit"] {
+  background-color: var(--azul-logo);
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Ajuste específico para input de fecha */
+input[type="date"] {
+  color: #888;
+  background-color: #fff;
+  border: 1px solid var(--azul-logo);
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 1rem;
+  cursor: text;
+}
+
+/* Para que se vea bien el iconito del calendario en todos los navegadores */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(36%) sepia(86%) saturate(747%) hue-rotate(191deg) brightness(92%) contrast(96%);
+  cursor: pointer;
+}
+
+.divider {
+  margin: 1.5rem 0 1rem;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.google-button {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+}
+
+.google-button img {
+  width: 20px;
+  height: 20px;
+}
+
+.terms {
+  font-size: 0.75rem;
+  color: #38568a;
+  margin-top: 1rem;
+}
+
+.terms a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-link {
+  margin-top: 0.8rem;
+  font-size: 0.85rem;
+}
+
+.login-link a {
+  color: #007bff;
+  font-weight: bold;
+  text-decoration: none;
 }
