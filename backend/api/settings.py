@@ -12,8 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
-from decouple import Csv
-from decouple import config
+from decouple import Csv, config, RepositoryEnv, Config
 
 
 from datetime import timedelta
@@ -21,6 +20,9 @@ from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+#Esto le dice a 'decouple' dónde encontrar el archivo .env
+config = Config(RepositoryEnv(str(BASE_DIR / '.env')))
 
 
 # Quick-start development settings - unsuitable for production
