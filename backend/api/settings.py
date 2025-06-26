@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 #Esto le dice a 'decouple' dónde encontrar el archivo .env
 config = Config(RepositoryEnv(str(BASE_DIR / '.env')))
-git
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
