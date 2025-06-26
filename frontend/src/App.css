@@ -50,11 +50,11 @@ body {
   margin: 0;
   padding: 0;
 }
-
+/* Contenedor principal del formulario */
 .container {
   max-width: 400px;
   margin: 2rem auto;
-  background: white;
+  background: rgb(247, 246, 246);
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -84,25 +84,26 @@ form {
   gap: 0.9rem;
   margin-top: 1.5rem;
 }
-
+/* Estilo para las etiquetas del formulario */
 form input {
   padding: 10px;
   font-size: 1rem;
   border: 1px solid var(--azul-logo);
-  background-color: #fff;
+  background-color: #ffffff;
   border-radius: 6px;
   box-sizing: border-box;
   outline: none;
 }
-
+/* Estilo para los inputs del formulario */
 form input:focus {
   border-color: #0056b3;
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
 }
 
+/* Estilo para el botón de envío */
 button[type="submit"] {
   background-color: var(--azul-logo);
-  color: white;
+  color: rgb(252, 252, 252);
   font-weight: bold;
   padding: 10px;
   border: none;
@@ -111,7 +112,7 @@ button[type="submit"] {
   font-size: 1rem;
 }
 
-
+/* Efecto hover para el botón de envío */
 button[type="submit"]:hover {
   background-color: #0056b3;
 }
@@ -131,6 +132,14 @@ input[type="date"] {
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(36%) sepia(86%) saturate(747%) hue-rotate(191deg) brightness(92%) contrast(96%);
   cursor: pointer;
+}
+
+input::placeholder {
+  color: grey; /* Color gris para el texto de placeholder */
+}
+
+input {
+  color: black; /* Color negro para el texto que el usuario escribe */
 }
 
 .divider {
