@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     
     # apps django propias creadas con "python manage.py startapp app_name"
     'core', 
+    'users',
 ]
 
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='').split(',')
@@ -139,6 +140,8 @@ DATABASES = {
     }
 }
 
+
+AUTH_USER_MODEL = 'users.AppUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
