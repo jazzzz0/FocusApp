@@ -4,6 +4,14 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class AppUser(AbstractUser):
+    # Campo obligatorio: Email. Se sobreescribe de AbstractUser
+    email = models.EmailField(
+        unique=True,
+        blank=False, # obligatorio en forms
+        null=False, # obligatorio en DB
+        verbose_name="Dirección de correo electrónico"
+    )
+
     # Campo obligatorio: Fecha de nacimiento, por eso dejamos null&blank=False
     date_of_birth = models.DateField(
         null=False,
