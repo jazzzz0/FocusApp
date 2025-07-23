@@ -44,7 +44,7 @@ class AppUser(AbstractUser):
         help_text="Obligatorio. Provincia/Estado de residencia.",
     )
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'date_of_birth', 'country', 'province']
 
     def is_adult(self):
