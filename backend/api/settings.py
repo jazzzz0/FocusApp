@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     # apps django propias creadas con "python manage.py startapp app_name"
     'core', 
     'users',
+    'posts',
 ]
 
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='').split(',')
