@@ -1,7 +1,9 @@
 from django.db import models
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from django.utils.text import slugify
 from users.models import AppUser
-
+import os, logging
 
 class Category(models.Model):
     # atributos ID, name, slug, description
@@ -88,3 +90,21 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title or f"Post de {self.author} ({self.uploaded_at.date()})"
+
+@receiver(pre_delete, sender=Post)
+def delete_post_image(sender, instance, **kwargs):
+    logger = logging.getLogger('posts')
+    if instance.image:
+        try:
+            # Verificar si la imagen existe
+            if os.path.exists(instance.image.path):
+                # Eliminar el archivo físico
+                os.remove(instance.image.path)
+
+                # Log de éxito
+                logger.info(f"Imagen eliminada: {instance.image.path}")
+        
+        except Exception as e:
+            # Log del error pero no fallar la eliminación del post
+            logger.error(f"Error al eliminar la imagen {instance.image.path}: {str(e)}")
+            # No hacer raise para que no se interrumpa la eliminación del post
