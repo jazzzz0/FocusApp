@@ -31,6 +31,7 @@ const RegisterForm = () => {
         alert('Error: ' + JSON.stringify(data));
       }
     } catch (error) {
+      console.error(error);
       alert('Error de conexión');
     }
   };
@@ -48,6 +49,8 @@ const RegisterForm = () => {
       <input type="password" name="password" value={formData.password} onChange={handleChange} required />
       
       <button type="submit">Registrarse</button>
+      
+      <a href=""></a>
     </form>
   );
 };

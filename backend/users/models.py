@@ -1,14 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-
 # Create your models here.
 class AppUser(AbstractUser):
     # Campo obligatorio: Email. Se sobreescribe de AbstractUser
     email = models.EmailField(
         unique=True,
-        blank=False, # obligatorio en forms
-        null=False, # obligatorio en DB
+        blank=False,  # obligatorio en forms
+        null=False,   # obligatorio en DB
         verbose_name="Dirección de correo electrónico"
     )
 
@@ -44,6 +43,9 @@ class AppUser(AbstractUser):
         help_text="Obligatorio. Provincia/Estado de residencia.",
     )
 
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['date_of_birth', 'country', 'province']  # <-- email eliminado
+
     def is_adult(self):
         from datetime import date
 
@@ -65,4 +67,3 @@ class AppUser(AbstractUser):
 
         # Orden por defecto al listar usuarios
         ordering = ['username']
-
