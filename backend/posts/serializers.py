@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from users.models import AppUser
 from .models import Category, Post
 from PIL import Image
 
@@ -9,8 +10,13 @@ class CategorySerializer(serializers.ModelSerializer):
         #fields = '__all__' # Trae todos los campos
         fields = ['id', 'name', 'slug', 'description'] # Trae los campos que se especifican
 
+class AuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AppUser
+        fields = ['id', 'username', 'profile_picture_url']
 
 class PostSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(read_only=True)
     class Meta:
         model = Post
         fields = ["id", "author", "image", "title", "description", "category", "allows_ratings", "uploaded_at", "updated_at"]
