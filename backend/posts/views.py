@@ -3,6 +3,7 @@ from django.db import transaction
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from .models import Category, Post
 from .serializers import CategorySerializer, PostSerializer
@@ -26,7 +27,13 @@ class CategoryListView(APIView):
                 {"error": "No se pudieron obtener las categorías.", "detalle": str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-        
+
+class PostPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    # max_page_size = 100
+    max_page_size = 30
+
 class PostView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -102,3 +109,14 @@ class PostView(APIView):
 
     def patch(self, request, pk):
         return self.put(request, pk)
+
+    def get(self, request):
+        try:
+            posts = Post.objects.all()
+            paginator = PostPagination()
+            result_page = paginator.paginate_queryset(posts, request)
+            serializer = PostSerializer(result_page, many=True)
+            return paginator.get_paginated_response(serializer.data)
+        except Exception as e:
+            return Response({"success": False, "message": "No se pudieron obtener las publicaciones.", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
