@@ -70,3 +70,35 @@ class PostView(APIView):
 
         except Exception as e:
                 return Response({"success": False, "message": "Error interno del servidor"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def put(self, request, pk):
+        logger = logging.getLogger('posts')
+
+        try:
+            post = Post.objects.get(id=pk)
+            if post.author != request.user:
+                return Response({"success":False, "message": "No puedes editar este post."}, status=status.HTTP_403_FORBIDDEN)
+
+            serializer = PostSerializer(post, data=request.data, partial=True, context={'request': request})
+
+            if serializer.is_valid():
+                serializer.save()
+                
+                # Log de actualización exitosa
+                logger.info(f"Post actualizado: Usuario {post.author.username} - Post ID: {post.id} - Campos modificados: {list(request.data.keys())}")
+                
+                return Response({"success": True, "data": serializer.data}, status=status.HTTP_200_OK)
+            else:
+                logger.warning(f"Error de validación al actualizar el post ID {pk}: {serializer.errors}")
+                return Response({"success":False, "message": "Error de validación", "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Post.DoesNotExist:
+            logger.warning(f"No se puede actualizar un post inexistente")
+            return Response({"success": False, "message": "Post no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            logger.error(f"Error al actualizar el post ID {pk}: {str(e)}")
+            return Response({"success": False, "message": "Error interno del servidor"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def patch(self, request, pk):
+        return self.put(request, pk)
