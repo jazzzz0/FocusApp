@@ -85,3 +85,18 @@ class PostSerializer(serializers.ModelSerializer):
         post.save()
 
         return post
+
+    def update(self, instance, validated_data):
+
+        # Campos editables
+        editable_fields = ['title', 'description', 'category', 'allows_ratings']
+        
+        # Filtrar solo los campos editable
+        filtered_data = {k: v for k, v in validated_data.items() if k in editable_fields}
+
+        for attr, value in filtered_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+
+        return instance
