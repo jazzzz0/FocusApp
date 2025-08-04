@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from .models import Category, Post
+from users.models import AppUser
 from .serializers import CategorySerializer, PostSerializer
 import logging
 import os
@@ -110,6 +111,18 @@ class PostView(APIView):
     def patch(self, request, pk):
         return self.put(request, pk)
 
+    def _apply_filters(self, queryset, request):
+        if 'author' in request.query_params:
+            author_id = request.query_params['author']
+
+            try:
+                user = AppUser.objects.get(id=author_id)
+                queryset = queryset.filter(author=user)
+            except AppUser.DoesNotExist:
+                raise AppUser.DoesNotExist(f"Usuario con ID {author_id} no existe")
+        return queryset
+
+
     def get(self, request, pk=None):
         try:
             if pk:
@@ -118,12 +131,16 @@ class PostView(APIView):
                 return Response({"success": True, "data": serializer.data}, status=status.HTTP_200_OK)
 
             posts = Post.objects.all()
+            posts = self._apply_filters(posts, request)
+
             paginator = PostPagination()
             result_page = paginator.paginate_queryset(posts, request)
             serializer = PostSerializer(result_page, many=True)
             return paginator.get_paginated_response(serializer.data)
         except Post.DoesNotExist:
             return Response({"success": False, "message": "Post no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+        except AppUser.DoesNotExist as e:
+            return Response({"success": False, "message": str(e)}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"success": False, "message": "No se pudieron obtener las publicaciones.", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
