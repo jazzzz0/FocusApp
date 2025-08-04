@@ -120,6 +120,15 @@ class PostView(APIView):
                 queryset = queryset.filter(author=user)
             except AppUser.DoesNotExist:
                 raise AppUser.DoesNotExist(f"Usuario con ID {author_id} no existe")
+
+        if 'category' in request.query_params:
+            category_id = request.query_params['category']
+            try:
+                category = Category.objects.get(id=category_id)
+                queryset = queryset.filter(category=category)
+            except Category.DoesNotExist:
+                raise Category.DoesNotExist(f"La categoría ID {category_id} no existe")
+
         return queryset
 
 
@@ -140,6 +149,8 @@ class PostView(APIView):
         except Post.DoesNotExist:
             return Response({"success": False, "message": "Post no encontrado"}, status=status.HTTP_404_NOT_FOUND)
         except AppUser.DoesNotExist as e:
+            return Response({"success": False, "message": str(e)}, status=status.HTTP_404_NOT_FOUND)
+        except Category.DoesNotExist as e:
             return Response({"success": False, "message": str(e)}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"success": False, "message": "No se pudieron obtener las publicaciones.", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
