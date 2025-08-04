@@ -110,13 +110,20 @@ class PostView(APIView):
     def patch(self, request, pk):
         return self.put(request, pk)
 
-    def get(self, request):
+    def get(self, request, pk=None):
         try:
+            if pk:
+                post = Post.objects.get(id=pk)
+                serializer = PostSerializer(post)
+                return Response({"success": True, "data": serializer.data}, status=status.HTTP_200_OK)
+
             posts = Post.objects.all()
             paginator = PostPagination()
             result_page = paginator.paginate_queryset(posts, request)
             serializer = PostSerializer(result_page, many=True)
             return paginator.get_paginated_response(serializer.data)
+        except Post.DoesNotExist:
+            return Response({"success": False, "message": "Post no encontrado"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"success": False, "message": "No se pudieron obtener las publicaciones.", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
