@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'core', 
     'users',
     'posts',
+    'ratings'
 ]
 
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='').split(',')
