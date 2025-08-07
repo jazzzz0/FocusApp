@@ -4,7 +4,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils import timezone
 from datetime import timedelta
 
-from django.utils.ipv6 import ValidationError
+from django.core.exceptions import ValidationError
 
 from posts.models import Post
 from users.models import AppUser
@@ -73,6 +73,19 @@ class Rating(models.Model):
         """Verifica si la valoración puede ser editada en el rango de 24 horas"""
         time_limit = self.created_at + timedelta(hours=24)
         return timezone.now() <= time_limit
+
+    def clean(self):
+        super().clean()
+        if self.rater == self.post.author:
+            raise ValidationError("No puedes valorar tu propia publicación.")
+
+        if not self.post.allows_ratings:
+            raise ValidationError("Esta publicación no permite valoraciones.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
 
     def get_average_score(self):
         """Calcula la puntuación promedio de esta valoración individual"""
