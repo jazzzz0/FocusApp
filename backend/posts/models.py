@@ -2,7 +2,10 @@ from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from django.utils.text import slugify
+
 from users.models import AppUser
+
+
 import os, logging
 
 class Category(models.Model):
@@ -88,6 +91,19 @@ class Post(models.Model):
         verbose_name = "Publicación"
         verbose_name_plural = "Publicaciones"
 
+    def can_be_rated_by(self, user):
+        if user == self.author:
+            return False, "No puedes valorar tu propia publicación."
+        
+        if not self.allows_ratings:
+            return False, "Esta publicación no permite valoraciones."
+
+        from ratings.models import Rating
+        if Rating.objects.filter(post=self, rater=user).exists():
+            return False, "Ya has valorado esta publicación."
+
+        return True, "Puedes valorar esta publicación."
+    
     def __str__(self):
         return self.title or f"Post de {self.author} ({self.uploaded_at.date()})"
 
