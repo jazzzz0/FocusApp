@@ -1,18 +1,22 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import FocusApp from "./components/FocusApp";
-import Registro from "./components/RegisterForm";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Register from './components/RegisterForm'; 
+import Bienvenida from './components/Bienvenida';
+
 
 function App() {
   return (
     <Router>
-      <nav style={{ margin: 16 }}>
-        <Link to="/RegisterForm" style={{ marginRight: 16 }}>Registro</Link>
-        <Link to="/focusapp">FocusApp</Link>
+      <nav>
+        <ul>
+          <li><a href="/">Inicio</a></li>
+          <li><a href="/RegisterForm">Registro</a></li>
+        </ul>
+    
       </nav>
       <Routes>
-        <Route path="/RegisterForm" element={<Registro />} />
-        <Route path="/focusapp" element={<FocusApp />} />
+        <Route path="/" element={<Bienvenida />} />
+        <Route path="/RegisterForm" element={<Register />} />
       </Routes>
     </Router>
   );
