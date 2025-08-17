@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
 import '../styles/Home.css';
+import '../styles/Bienvenida.css';
 import logo from '../assets/imagenes/logo.png';
 import fotoBienvenida from '../assets/imagenes/naturaleza.webp';
 

@@ -34,7 +34,7 @@ body {
 
 /* --------- Header --------- */
 .header {
-  background: #111;
+  background: #212f4f;
   color: white;
   padding: 1rem 0;
   position: fixed;
@@ -145,8 +145,8 @@ body {
 
 /* --------- Botón --------- */
 .btn {
-  background: #f7b731;
-  color: #111;
+  background: #0a3563;
+  color: #ffffff;
   padding: 0.8rem 1.5rem;
   border-radius: 5px;
   text-decoration: none;
@@ -155,7 +155,8 @@ body {
 }
 
 .btn:hover {
-  background: #ffca57;
+  background: #112d79;
+  color: #ffffff;
 }
 
 
