@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.db import transaction
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -12,6 +14,7 @@ import logging
 import os
 
 # Vista para listar todas las categorías
+@extend_schema(responses={200: CategorySerializer(many=True)})
 class CategoryListView(APIView):
     permission_classes = [IsAuthenticated]
     
@@ -37,7 +40,17 @@ class PostPagination(PageNumberPagination):
 
 class PostView(APIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = PostSerializer
 
+    # Documentación para el método POST
+    @extend_schema(
+        request=PostSerializer,
+        responses={
+            201: PostSerializer,
+            400: {"description": "Error de validación"}
+        },
+        description="Crear una nueva publicación de imagen.",
+    )
     def post(self, request):
         """
         Crear una nueva publicación de imagen
@@ -52,6 +65,18 @@ class PostView(APIView):
         # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response({"success": False, "message": "Error de validación", "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+    # Documentación para el método DELETE
+    @extend_schema(
+        parameters=[
+            OpenApiParameter('pk', OpenApiTypes.INT, OpenApiParameter.PATH, description="ID del post a eliminar")
+        ],
+        responses = {
+            200: {"description": "Post eliminado correctamente"},
+            403: {"description": "No puedes eliminar este post"},
+            404: {"description": "Post no encontrado"},
+        },
+        description="Eliminar una publicación.",
+    )
     def delete(self, request, pk):
         logger = logging.getLogger('posts')
 
@@ -79,6 +104,19 @@ class PostView(APIView):
         except Exception as e:
                 return Response({"success": False, "message": "Error interno del servidor"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    # Documentación para métodos PUT y PATCH
+    @extend_schema(
+        parameters=[
+            OpenApiParameter('pk', OpenApiTypes.INT, OpenApiParameter.PATH, description="ID del post a actualizar"),
+        ],
+        request = PostSerializer,
+        responses = {
+            200: PostSerializer,
+            403: {"description": "No puedes editar este post"},
+            404: {"description": "Post no encontrado"}
+        },
+        description="Editar una publicación de imagen.",
+    )
     def put(self, request, pk):
         logger = logging.getLogger('posts')
 
@@ -131,7 +169,18 @@ class PostView(APIView):
 
         return queryset
 
-
+    @extend_schema(
+        parameters = [
+            OpenApiParameter('pk', OpenApiTypes.INT, OpenApiParameter.PATH, description="ID del post (opcional)"),
+            OpenApiParameter('author', OpenApiTypes.INT, OpenApiParameter.QUERY, description="Filtrar por ID de autor (opcional)"),
+            OpenApiParameter('category', OpenApiTypes.INT, OpenApiParameter.QUERY, description="Filtrar por ID de categoría (opcional)"),
+        ],
+        responses={
+            200: PostSerializer(many=True),
+            404: {"description": "Post no encontrado"}
+        },
+        description="Obtener publicación por ID. \nOtros filtros: Obtener todas las publicaciones de un autor (usuario) o todas las publicaciones de una categoría."
+    )
     def get(self, request, pk=None):
         try:
             if pk:

@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+
+    'drf_spectacular',
     
     # apps django propias creadas con "python manage.py startapp app_name"
     'core', 
@@ -85,7 +87,8 @@ REST_FRAMEWORK = {
         # 'rest_framework.permissions.AllowAny', # Permite acceso a todos por defecto
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 SIMPLE_JWT = {
@@ -117,6 +120,12 @@ SIMPLE_JWT = {
 
     # 'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     # 'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'api-focusapp',
+    'DESCRIPTION': 'Documentación de la API de FocusApp, una comunidad para fotógrafos y amantes de la fotografía.',
+    'VERSION': '1.0.0',
 }
 
 
