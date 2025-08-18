@@ -42,10 +42,11 @@ class AppUser(AbstractUser):
         verbose_name="Provincia",
         help_text="Obligatorio. Provincia/Estado de residencia.",
     )
+    
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email', 'date_of_birth', 'country', 'province']
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['date_of_birth', 'country', 'province']  # <-- email eliminado
-
+    
     def is_adult(self):
         from datetime import date
 
