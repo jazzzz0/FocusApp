@@ -1,42 +1,92 @@
-.register-form {
-  max-width: 400px;
-  margin: 40px auto;
-  padding: 20px;
-  background-color: #f7f7f7;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+.register-form-center {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fdfcfc;
 }
 
+/* Fondo y centrado del formulario */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background:  #fdfcfc;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Contenedor del formulario */
+.register-form {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Título */
 .register-form h2 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
+  color: #333;
 }
 
+/* Etiquetas */
 .register-form label {
   display: block;
-  margin: 10px 0 5px;
+  margin-bottom: 0.5rem;
   font-weight: bold;
+  color: #444;
 }
 
+/* Inputs */
 .register-form input {
   width: 100%;
-  padding: 8px;
-  margin-bottom: 15px;
+  padding: 0.8rem;
+  margin-bottom: 1.2rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
+  outline: none;
+  font-size: 1rem;
+  transition: border 0.3s;
 }
 
+.register-form input:focus {
+  border-color: #172ad4;
+}
+
+/* Botón */
 .register-form button {
   width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
+  padding: 0.9rem;
+  background-color: #1c36c9;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
+  color: white;
+  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
+  transition: background 0.3s;
 }
 
 .register-form button:hover {
-  background-color: #0056b3;
+  background-color: #1928b3;
+}
+
+/* Link opcional */
+.register-form a {
+  display: block;
+  text-align: center;
+  margin-top: 1rem;
+  text-decoration: none;
+  color: #ff9800;
+}
+
+.register-form a:hover {
+  text-decoration: underline;
 }
