@@ -247,6 +247,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'ratings': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'users': {
             'handlers': ['file', 'console'],
             'level': 'DEBUG',

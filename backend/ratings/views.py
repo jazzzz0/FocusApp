@@ -7,6 +7,8 @@ from posts.models import Post
 from .serializers import RatingSerializer
 from .models import Rating
 
+import logging
+
 class RatingView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = RatingSerializer
@@ -62,3 +64,44 @@ class RatingView(APIView):
         return Response(
             {"success": False, "message": "Error de validación", "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST
         )
+
+    def put(self, request, pk, *args, **kwargs):
+        """
+        Actualiza una valoración existente por su ID.
+        """
+
+        logger = logging.getLogger('ratings')
+
+        try:
+            rating = Rating.objects.get(pk=pk)
+            
+            if rating.rater != request.user:
+                return Response({"success": False, "message": "No puedes actualizar esta valoración."}, status=status.HTTP_403_FORBIDDEN)
+            
+            if not rating.can_be_edited():
+                return Response({"success": False, "message": "Solo puede actualizar la valoración durante las primeras 24 horas."}, status=status.HTTP_400_BAD_REQUEST)
+            
+            serializer = RatingSerializer(rating, data=request.data, partial=True)
+            
+            if serializer.is_valid():
+                serializer.save()
+
+                logger.info(f"Valoración actualizada: Valorador {rating.rater} - Post ID: {rating.post.id} - Campos modificados: {list(request.data.keys())}")
+
+                return Response({"success": True, "data": serializer.data}, status=status.HTTP_200_OK)
+
+            else:
+                logger.warning(f"Error de validación al actualizar la valoración ID {pk}: {serializer.errors}")
+                return Response({"success": False, "message": "Error de validación", "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        except Rating.DoesNotExist:
+            logger.warning(f"No se puede actualizar una valoración inexistente")
+            return Response({"success": False, "message": "Valoración no encontrada."}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            logger.error(f"Error al actualizar la valoración ID {pk}: {str(e)}")
+            return Response({"success": False, "message": "Error interno del servidor"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+    def patch(self, request, pk, *args, **kwargs):
+        return self.put(request, pk, *args, **kwargs)
