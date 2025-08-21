@@ -6,7 +6,6 @@ class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
         fields = [
-            "post",
             "rater",
             "composition",
             "clarity_focus",
@@ -14,17 +13,15 @@ class RatingSerializer(serializers.ModelSerializer):
             "creativity",
             "technical_adaptation",
         ]
+        
+        read_only_fields = ["rater"] 
+
 
     def validate(self, data):
-        # Verificar que el rater no sea el author
-        if data['rater'] == data['post'].author:
-            raise serializers.ValidationError({'rater': 'No puedes valorar tu propia publicación.'})
-
-        # Verificar que el post permita valoraciones
-        if not data['post'].allows_ratings:
-            raise serializers.ValidationError({'post': 'Esta publicación no permite valoraciones.'})
-
-        if Rating.objects.filter(post=data['post'], rater=data['rater']).exists():
-            raise serializers.ValidationError({'rater': 'Ya has valorado esta publicación.'})
+        # Validar que las valoraciones estén entre 1 y 5
+        score_fields = ['composition', 'clarity_focus', 'lighting', 'creativity', 'technical_adaptation']
+        for field in score_fields:
+            if not 1 <= data[field] <= 5:
+                raise serializers.ValidationError({field: f"La puntuación para '{field}' debe estar entre 1 y 5."})
 
         return data
