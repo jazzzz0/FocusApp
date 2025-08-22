@@ -1,6 +1,8 @@
+from django.shortcuts import get_object_or_404
+
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from posts.models import Post
@@ -105,3 +107,44 @@ class RatingView(APIView):
 
     def patch(self, request, pk, *args, **kwargs):
         return self.put(request, pk, *args, **kwargs)
+
+class PostRatingsView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, post_id):
+        """
+        Obtener el promedio de valoraciones de una publicación
+        """
+
+        logger = logging.getLogger('ratings')
+
+        try:
+            post = Post.objects.get(id=post_id)
+
+            averages = Rating.get_post_averages(post)
+
+            if averages is None:
+                data = {
+                    'composition': 0.0,
+                    'clarity_focus': 0.0,
+                    'lighting': 0.0,
+                    'creativity': 0.0,
+                    'technical_adaptation': 0.0,
+                    'overall': 0.0,
+                    'total_ratings': 0.0,
+                }
+            
+            else:
+                data = averages
+
+            logger.info(f"\n-------------------------------- \nPromedio de valoraciones obtenido: \n{data} \n--------------------------------")
+            return Response({"success": True, "data": data}, status=status.HTTP_200_OK)
+        
+        except Post.DoesNotExist:
+            logger.warning(f"No se pueden obtener el promedio de un post inexistente.")
+            return Response({"success": False, "message": "Post no encontrado."}, status=status.HTTP_404_NOT_FOUND)
+
+
+        except Exception as e:
+            logger.error(f"Error al obtener los ratings del post {post_id}: {str(e)}")
+            return Response({"success": False, "message": "Error interno del servidor"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
