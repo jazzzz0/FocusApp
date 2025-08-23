@@ -108,6 +108,51 @@ class RatingView(APIView):
     def patch(self, request, pk, *args, **kwargs):
         return self.put(request, pk, *args, **kwargs)
 
+    def get(self, request, *args, **kwargs):
+        """
+            Obtener la valoración de un post hecha por el usuario autenticado para
+            pre-poblar el formulario de valoración si el usuario ya ha puntuado el post.
+            Si no se valoró la publicación, se devuelve un objeto vacío. 
+            Requiere el parámetro de consulta 'post_id'.
+            Si llega 'success': true, el frontend deberá mostrar las estrellas de valoración.
+        """
+        logger = logging.getLogger('ratings')
+
+        post_id = request.query_params.get('post_id')
+        if not post_id:
+            return Response({"success": False, "message": "El parámetro 'post_id' es requerido."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Obtener post y usuario autenticado
+            post = Post.objects.get(id=post_id)
+
+            user = request.user
+
+            if post.author == user:
+                return Response({"success": False, "message": "No puedes valorar tu propia publicacipon"}, status=status.HTTP_403_FORBIDDEN)
+
+            # Buscar la valoración específica con índice compuesto
+            rating = Rating.objects.get(post=post, rater=user)
+
+            serializer = self.serializer_class(rating)
+
+            logger.info(f"Valoración obtenida: Rater {rating.rater} - Post ID {rating.post} - Valoración {serializer.data}")
+            return Response({"success": True, "data": serializer.data}, status=status.HTTP_200_OK)
+
+        # Si el Rating no existe se devuelve un objeto vacío
+        except Rating.DoesNotExist:
+            logger.info(f"Usuario {user} no ha valorado el post ID {post_id}")
+            return Response({"success": True, "data": {}}, status=status.HTTP_200_OK)
+
+        except Post.DoesNotExist:
+            logger.warning(f"No se puede obtener la valoración de un post inexistente.")
+            return Response({"success": False, "message": "Post no encontrado."}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            logger.error(f"Error al obtener los ratings del post {post_id}: {str(e)}")
+            return Response({"success": False, "message": "Error interno del servidor"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 class PostRatingsView(APIView):
     permission_classes = [AllowAny]
 
