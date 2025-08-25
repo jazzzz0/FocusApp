@@ -17,14 +17,11 @@ class UserSerializer(serializers.ModelSerializer):
         # Definir los campos que se exponen a la API
         # Se incluye "password"
         fields = [
-            'id', 'email', 'username', 'password', 'first_name', 'last_name',
-            'date_of_birth', 'profile_picture_url', 'country', 'province'
+            'id', 'email', 'username', 'password'
         ]
         extra_kwargs = {
-            'email': {'required': True},
-            'date_of_birth': {'required': True},
-            'country': {'required': True},
-            'province': {'required': True},
+            'email': {'required': True}
+            
         }
 
     def validate_password(self, value):
