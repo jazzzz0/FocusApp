@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Concursos - FocusApp</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <a href="index.html" class="logo leckerli-one-regular">
+        <img src="/imagenes/logo.png" alt="FocusApp" class="logo-image" />
+        <span class="logo-text">FocusApp</span>
+      </a>
+      <nav class="navbar">
+        <ul class="nav_list">
+          <li><a href="index.html#about">Nosotros</a></li>
+          <li><a href="index.html#funciones">Funciones</a></li>
+          <li><a href="/concursos.html">Concursos</a></li>
+          <li><a href="/edit/login.html">Ingresar</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Concursos -->
+  <section class="noticias" id="concursos">
+    <h1 class="heading">Concursos <span>Destacados</span></h1>
+
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+
+        <!-- Concurso 1 -->
+        <div class="swiper-slide box">
+          <div class="imagen">
+            <img src="/imagenes/concurso1.jpg" alt="Concurso Naturaleza" />
+          </div>
+          <div class="content">
+            <a href="#" class="title">Concurso "Belleza Natural"</a>
+            <span>Hasta el 20 de julio</span>
+            <p>Subí tus mejores fotos de paisajes, animales o naturaleza. ¡Participá por premios y reconocimientos!</p>
+            <a href="#" class="btn">Ver bases</a>
+          </div>
+        </div>
+
+        <!-- Concurso 2 -->
+        <div class="swiper-slide box">
+          <div class="imagen">
+            <img src="/imagenes/concurso2.jpg" alt="Concurso Urbano" />
+          </div>
+          <div class="content">
+            <a href="#" class="title">Desafío Fotografía Urbana</a>
+            <span>Finaliza el 30 de julio</span>
+            <p>Mostrá la esencia de la ciudad en tus fotos. Las más votadas serán destacadas en nuestro ranking mensual.</p>
+            <a href="#" class="btn">Participar</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="swiper-pagination">
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer básico -->
+  <section class="footer">
+    <div class="container">
+      <p style="color: black;">&copy; 2024 FocusApp. Todos los derechos reservados.</p>
+    </div>
+  </section>
+
+  <!-- JS Scripts -->
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <script src="js/script.js"></script>
+
+  <script>
+    var swiper = new Swiper('.swiper-container', {
+      loop: true,
+      autoplay: {
+        delay: 5000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      slidesPerView: 1,
+      spaceBetween: 50,
+    });
+  </script>
+</body>
+</html>

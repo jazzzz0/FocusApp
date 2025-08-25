@@ -1,0 +1,291 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Leckerli+One&display=swap');
+
+:root {
+  --primary-blue: #0a5d91;
+  --primary-blue-light: #3a8edc;
+  --dark-blue: #063a7e;
+  --bg-light: #f9faff;
+  --white: #ffffff;
+  --text-dark: #1a1a2e;
+  --text-light: #666666;
+  --border-radius: 8px;
+  --transition-speed: 0.3s;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+}
+
+/* Header */
+header {
+  text-align: center;
+  padding: 2rem 0 1rem 0;
+  border-bottom: 1px solid var(--primary-blue-light);
+}
+
+header .logo {
+  font-family: 'Leckerli One', cursive;
+  font-size: 4rem;
+  color: var(--primary-blue);
+  margin-bottom: 0.25rem;
+}
+
+header .tagline {
+  font-weight: 300;
+  font-size: 1.1rem;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+}
+
+/* Navbar */
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  padding: 1.5rem 0;
+  background-color: var(--bg-light);
+  font-weight: 500;
+}
+
+nav a {
+  color: var(--primary-blue);
+  text-decoration: none;
+  font-size: 1.1rem;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  padding: 0.5rem;
+  transition: color var(--transition-speed);
+}
+
+nav a:hover {
+  color: var(--dark-blue);
+  border-bottom: 2px solid var(--dark-blue);
+}
+
+/* Banner */
+.main-banner {
+  background-color: var(--white);
+  color: var(--primary-blue);
+  text-align: center;
+  padding: 3rem 2rem;
+  margin: 2rem 0;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 20px rgba(10, 93, 145, 0.15);
+}
+
+.main-banner h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.main-banner p {
+  font-size: 1.2rem;
+  font-weight: 300;
+}
+
+/* Sections - 5 photos with text */
+.section-title {
+  text-align: center;
+  margin: 4rem 0 1.5rem 0;
+  font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: 0.1rem;
+  color: var(--text-dark);
+}
+
+.section-subtitle {
+  text-align: center;
+  font-weight: 300;
+  font-size: 1.1rem;
+  color: var(--text-light);
+  margin-bottom: 3rem;
+  text-transform: uppercase;
+}
+
+.photo-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.photo-item {
+  background-color: var(--white);
+  padding: 2rem;
+  text-align: center;
+  border-radius: var(--border-radius);
+  width: 18%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.photo-item:hover {
+  transform: scale(1.05);
+}
+
+.photo-item img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.photo-item .name {
+  font-weight: 600;
+  color: var(--primary-blue);
+  font-size: 1.2rem;
+  margin: 1rem 0;
+}
+
+.photo-item .category {
+  font-size: 1rem;
+  color: var(--text-light);
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+.photo-item .vote-btn {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color var(--transition-speed);
+}
+
+.photo-item .vote-btn:hover {
+  background-color: var(--dark-blue);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 2rem;
+  background-color: var(--primary-blue);
+  color: var(--white);
+  margin-top: 4rem;
+}
+
+footer p {
+  font-size: 1rem;
+}
+/* Login Form Styling */
+.login-form {
+  background-color: var(--white);
+  padding: 3rem;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 20px rgba(10, 93, 145, 0.15);
+  width: 100%;
+  max-width: 400px;
+  margin: 3rem auto;
+  text-align: center;
+}
+
+.login-form h1 {
+  font-family: 'Leckerli One', cursive;
+  color: var(--primary-blue);
+  text-align: center;
+  font-size: 2.8rem;
+  margin-bottom: 2rem;
+}
+
+.login-form p {
+  font-size: 1rem;
+  color: var(--text-light);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.login-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+  padding: 0.8rem;
+  font-size: 1.2rem;
+  border: 2px solid var(--primary-blue-light);
+  border-radius: var(--border-radius);
+  transition: border-color var(--transition-speed);
+}
+
+.login-form input[type="text"]:focus,
+.login-form input[type="password"]:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 5px var(--primary-blue-light);
+}
+
+.login-form button {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  padding: 1rem;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color var(--transition-speed);
+  font-weight: bold;
+}
+
+.login-form button:hover {
+  background-color: var(--dark-blue);
+}
+
+.login-form .link {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+.login-form .link a {
+  color: var(--primary-blue);
+  text-decoration: none;
+  font-weight: bold;
+  transition: color var(--transition-speed);
+}
+
+.login-form .link a:hover {
+  color: var(--dark-blue);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .login-form {
+    width: 90%;
+    padding: 2rem;
+  }
+
+  .login-form h1 {
+    font-size: 2.5rem;
+  }
+
+  .login-form input[type="text"],
+  .login-form input[type="password"] {
+    font-size: 1.1rem;
+  }
+
+  .login-form button {
+    font-size: 1.1rem;
+  }
+}
+

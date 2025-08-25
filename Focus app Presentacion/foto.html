@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Foto - FocusApp</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .estrellas {
+      font-size: 2rem;
+      cursor: pointer;
+      color: #ccc;
+    }
+    .estrellas input {
+      display: none;
+    }
+    .estrellas label {
+      color: #ccc;
+      transition: color 0.2s;
+    }
+    .estrellas input:checked ~ label,
+    .estrellas label:hover,
+    .estrellas label:hover ~ label {
+      color: gold;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <a href="index.html" class="logo leckerli-one-regular">
+        <img src="/imagenes/logo.png" alt="FocusApp" class="logo-image" />
+        <span class="logo-text">FocusApp</span>
+      </a>
+    </div>
+  </header>
+
+  <section class="about">
+    <h1 class="heading">Vista de <span>Foto</span></h1>
+    <div class="container">
+      <img src="/imagenes/concurso1.jpg" alt="Foto subida" width="300" /><br/><br/>
+      <h2>Título: Belleza Natural</h2>
+
+      <!-- Simulación: Esto debería depender del valor 'votable' -->
+      <h3>Puntuar esta foto:</h3>
+      <form class="estrellas">
+        <input type="radio" id="estrella5" name="valoracion" value="5" /><label for="estrella5">★</label>
+        <input type="radio" id="estrella4" name="valoracion" value="4" /><label for="estrella4">★</label>
+        <input type="radio" id="estrella3" name="valoracion" value="3" /><label for="estrella3">★</label>
+        <input type="radio" id="estrella2" name="valoracion" value="2" /><label for="estrella2">★</label>
+        <input type="radio" id="estrella1" name="valoracion" value="1" /><label for="estrella1">★</label>
+      </form>
+    </div>
+  </section>
+</body>
+</html>
