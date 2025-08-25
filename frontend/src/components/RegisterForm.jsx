@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // <-- Importa el hook
 import '../styles/RegisterForm.css';
 
 const RegisterForm = () => {
@@ -7,6 +8,8 @@ const RegisterForm = () => {
     email: '',
     password: '',
   });
+
+  const navigate = useNavigate(); // <-- Inicializa el hook
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,6 +30,7 @@ const RegisterForm = () => {
 
       if (response.ok) {
         alert('Usuario registrado exitosamente');
+        navigate('/Homepage'); // <-- Redirige al Homepage
       } else {
         alert('Error: ' + JSON.stringify(data));
       }
