@@ -17,11 +17,14 @@ class UserSerializer(serializers.ModelSerializer):
         # Definir los campos que se exponen a la API
         # Se incluye "password"
         fields = [
-            'id', 'email', 'username', 'password'
+            'id', 'email', 'username', 'password', 'first_name', 'last_name',
+            'date_of_birth', 'profile_picture_url', 'country', 'province'
         ]
         extra_kwargs = {
-            'email': {'required': True}
-            
+            'email': {'required': True},
+            'date_of_birth': {'required': True},
+            'country': {'required': True},
+            'province': {'required': True},
         }
 
     def validate_password(self, value):
@@ -45,22 +48,15 @@ class UserSerializer(serializers.ModelSerializer):
 
     # Creación de un nuevo usuario
     def create(self, validated_data):
-        # "pop" elimina el campo "password" de los datos validados
-        # y lo guarda en la variable "password"
-        password = validated_data.pop('password')
-
-        # "**validated_data" pasa los datos restantes al constructor de "AppUser"
-        user = AppUser(**validated_data)
-
-        # "set_password" encripta la contraseña
-        user.set_password(password)
-
-        # "save" guarda el usuario en la base de datos
-        user.save()
-
-        # "return user" devuelve el usuario creado
+        user = AppUser.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password'],
+            date_of_birth=validated_data['date_of_birth'],
+            country=validated_data['country'],
+            province=validated_data['province']
+        )
         return user
-
     # Actualización de un usuario existente
     def update(self, instance, validated_data):
         # Manejar la actualización segura de la contraseña

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Register from './components/RegisterForm'; 
 import Bienvenida from './components/Bienvenida';
 import Homepage from './components/Homepage';
+//import Login from './components/Login'; 
 import './styles/Home.css';
 
 
@@ -14,6 +15,7 @@ function App() {
         <ul>
           <li><a href="/">Inicio</a></li>
           <li><a href="/RegisterForm">Registro</a></li>
+          <li> <a href="/Login"></a>Login</li>
           <li><a href="/Homepage">Homepage</a></li>
         </ul>
     
@@ -22,6 +24,8 @@ function App() {
         <Route path="/" element={<Bienvenida />} />
         <Route path="/RegisterForm" element={<Register />} />
         <Route path="/Homepage" element={<Homepage />} />
+      
+
       </Routes>
     </Router>
   );

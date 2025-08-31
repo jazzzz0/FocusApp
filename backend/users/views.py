@@ -1,6 +1,4 @@
 from django.shortcuts import render
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -12,9 +10,6 @@ from .serializers import UserSerializer
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
-    
-    # Documentación para API de registro de usuario
-    @extend_schema(request=UserSerializer, responses={201: UserSerializer}, description="Registrar nuevo usuario.")
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
@@ -25,14 +20,6 @@ class RegisterView(APIView):
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(
-        request={"refresh": OpenApiTypes.STR},
-        responses={
-            205: None,
-            400: None
-        },
-        description="Endpoint para cerrar sesión."
-    )
     def post(self, request):
         try:
             refresh_token = request.data['refresh']

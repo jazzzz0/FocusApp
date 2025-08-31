@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // <-- Importa el hook
+import { useNavigate } from 'react-router-dom';
 import '../styles/RegisterForm.css';
 
 const RegisterForm = () => {
@@ -7,6 +7,9 @@ const RegisterForm = () => {
     username: '',
     email: '',
     password: '',
+    date_of_birth: '',
+    country: '',
+    province: '',
   });
 
   const navigate = useNavigate(); // <-- Inicializa el hook
@@ -44,6 +47,7 @@ const RegisterForm = () => {
     <div className="register-form-center">
       <form className="register-form" onSubmit={handleSubmit}>
         <h2>Registro de Usuario</h2>
+
         <label>Usuario</label>
         <input type="text" name="username" value={formData.username} onChange={handleChange} required />
 
@@ -53,9 +57,22 @@ const RegisterForm = () => {
         <label>Contraseña</label>
         <input type="password" name="password" value={formData.password} onChange={handleChange} required />
 
+        <label>Fecha de nacimiento</label>
+        <input type="date" name="date_of_birth" value={formData.date_of_birth} onChange={handleChange} required />
+
+        <label>País</label>
+        <input type="text" name="country" value={formData.country} onChange={handleChange} required />
+
+        <label>Provincia</label>
+        <input type="text" name="province" value={formData.province} onChange={handleChange} required />
+
+
+
+
         <button type="submit">Registrarse</button>
 
-        <a href=""></a>
+        <p>¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí</a></p>
+
       </form>
     </div>
   );
