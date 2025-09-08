@@ -1,8 +1,4 @@
-export default function Login() {
-  return <h1>Página del login</h1>;
-}
-
-/* import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/RegisterForm.css'; 
 import { Link } from "react-router-dom";
@@ -20,31 +16,36 @@ const LoginForm = () => {
   };
 
   const handleSubmit = async e => {
-    e.preventDefault();
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}token/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+  e.preventDefault();
+  try {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}token/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      // SimpleJWT espera 'username' y 'password'
+      body: JSON.stringify({
+        username: formData.email, 
+        password: formData.password
+      }),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (response.ok) {
-        // Guardar token si el backend lo devuelve
-        localStorage.setItem('token', data.token); 
-        alert('Login exitoso');
-        navigate('/Homepage'); // redirige al Homepage
-      } else {
-        alert('Error: ' + JSON.stringify(data));
-      }
-    } catch (error) {
-      console.error(error);
-      alert('Error de conexión');
+    if (response.ok) {
+      // SimpleJWT devuelve access y refresh
+      localStorage.setItem('access', data.access);
+      localStorage.setItem('refresh', data.refresh);
+      alert('Login exitoso');
+      navigate('/Homepage');
+    } else {
+      alert('Error: ' + JSON.stringify(data));
     }
-  };
+  } catch (error) {
+    console.error(error);
+    alert('Error de conexión');
+  }
+};
+
+
 
   return (
     <div className="register-form-center">
@@ -66,4 +67,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
- */
