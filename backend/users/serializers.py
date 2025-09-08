@@ -46,16 +46,22 @@ class UserSerializer(serializers.ModelSerializer):
         return value
         
 
-    # Creación de un nuevo usuario
+        # Creación de un nuevo usuario
     def create(self, validated_data):
-        user = AppUser.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password'],
-            date_of_birth=validated_data['date_of_birth'],
-            country=validated_data['country'],
-            province=validated_data['province']
-        )
+         # "pop" elimina el campo "password" de los datos validados
+         # y lo guarda en la variable "password"
+        password = validated_data.pop('password')
+
+        # "**validated_data" pasa los datos restantes al constructor de "AppUser"
+        user = AppUser(**validated_data)
+
+        # "set_password" encripta la contraseña
+        user.set_password(password)
+
+        # "save" guarda el usuario en la base de datos
+        user.save()
+
+        # "return user" devuelve el usuario creado
         return user
     # Actualización de un usuario existente
     def update(self, instance, validated_data):

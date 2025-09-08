@@ -3,29 +3,28 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Register from './components/RegisterForm'; 
 import Bienvenida from './components/Bienvenida';
 import Homepage from './components/Homepage';
-//import Login from './components/Login'; 
+import Login from './components/Login'; 
+import Concursos from './components/Concursos';
+import Perfil from './components/Perfil';
+import Subir from './components/Subir';
 import './styles/Home.css';
 
 
 
 function App() {
-  return (
+    return (
     <Router>
-      <nav>
-        <ul>
-          <li><a href="/">Inicio</a></li>
-          <li><a href="/RegisterForm">Registro</a></li>
-          <li> <a href="/Login"></a>Login</li>
-          <li><a href="/Homepage">Homepage</a></li>
-        </ul>
-    
-      </nav>
       <Routes>
+        {/* Ruta principal */}
         <Route path="/" element={<Bienvenida />} />
-        <Route path="/RegisterForm" element={<Register />} />
-        <Route path="/Homepage" element={<Homepage />} />
-      
 
+        {/* Otras rutas */}
+        <Route path="/Homepage" element={<Homepage />} />
+        <Route path="/Concursos" element={<Concursos />} />
+        <Route path="/Perfil" element={<Perfil />} />
+        <Route path="/Subir" element={<Subir />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/RegisterForm" element={<Register />} />
       </Routes>
     </Router>
   );

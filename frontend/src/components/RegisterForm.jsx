@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/RegisterForm.css';
+import { Link } from "react-router-dom";
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -21,7 +22,7 @@ const RegisterForm = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/register/`, {
+       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}users/register/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,18 +61,22 @@ const RegisterForm = () => {
         <label>Fecha de nacimiento</label>
         <input type="date" name="date_of_birth" value={formData.date_of_birth} onChange={handleChange} required />
 
-        <label>País</label>
-        <input type="text" name="country" value={formData.country} onChange={handleChange} required />
-
-        <label>Provincia</label>
-        <input type="text" name="province" value={formData.province} onChange={handleChange} required />
-
-
+        <div className="form-row">
+          <div>
+            <label>País</label>
+            <input type="text" name="country" value={formData.country} onChange={handleChange} required />
+          </div>
+          <div>
+            <label>Provincia</label>
+            <input type="text" name="province" value={formData.province} onChange={handleChange} required />
+          </div>
+        </div>
 
 
         <button type="submit">Registrarse</button>
 
-        <p>¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí</a></p>
+        <p>¿Ya tienes cuenta? <Link to="/Login">Inicia sesión aquí</Link></p>
+
 
       </form>
     </div>
