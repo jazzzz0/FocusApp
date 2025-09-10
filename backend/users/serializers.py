@@ -17,11 +17,14 @@ class UserSerializer(serializers.ModelSerializer):
         # Definir los campos que se exponen a la API
         # Se incluye "password"
         fields = [
-            'id', 'email', 'username', 'password'
+            'id', 'email', 'username', 'password', 'first_name', 'last_name',
+            'date_of_birth', 'profile_picture_url', 'country', 'province'
         ]
         extra_kwargs = {
-            'email': {'required': True}
-            
+            'email': {'required': True},
+            'date_of_birth': {'required': True},
+            'country': {'required': True},
+            'province': {'required': True},
         }
 
     def validate_password(self, value):
@@ -43,10 +46,10 @@ class UserSerializer(serializers.ModelSerializer):
         return value
         
 
-    # Creación de un nuevo usuario
+        # Creación de un nuevo usuario
     def create(self, validated_data):
-        # "pop" elimina el campo "password" de los datos validados
-        # y lo guarda en la variable "password"
+         # "pop" elimina el campo "password" de los datos validados
+         # y lo guarda en la variable "password"
         password = validated_data.pop('password')
 
         # "**validated_data" pasa los datos restantes al constructor de "AppUser"
@@ -60,7 +63,6 @@ class UserSerializer(serializers.ModelSerializer):
 
         # "return user" devuelve el usuario creado
         return user
-
     # Actualización de un usuario existente
     def update(self, instance, validated_data):
         # Manejar la actualización segura de la contraseña

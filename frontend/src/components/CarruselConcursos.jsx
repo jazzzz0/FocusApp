@@ -1,3 +1,4 @@
+/* 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -63,3 +64,4 @@ const CarruselConcursos = () => {
 };
 
 export default CarruselConcursos;
+ */
