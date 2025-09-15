@@ -122,17 +122,17 @@ def delete_post_image(sender, instance, **kwargs):
 
 # ..CLASS COMENTARIO..
 
-class Comentario(models.Model):
+class PostComment(models.Model):
     author = models.ForeignKey(
         AppUser,
         on_delete=models.CASCADE,
-        related_name="comentarios",
+        related_name="post_commenter",
         verbose_name="Autor del comentario"
     )
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
-        related_name="comentarios",
+        related_name= "commented_post",
         verbose_name="Publicación comentada"
     )
     content = models.TextField(verbose_name="Contenido del comentario")
