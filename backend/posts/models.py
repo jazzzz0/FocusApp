@@ -124,3 +124,31 @@ def delete_post_image(sender, instance, **kwargs):
             # Log del error pero no fallar la eliminación del post
             logger.error(f"Error al eliminar la imagen {instance.image.path}: {str(e)}")
             # No hacer raise para que no se interrumpa la eliminación del post
+
+# ..CLASS COMENTARIO..
+
+class Comentario(models.Model):
+    author = models.ForeignKey(
+        AppUser,
+        on_delete=models.CASCADE,
+        related_name="comentarios",
+        verbose_name="Autor del comentario"
+    )
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name="comentarios",
+        verbose_name="Publicación comentada"
+    )
+    content = models.TextField(verbose_name="Contenido del comentario")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Fecha de actualización")
+
+    def __str__(self):
+        return f'Comentario de {self.author} en {self.post}'
+
+    class Meta:
+        verbose_name = "Comentario"
+        verbose_name_plural = "Comentarios"
+        ordering = ["-created_at"]
+
