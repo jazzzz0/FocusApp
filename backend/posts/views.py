@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.db import transaction
+from django.conf import settings
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.views import APIView
@@ -11,7 +12,7 @@ from .models import Category, Post
 from users.models import AppUser
 from .serializers import CategorySerializer, PostSerializer
 import logging
-import os
+import json
 
 # Vista para listar todas las categorías
 @extend_schema(responses={200: CategorySerializer(many=True)})
@@ -204,3 +205,61 @@ class PostView(APIView):
         except Exception as e:
             return Response({"success": False, "message": "No se pudieron obtener las publicaciones.", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class DescriptionSuggestionView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        # Validar envío de imagen
+        image = request.FILES.get('image')
+        if not image:
+            return Response({"success": False, "message": "No se envió ninguna imagen"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+        try:
+            image_bytes = image.read()
+            
+            custom_prompt = """
+            **Tu Rol y Tarea Principal:**
+            Actúa rigurosamente como la siguiente persona:
+            ---
+            Usuario de una comunidad (red social) de fotografia, que puede definir la imagen tanto en un lenguaje tecnico, en un lenguaje natural.
+            ---
+            Tu tarea es generar un paquete de contenido multimedia sobre la imagen adjunta. Debes dar una descripción para un caption de publicación tanto en lenguaje técnico, lenguaje natural, y en lenguaje natural aún más reducido y ameno, para que el usuario pueda elegir una de estas descripciones para su publicación.
+            Debes ser preciso hablando como el usuario que tomó la fotografía. La descripción debe ser clara, no puedes hablar de posibles.
+            Además, puedes usar emojis si lo deseas.
+
+            **Reglas de Formato de Salida (MUY IMPORTANTE):**
+            1.  Tu respuesta debe ser **EXCLUSIVAMENTE** un objeto JSON válido, sin ningún texto, explicación o markdown antes o después.
+            2.  El JSON debe seguir estrictamente la siguiente estructura y claves:
+                {{
+                "contenido_generado": {{
+                    "lenguaje_tecnico_imagen": "...",
+                    "lenguaje_natural_imagen": "...",
+                    "lenguaje_natural_ameno_imagen": "...",
+                }}
+                }}
+
+            **Instrucciones Adicionales:**
+            -   Asegúrate de que cada pieza de contenido refleje fielmente la imagen adjunta.
+            -   No inventes datos, pero sé creativo dentro de los límites del rol asignado.
+
+            **COMIENZA LA SALIDA JSON A CONTINUACIÓN:**
+            """
+
+            # Llamada a Gemini
+            result = settings.GEMINI_MODEL.generate_content([{"mime_type": "image/jpeg", "data": image_bytes}, custom_prompt])
+
+            # Obtener el texto devuelto y parsear JSON
+            clean_response_text = result.text.replace("```json", "").replace("```", "").strip()
+            
+            print("RESPUESTA GEMINI:\n", clean_response_text)
+            
+            data = json.loads(clean_response_text)
+
+            return Response({"success": True, "data": data}, status=status.HTTP_200_OK)
+
+        except json.JSONDecodeError:
+            return Response({"success": False, "message": "La respuesta de Gemini no fue un JSON válido."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        except Exception as e:
+            return Response({"success": False, "message": "No se pudo completar la petición.", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CategoryListView, PostView
+from .views import CategoryListView, PostView, DescriptionSuggestionView
 from ratings.views import PostRatingsView
 
 urlpatterns = [
@@ -9,5 +9,8 @@ urlpatterns = [
     
     # URLs relacionadas a ratings
     path("<int:post_id>/ratings/averages/", PostRatingsView.as_view(), name='post-ratings-average'),
+
+    # URL Gemini
+    path("description-suggestions/", DescriptionSuggestionView.as_view(), name='suggest-post-descriptions')
 
 ] 
