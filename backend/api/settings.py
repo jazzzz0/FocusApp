@@ -17,6 +17,7 @@ from datetime import timedelta
 import os
 
 from google.oauth2 import service_account
+import google.generativeai as genai
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -219,6 +220,13 @@ STORAGES = {
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+GEMINI_API_KEY = config('GEMINI_API_KEY')
+
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
+
+GEMINI_MODEL = genai.GenerativeModel('gemini-2.5-flash')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
