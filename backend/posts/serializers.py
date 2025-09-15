@@ -13,7 +13,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = AppUser
-        fields = ['id', 'username', 'profile_picture_url']
+        fields = ['id', 'username', 'profile_pic']
 
 class PostSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)

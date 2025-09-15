@@ -11,14 +11,12 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-
 from decouple import Csv, config, RepositoryEnv, Config
 
-
 from datetime import timedelta
-
 import os
 
+from google.oauth2 import service_account
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -55,6 +53,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
 
     'drf_spectacular',
+    'storages',  # Para usar GCS
     
     # apps django propias creadas con "python manage.py startapp app_name"
     'core', 
@@ -192,9 +191,28 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Configuración de media files
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+# Configuración de sevicio cloud
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    os.path.join(BASE_DIR, "credentials", "gcs.json")
+)
+GS_BUCKET_NAME = "focusapp-uploads"
+
+
+# Configuración de almacenamiento para Django 5.2+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
+
+
+# Configuración de media files para servidor (config vieja)
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
 
 
 # Static files (CSS, JavaScript, Images)

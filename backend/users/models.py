@@ -20,11 +20,11 @@ class AppUser(AbstractUser):
     )
 
     # Campo no obligatorio: Foto de perfil
-    profile_picture_url = models.CharField(
-        max_length=255,
+    profile_pic = models.ImageField(
+        upload_to="profiles/",
         blank=True,
         null=True,
-        verbose_name="URL de foto de perfil",
+        verbose_name="Foto de perfil",
         help_text="Opcional. Se guarda la URL de la imagen.",
     )
 
