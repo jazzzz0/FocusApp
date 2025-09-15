@@ -89,7 +89,12 @@ body {
 .menu.open {
   right: 0; 
 }
-
+.menu-icon {
+  display: none;
+  font-size: 1.8rem;
+  color: #fff;
+  cursor: pointer;
+}
 .menu ul {
   list-style: none;
   display: flex;
@@ -174,5 +179,9 @@ body {
   .overlay img {
     max-height: 200px;
     object-fit: cover;
+ 
   }
+
+  
+
 }

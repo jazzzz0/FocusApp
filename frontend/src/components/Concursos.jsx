@@ -1,4 +1,4 @@
-import CarruselConcursos from '../components/CarruselConcursos';
+//import CarruselConcursos from '../components/CarruselConcursos';
 
 const Concursos = () => {
   return (
