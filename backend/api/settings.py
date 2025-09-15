@@ -11,14 +11,12 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-
 from decouple import Csv, config, RepositoryEnv, Config
 
-
 from datetime import timedelta
-
 import os
 
+from google.oauth2 import service_account
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -55,7 +53,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
 
     'drf_spectacular',
-    'storages',  # Para usar Cloudflare R2
+    'storages',  # Para usar GCS
     
     # apps django propias creadas con "python manage.py startapp app_name"
     'core', 
@@ -194,26 +192,16 @@ USE_I18N = True
 USE_TZ = True
 
 # Configuración de sevicio cloud
-AWS_ACCESS_KEY_ID = config("R2_ACCESS_KEY")
-AWS_SECRET_ACCESS_KEY = config("R2_SECRET_KEY")
-AWS_STORAGE_BUCKET_NAME = "focusapp-uploads"
-AWS_S3_ENDPOINT_URL = "https://87ab1f479c5758221a757c4462e72547.r2.cloudflarestorage.com"
-AWS_S3_REGION_NAME = "auto"
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    os.path.join(BASE_DIR, "credentials", "gcs.json")
+)
+GS_BUCKET_NAME = "focusapp-uploads"
 
-# No poner permisos ACL automáticamente
-AWS_DEFAULT_ACL = "public-read"
-
-# Para que las URLs sean públicas (cambiar a True si se quieren signed URLs)
-AWS_QUERYSTRING_AUTH = False
-
-# Configuración adicional para R2
-AWS_S3_FILE_OVERWRITE = False
-AWS_S3_VERIFY = True
 
 # Configuración de almacenamiento para Django 5.2+
 STORAGES = {
     "default": {
-        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
     },
     "staticfiles": {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",

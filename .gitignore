@@ -19,6 +19,7 @@
 /backend/celerybeat-schedule
 /backend/site.prod.ini
 /backend/local_settings.py
+**/gcs.json
 
 # Frontend React
 ###################
