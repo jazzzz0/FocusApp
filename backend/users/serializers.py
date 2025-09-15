@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
         # Se incluye "password"
         fields = [
             'id', 'email', 'username', 'password', 'first_name', 'last_name',
-            'date_of_birth', 'profile_picture_url', 'country', 'province'
+            'date_of_birth', 'profile_pic', 'country', 'province'
         ]
         extra_kwargs = {
             'email': {'required': True},
