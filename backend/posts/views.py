@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.db import transaction
+from django.conf import settings
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.views import APIView
@@ -11,7 +12,7 @@ from .models import Category, Post
 from users.models import AppUser
 from .serializers import CategorySerializer, PostSerializer
 import logging
-import os
+import json
 
 # Vista para listar todas las categorías
 @extend_schema(responses={200: CategorySerializer(many=True)})
@@ -204,3 +205,35 @@ class PostView(APIView):
         except Exception as e:
             return Response({"success": False, "message": "No se pudieron obtener las publicaciones.", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class DescriptionSuggestionView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        # Validar envío de imagen
+        image = request.FILES.get('image')
+        if not image:
+            return Response({"success": False, "message": "No se envió ninguna imagen"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+        try:
+            image_bytes = image.read()
+
+            from .prompts.description_prompt import IMAGE_DESCRIPTION_PROMPT
+
+            # Llamada a Gemini
+            result = settings.GEMINI_MODEL.generate_content([{"mime_type": "image/jpeg", "data": image_bytes}, IMAGE_DESCRIPTION_PROMPT])
+
+            # Obtener el texto devuelto y parsear JSON
+            clean_response_text = result.text.replace("```json", "").replace("```", "").strip()
+            
+            print("RESPUESTA GEMINI:\n", clean_response_text)
+            
+            data = json.loads(clean_response_text)
+
+            return Response({"success": True, "data": data}, status=status.HTTP_200_OK)
+
+        except json.JSONDecodeError:
+            return Response({"success": False, "message": "La respuesta de Gemini no fue un JSON válido."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        except Exception as e:
+            return Response({"success": False, "message": "No se pudo completar la petición.", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

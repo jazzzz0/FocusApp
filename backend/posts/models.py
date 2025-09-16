@@ -1,3 +1,4 @@
+from django.core.files.storage import default_storage
 from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
@@ -45,7 +46,7 @@ class Post(models.Model):
     )
 
     image = models.ImageField(
-        upload_to="posts/",  # TODO: Añadir ruta de almacenamiento de imágenes MEDIA_ROOT + MEDIA_URL
+        upload_to="posts/", 
         verbose_name="Fotografía",
         # TODO: Añadir validators (validaciones) de imagen (tamaño, formato, etc.)
     )
@@ -112,15 +113,9 @@ def delete_post_image(sender, instance, **kwargs):
     logger = logging.getLogger('posts')
     if instance.image:
         try:
-            # Verificar si la imagen existe
-            if os.path.exists(instance.image.path):
-                # Eliminar el archivo físico
-                os.remove(instance.image.path)
-
-                # Log de éxito
-                logger.info(f"Imagen eliminada: {instance.image.path}")
-        
+            # Borrar usando el storage backend
+            if default_storage.exists(instance.image.name):
+                default_storage.delete(instance.image.name)
+                logger.info(f"Imagen eliminada del storage: {instance.image.name}")
         except Exception as e:
-            # Log del error pero no fallar la eliminación del post
-            logger.error(f"Error al eliminar la imagen {instance.image.path}: {str(e)}")
-            # No hacer raise para que no se interrumpa la eliminación del post
+            logger.error(f"Error al eliminar la imagen {instance.image.name}: {str(e)}")

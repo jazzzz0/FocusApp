@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // <-- Importa el hook
+import { useNavigate } from 'react-router-dom';
 import '../styles/RegisterForm.css';
+import { Link } from "react-router-dom";
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
+    date_of_birth: '',
+    country: '',
+    province: '',
   });
 
   const navigate = useNavigate(); // <-- Inicializa el hook
@@ -18,7 +22,7 @@ const RegisterForm = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/register/`, {
+       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}users/register/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,6 +48,7 @@ const RegisterForm = () => {
     <div className="register-form-center">
       <form className="register-form" onSubmit={handleSubmit}>
         <h2>Registro de Usuario</h2>
+
         <label>Usuario</label>
         <input type="text" name="username" value={formData.username} onChange={handleChange} required />
 
@@ -53,9 +58,26 @@ const RegisterForm = () => {
         <label>Contraseña</label>
         <input type="password" name="password" value={formData.password} onChange={handleChange} required />
 
+        <label>Fecha de nacimiento</label>
+        <input type="date" name="date_of_birth" value={formData.date_of_birth} onChange={handleChange} required />
+
+        <div className="form-row">
+          <div>
+            <label>País</label>
+            <input type="text" name="country" value={formData.country} onChange={handleChange} required />
+          </div>
+          <div>
+            <label>Provincia</label>
+            <input type="text" name="province" value={formData.province} onChange={handleChange} required />
+          </div>
+        </div>
+
+
         <button type="submit">Registrarse</button>
 
-        <a href=""></a>
+        <p>¿Ya tienes cuenta? <Link to="/Login">Inicia sesión aquí</Link></p>
+
+
       </form>
     </div>
   );
