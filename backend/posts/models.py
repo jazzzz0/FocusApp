@@ -118,4 +118,31 @@ def delete_post_image(sender, instance, **kwargs):
                 default_storage.delete(instance.image.name)
                 logger.info(f"Imagen eliminada del storage: {instance.image.name}")
         except Exception as e:
-            logger.error(f"Error al eliminar la imagen {instance.image.name}: {str(e)}")
+            logger.error(f"Error al eliminar la imagen {instance.image.path}: {str(e)}")
+
+# ..CLASS COMENTARIO..
+
+class PostComment(models.Model):
+    author = models.ForeignKey(
+        AppUser,
+        on_delete=models.CASCADE,
+        related_name="post_commenter",
+        verbose_name="Autor del comentario"
+    )
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name= "commented_post",
+        verbose_name="Publicación comentada"
+    )
+    content = models.TextField(verbose_name="Contenido del comentario")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Fecha de actualización")
+
+    def __str__(self):
+        return f'Comentario de {self.author} en {self.post}'
+
+    class Meta:
+        verbose_name = "Comentario"
+        verbose_name_plural = "Comentarios"
+        ordering = ["-created_at"]
