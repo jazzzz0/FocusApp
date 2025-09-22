@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from users.models import AppUser
-from .models import Category, Post
+from .models import Category, Post, PostComment 
 from PIL import Image
-
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -105,4 +104,49 @@ class PostSerializer(serializers.ModelSerializer):
 
         instance.save()
 
+        return instance
+
+# Serializador del autor (AppUser)
+class AuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AppUser
+        fields = ['id', 'username', 'profile_pic']
+
+class PostCommentSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(read_only=True)
+    class Meta:
+        model = PostComment
+        fields = ['id', 'post', 'author', 'content', 'created_at', 'updated_at']
+        read_only_fields = ['author', 'created_at', 'updated_at']
+
+        extra_kwargs = {
+            'post': {'required': True},
+            'content': {'required': True, 'max_length': 500},
+        }
+
+    def validate_post(self, value):
+        try:
+            if isinstance(value, Post):
+                return value
+            post = Post.objects.get(id=value)
+            return post
+        except Post.DoesNotExist:
+            raise serializers.ValidationError("El post no existe")
+
+    def create(self, validated_data):
+        authenticated_user = self.context['request'].user
+
+        if not authenticated_user.is_authenticated:
+            raise serializers.ValidationError("Usuario no autenticado.")
+
+        validated_data['author'] = authenticated_user
+
+        comment = PostComment(**validated_data)
+        comment.save()
+        return comment
+
+    def update(self, instance, validated_data):
+        if 'content' in validated_data:
+            instance.content = validated_data['content']
+            instance.save()
         return instance
