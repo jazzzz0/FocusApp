@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const UploadPhoto = () => {
+
+const PostForm = ({ existingPost = null }) => {
   const [formData, setFormData] = useState({
     image: null,
     title: "",
@@ -16,10 +17,22 @@ const UploadPhoto = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Depuración: Muestra el estado actual del formData en la consola
-  /* useEffect(() => {
-    console.log("📝 Estado actual del formData:", formData);
-  }, [formData]); */
+
+
+  useEffect(() => {
+    if (existingPost) {
+      setFormData({
+        image: null, // si quiere cambiarla puede seleccionar otra
+        title: existingPost.title || "",
+        description: existingPost.description || "",
+        category: existingPost.category,
+        allows_ratings: existingPost.allows_ratings,
+      });
+      setPreview(existingPost.image); // mostramos la imagen actual
+    }
+  }, [existingPost]);
+
+
 
   // Carga categorías desde la API
   useEffect(() => {
@@ -52,10 +65,7 @@ const UploadPhoto = () => {
 
   // Genera preview de la imagen seleccionada
   useEffect(() => {
-    if (!formData.image) {
-      setPreview(null);
-      return;
-    }
+    if (!formData.image) return;
 
     const objectUrl = URL.createObjectURL(formData.image);
     setPreview(objectUrl);
@@ -83,15 +93,21 @@ const UploadPhoto = () => {
     }
 
     const formDataToSend = new FormData();
-    formDataToSend.append("image", formData.image);
+    if (formData.image) formDataToSend.append("image", formData.image);
     formDataToSend.append("title", formData.title || "");
     formDataToSend.append("description", formData.description || "");
     formDataToSend.append("category", formData.category);
     formDataToSend.append("allows_ratings", formData.allows_ratings);
 
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}posts/`, {
-        method: "POST",
+     try {
+      const url = existingPost
+        ? `${import.meta.env.VITE_API_BASE_URL}posts/${existingPost.id}/`
+        : `${import.meta.env.VITE_API_BASE_URL}posts/`;
+
+      const method = existingPost ? "PATCH" : "POST";
+
+      const response = await fetch(url, {
+        method,
         headers: { Authorization: `Bearer ${token}` },
         body: formDataToSend,
       });
@@ -99,30 +115,30 @@ const UploadPhoto = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Foto subida correctamente");
+        alert(existingPost ? "✅ Publicación actualizada" : "✅ Foto subida correctamente");
         navigate("/Homepage");
       } else {
         console.error("Error de validación:", data);
-        alert("Error: " + JSON.stringify(data.errors));
+        alert("❌ Error: " + (data.detail || "No se pudo completar la acción."));
       }
     } catch (error) {
       console.error(error);
-      alert("Error de conexión");
+      alert("⚠️ Error de conexión");
     }
   };
 
   return (
     <div className="register-form-center">
       <form className="register-form" onSubmit={handleSubmit}>
-        <h2>Subir Foto</h2>
+        <h2>{existingPost ? "Editar publicación" : "Subir Foto"}</h2>
 
-        <label>Imagen *</label>
+        <label>Imagen {existingPost ? "(opcional)" : "*"}</label>
         <input
           type="file"
           name="image"
           accept="image/*"
           onChange={handleChange}
-          required
+          required={!existingPost}
         />
 
         {/* Vista previa de la imagen */}
@@ -187,12 +203,14 @@ const UploadPhoto = () => {
           Permitir calificaciones
         </label>
 
-        <button type="submit" disabled={loading}>
-          Subir
+         <button type="submit" disabled={loading}>
+          {existingPost ? "Actualizar publicación" : "Subir"}
         </button>
+
       </form>
     </div>
+
   );
 };
 
-export default UploadPhoto;
+export default PostForm;
