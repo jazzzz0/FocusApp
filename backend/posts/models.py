@@ -122,7 +122,7 @@ def delete_post_image(sender, instance, **kwargs):
 
 # ..CLASS COMENTARIO..
 
-class PostComment(models.Model):
+class PostContent(models.Model):
     author = models.ForeignKey(
         AppUser,
         on_delete=models.CASCADE,

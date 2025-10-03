@@ -106,12 +106,6 @@ class PostSerializer(serializers.ModelSerializer):
 
         return instance
 
-# Serializador del autor (AppUser)
-class AuthorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AppUser
-        fields = ['id', 'username', 'profile_pic']
-
 class PostCommentSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
     class Meta:

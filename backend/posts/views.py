@@ -239,14 +239,14 @@ class DescriptionSuggestionView(APIView):
             return Response({"success": False, "message": "No se pudo completar la petición.", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
    
    # Vista para agregar comentarios a un post#     
-class PostCommentView(APIView):
+class PostContentView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, post_id):
         # La función get_object_or_404 ya maneja el error 404
         post = get_object_or_404(Post, pk=post_id)
         
-        comment_text = request.data.get("comment")
+        comment_text = request.data.get("content")
         if not comment_text:
             return Response({
                 "success": False,
@@ -254,13 +254,13 @@ class PostCommentView(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            comment = PostComment.objects.create(
+            content = PostContent.objects.create(
                 post=post,
                 author=request.user, 
-                comment=comment_text
+                content=content_text
             )
             
-            serializer = PostCommentSerializer(comment)
+            serializer = PostCommentSerializer(content)
             return Response({
                 "success": True,
                 "data": serializer.data
