@@ -239,7 +239,7 @@ class DescriptionSuggestionView(APIView):
             return Response({"success": False, "message": "No se pudo completar la petición.", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
    
    # Vista para agregar comentarios a un post#     
-class PostContentView(APIView):
+class PostComentView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, post_id):
@@ -254,10 +254,10 @@ class PostContentView(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            content = PostContent.objects.create(
+            content = PostComment.objects.create(
                 post=post,
                 author=request.user, 
-                content=content_text
+                content=comment_text
             )
             
             serializer = PostCommentSerializer(content)
@@ -271,3 +271,22 @@ class PostContentView(APIView):
                 "success": False,
                 "message": "Error del servidor."
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)       
+          
+          #metodo get para obtener comentarios de un post  
+    def get(self, request, post_id):
+        post = get_object_or_404(Post, pk=post_id)
+
+        try:
+            comments = PostComment.objects.filter(post=post).order_by('-created_at')
+            paginator = PostPagination()
+            result_page = paginator.paginate_queryset(comments, request)
+            # SERIALIZAR la lista de comentarios
+            serializer = PostCommentSerializer(result_page, many=True)
+            return paginator.get_paginated_response(serializer.data)
+
+        except Exception as e:
+            return Response({
+                "success": False,
+                "message": "Error del servidor."
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
+            
