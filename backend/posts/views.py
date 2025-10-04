@@ -239,7 +239,7 @@ class DescriptionSuggestionView(APIView):
             return Response({"success": False, "message": "No se pudo completar la petición.", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
    
    # Vista para agregar comentarios a un post#     
-class PostContentView(APIView):
+class PostCommentView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, post_id):
@@ -250,7 +250,7 @@ class PostContentView(APIView):
         if not comment_text:
             return Response({
                 "success": False,
-                "message": "El campo 'comment' es requerido."
+                "message": "El campo 'content' es requerido."
             }, status=status.HTTP_400_BAD_REQUEST)
 
         try:
@@ -270,4 +270,25 @@ class PostContentView(APIView):
             return Response({
                 "success": False,
                 "message": "Error del servidor."
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)       
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
+
+# Vista para agregar comentarios a un post#     
++class PostCommentView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, post_id):
+       # La función get_object_or_404 ya maneja el error 404
+        post = get_object_or_404(Post, pk=post_id)
+        
+        comment_text = request.data.get("content")
+
+
+
+
+
+
+
+
+
+
+
