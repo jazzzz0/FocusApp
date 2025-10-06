@@ -42,7 +42,7 @@ const PostList = () => {
   }, []);
 
   const handleEdit = (post) => {
-    navigate(`/editar-post/${post.id}`, { state: { post } });
+    navigate(`/editar-post/${post.id}`);
   };
 
   const handleDelete = async (id) => {
@@ -61,6 +61,7 @@ const PostList = () => {
         setPosts((prev) => prev.filter((p) => p.id !== id));
       } else {
         const errorData = await response.json();
+        console.error("Error eliminando post:", errorData);
         alert("❌ Error eliminando post: " + (errorData.detail || "Intenta nuevamente"));
       }
     } catch (error) {
@@ -88,7 +89,7 @@ const PostList = () => {
             }}
           >
             <img
-              src={post.image}
+              src={post.image || "https://via.placeholder.com/300x200?text=Sin+imagen"}
               alt={post.title || "Imagen"}
               style={{
                 maxWidth: "100%",
@@ -99,7 +100,7 @@ const PostList = () => {
             <h3>{post.title || "Sin título"}</h3>
             <p>{post.description || "Sin descripción"}</p>
             <p>
-              <strong>Categoría:</strong> {post.category}
+              <strong>Categoría:</strong> {post.category?.name || post.category || "Sin categoría"}
             </p>
 
             <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
