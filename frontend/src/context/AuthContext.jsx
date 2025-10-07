@@ -19,11 +19,11 @@ export const AuthProvider = ({ children }) => {
   // Función para loguear
   const login = async (credentials) => {
     try {
-      const res = await fetch("http://localhost:8000/api/login", { // 🔹 cambia la URL según tu backend
+      const res = await fetch("${import.meta.env.VITE_API_BASE_URL}", { // 🔹 cambia la URL según tu backend
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
-        credentials: "include", // importante si tu backend devuelve cookies HttpOnly
+        credentials: "include", // importante si el backend devuelve cookies HttpOnly
       });
 
       if (!res.ok) {
