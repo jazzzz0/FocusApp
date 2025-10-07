@@ -1,58 +1,19 @@
-// src/components/PuntuarFoto.jsx
+/// src/components/PuntuarFoto.jsx
 import React from "react";
+import { Link } from "react-router-dom";
 import "../styles/focusapp.css";
 import "../styles/concursos.css";
 import "../styles/concursos_puntuar.css";
 
 const fotosData = [
-  {
-    img: "/imagenes/animales.jpg",
-    title: "Naturaleza y Paisajes",
-    author: "Foto de Claudio Perez",
-    btnText: "Valorar",
-  },
-  {
-    img: "/imagenes/retratos.png",
-    title: "Retrato y Moda",
-    author: "Marcela Facci",
-    btnText: "Valorar",
-  },
-  {
-    img: "/imagenes/urbano.webp",
-    title: "Arquitectura y Urbanismo",
-    author: "Leonardo Flarion",
-    btnText: "Valorar",
-  },
-  {
-    img: "/imagenes/13.jpeg",
-    title: "Fotografía Documental y Callejera",
-    author: "Julieta Cerrat",
-    btnText: "Valorar",
-  },
-  {
-    img: "/imagenes/foto 6.jpg",
-    title: "Comida y Estilismo Culinario",
-    author: "Lara Mayan",
-    btnText: "Valorar",
-  },
-  {
-    img: "/imagenes/foto 4.jpg",
-    title: "Concursos Futuros",
-    author: "Participá en desafíos temáticos con votación abierta a todos los usuarios registrados.",
-    btnText: "Ir",
-  },
-  {
-    img: "/imagenes/foto 2.jpg",
-    title: "Comentarios y feedback",
-    author: "Comentá en publicaciones, dejá feedback constructivo y conectá con otros fotógrafos.",
-    btnText: "Ir",
-  },
-  {
-    img: "/imagenes/foto2.png",
-    title: "¿Te gustaria participar con tu foto?",
-    author: "Mira las reglas e inscripciones en cada categoria",
-    btnText: "Ir",
-  },
+  { img: "/imagenes/animales.jpg", title: "Naturaleza y Paisajes", author: "Foto de Claudio Perez", btnText: "Valorar" },
+  { img: "/imagenes/retratos.png", title: "Retrato y Moda", author: "Marcela Facci", btnText: "Valorar" },
+  { img: "/imagenes/urbano.webp", title: "Arquitectura y Urbanismo", author: "Leonardo Flarion", btnText: "Valorar" },
+  { img: "/imagenes/13.jpeg", title: "Fotografía Documental y Callejera", author: "Julieta Cerrat", btnText: "Valorar" },
+  { img: "/imagenes/foto 6.jpg", title: "Comida y Estilismo Culinario", author: "Lara Mayan", btnText: "Valorar" },
+  { img: "/imagenes/foto 4.jpg", title: "Concursos Futuros", author: "Participá en desafíos temáticos con votación abierta a todos los usuarios registrados.", btnText: "Ir" },
+  { img: "/imagenes/foto 2.jpg", title: "Comentarios y feedback", author: "Comentá en publicaciones, dejá feedback constructivo y conectá con otros fotógrafos.", btnText: "Ir" },
+  { img: "/imagenes/foto2.png", title: "¿Te gustaria participar con tu foto?", author: "Mira las reglas e inscripciones en cada categoria", btnText: "Ir" },
 ];
 
 const PuntuarFoto = () => {
@@ -67,9 +28,7 @@ const PuntuarFoto = () => {
           </a>
           <nav className="navbar">
             <ul className="nav_list" style={{ display: "flex", gap: "20px" }}>
-              <li>
-                <a href="/loginok">Volver al Perfil</a>
-              </li>
+              <li><a href="/loginok">Volver al Perfil</a></li>
             </ul>
           </nav>
         </div>
@@ -88,9 +47,19 @@ const PuntuarFoto = () => {
                 <h3>{foto.title}</h3>
                 <p style={{ color: "#ccc", fontSize: "0.9rem" }}>{foto.author}</p>
               </div>
-              <button type="submit" className="btn" style={{ backgroundColor: "#646cff", color: "#fff", marginTop: "0.5rem" }}>
-                {foto.btnText}
-              </button>
+
+              {/* BOTÓN: si es "Valorar" lleva a /valorar */}
+              {foto.btnText === "Valorar" ? (
+                <Link to="/valorar">
+                  <button className="btn" style={{ backgroundColor: "#646cff", color: "#fff", marginTop: "0.5rem" }}>
+                    {foto.btnText}
+                  </button>
+                </Link>
+              ) : (
+                <button className="btn" style={{ backgroundColor: "#646cff", color: "#fff", marginTop: "0.5rem" }}>
+                  {foto.btnText}
+                </button>
+              )}
             </div>
           ))}
         </div>
