@@ -23,3 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 backend/.venv/
+backend/venv/
+
+# Node modules
+node_modules/
+package-lock.json

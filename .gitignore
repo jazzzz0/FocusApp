@@ -29,6 +29,14 @@
 /frontend/.yarn/cache/
 /frontend/.next/
 /frontend/dist/
+# Virtual environments
+backend/.venv/
+backend/venv/
+
+# Node modules
+node_modules/
+package-lock.json
+
 
 # Archivos específicos de sistemas operativos o editores
 Thumbs.db
