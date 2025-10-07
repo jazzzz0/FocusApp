@@ -9,6 +9,8 @@
 # Backend Django
 ###################
 /backend/env/
+backend/.venv/
+backend/venv/
 /backend/__pycache__/
 **/__pycache__/
 /backend/*.sqlite3
