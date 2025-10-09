@@ -23,7 +23,7 @@ import { Swiper, SwiperSlide } from "swiper/react"; // Usa Swiper y SwiperSlide 
 import { Navigation, Pagination, Autoplay } from "swiper/modules"; // Módulos desde swiper/modules
 import "swiper/css";
 import "../styles/Focusapp.css"; // tu CSS base
-import "../styles/concursos.css"; // estilos específicos para concursos
+//import "../styles/concursos.css"; // estilos específicos para concursos
 import "../styles/concursos_puntuar.css"
 import "swiper/css/navigation";
 import "swiper/css/pagination";
