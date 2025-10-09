@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/focusapp.css";
-import "../styles/concursos.css";
+//import "../styles/concursos.css";
 import "../styles/concursos_puntuar.css";
 
 const fotosData = [
