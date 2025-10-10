@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import CategoryListView, PostView, DescriptionSuggestionView, PostCommentView
 from ratings.views import PostRatingsView
+from .views import PostCommentDetailView # Importa tu vista
 
 urlpatterns = [
     path('categories/', CategoryListView.as_view(), name='categories-list'),
@@ -15,4 +16,7 @@ urlpatterns = [
     
     # URLs relacionadas a comentarios
     path("<int:post_id>/comments/", PostCommentView.as_view(), name='post-comments'),
+    
+    #urls relacionadas a eliminar comentarios
+     path('<int:post_id>/comments/<int:pk>', PostCommentDetailView.as_view(),name='comment-delete-detail'),
 ] 

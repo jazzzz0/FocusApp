@@ -305,5 +305,59 @@ class PostCommentView(APIView):
             return Response({
                 "success": False,
                 "message": "Error del servidor."
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
             
+#eliminar comentario
+
+class PostCommentDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    # Modificado para recibir tanto el post_id de la URL como el pk del comentario (comment_id)
+    def delete(self, request, post_id, pk): # Usaremos 'pk' para ser consistentes con DRF
+        """
+        Elimina un comentario por su ID, verificando autoría y existencia de Post.
+        """
+        # 1. Manejo de error HTTP_404_NOT_FOUND para Post.DoesNotExist
+        try:
+            # Verificamos que el post exista primero (aunque no lo usemos después)
+            Post.objects.get(pk=post_id) 
+        except Post.DoesNotExist:
+            return Response({
+                "success": False, 
+                "message": "Publicación no encontrada."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        # 2. Manejo de error HTTP_404_NOT_FOUND para PostComment.DoesNotExist
+        try:
+            # Intentamos obtener el comentario, *verificando* que pertenezca a ese post
+            comment = PostComment.objects.get(pk=pk, post_id=post_id)
+        except PostComment.DoesNotExist:
+            return Response({
+                "success": False,
+                "message": "Comentario no encontrado."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        # 3. Validar que el usuario autenticado sea el autor (HTTP_403_FORBIDDEN)
+        if comment.author != request.user:
+            return Response({
+                "success": False,
+                "message": "No tienes permiso para eliminar este comentario."
+            }, status=status.HTTP_403_FORBIDDEN)
+
+        # 4. Eliminación exitosa (HTTP_200_OK)
+        try:
+            comment.delete()
+            
+            # Formato de respuesta exitosa: {"success": True, "data": {mensaje}}
+            # Adaptamos el requisito a DELETE, donde no hay serializer.data
+            return Response({
+                "success": True,
+                "data": {"message": "Comentario eliminado correctamente."}
+            }, status=status.HTTP_200_OK)
+
+        # 5. Manejo de errores del servidor (HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            return Response({
+                "success": False,
+                "message": f"Error interno del servidor: {str(e)}" # Incluir 'e' para debug
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
