@@ -11,10 +11,8 @@ urlpatterns = [
     path("<int:post_id>/ratings/averages/", PostRatingsView.as_view(), name='post-ratings-average'),
 
     # URL Gemini
-    path("description-suggestions/", DescriptionSuggestionView.as_view(), name='suggest-post-descriptions')
+    path("description-suggestions/", DescriptionSuggestionView.as_view(), name='suggest-post-descriptions'),
     
     # URLs relacionadas a comentarios
-    path("<int:post_id>/comments/", PostCommentView.as_view(), name='post-comments' )    
-    
-      path("posts/<int:post_id>/comments/", PostCommentView.as_view(), name="post-comments"),
+    path("<int:post_id>/comments/", PostCommentView.as_view(), name='post-comments'),
 ] 
