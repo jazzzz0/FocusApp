@@ -8,7 +8,8 @@ import Concursos from './components/Concursos';
 import Perfil from './components/Perfil';
 import Subir from './components/Subir';
 import './styles/Home.css';
-
+import PuntuarFoto from "./components/PuntuarFoto";
+import ValorarFoto from "./components/ValorarFoto";
 
 
 function App() {
@@ -25,6 +26,8 @@ function App() {
         <Route path="/Subir" element={<Subir />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/RegisterForm" element={<Register />} />
+        <Route path="/PuntuarFoto" element={<PuntuarFoto />} />
+        <Route path="/ValorarFoto" element={<ValorarFoto />} />
       </Routes>
     </Router>
   );

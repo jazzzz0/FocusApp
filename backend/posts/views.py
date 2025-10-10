@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.db import transaction
 from django.conf import settings
 from drf_spectacular.types import OpenApiTypes
@@ -8,9 +8,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
-from .models import Category, Post
+from .models import Category, Post, PostComment
 from users.models import AppUser
-from .serializers import CategorySerializer, PostSerializer
+from .serializers import CategorySerializer, PostSerializer, CommentListSerializer
 import logging
 import json
 
@@ -237,3 +237,73 @@ class DescriptionSuggestionView(APIView):
 
         except Exception as e:
             return Response({"success": False, "message": "No se pudo completar la petición.", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+   
+   # Vista para agregar comentarios a un post#     
+class PostCommentView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, post_id):
+        """
+        Agregar un comentario a una publicación
+        """
+        try:
+            post = Post.objects.get(pk=post_id)
+        except Post.DoesNotExist:
+            return Response({
+                "success": False,
+                "message": "Post no encontrado."
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        content_text = request.data.get("content")
+        if not content_text:
+            return Response({
+                "success": False,
+                "message": "El campo 'content' es requerido."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            comment = PostComment.objects.create(
+                post=post,
+                author=request.user, 
+                content=content_text
+            )
+            
+            serializer = CommentListSerializer(comment)
+            return Response({
+                "success": True,
+                "data": serializer.data
+            }, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({
+                "success": False,
+                "message": "Error del servidor."
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)       
+          
+
+    def get(self, request, post_id):
+        """
+        Obtener todos los comentarios de una publicación
+        """
+        try:
+            post = Post.objects.get(pk=post_id)
+        except Post.DoesNotExist:
+            return Response({
+                "success": False,
+                "message": "Post no encontrado."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            comments = PostComment.objects.filter(post=post).order_by('-created_at')
+            paginator = PostPagination()
+            result_page = paginator.paginate_queryset(comments, request)
+            # SERIALIZAR la lista de comentarios
+            serializer = CommentListSerializer(result_page, many=True)
+            return paginator.get_paginated_response(serializer.data)
+
+        except Exception as e:
+            return Response({
+                "success": False,
+                "message": "Error del servidor."
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
+            
