@@ -49,6 +49,26 @@ const RegisterForm = () => {
       <form className="register-form" onSubmit={handleSubmit}>
         <h2>Registro de Usuario</h2>
 
+         <label>Nombre</label>
+        <input 
+          type="text" 
+          name="first_name" 
+          value={formData.first_name} 
+          onChange={handleChange} 
+          required 
+          title="Campo obligatorio" 
+        />
+
+        <label>Apellido</label>
+        <input 
+          type="text" 
+          name="last_name" 
+          value={formData.last_name} 
+          onChange={handleChange} 
+          required 
+          title="Campo obligatorio" 
+        />
+
         <label>Usuario</label>
         <input type="text" name="username" value={formData.username} onChange={handleChange} required />
 
@@ -71,7 +91,14 @@ const RegisterForm = () => {
             <input type="text" name="province" value={formData.province} onChange={handleChange} required />
           </div>
         </div>
-
+<label>Foto de perfil</label>
+        <input 
+          type="file" 
+          name="profile_picture" 
+          onChange={handleChange} 
+          accept="image/*" 
+          title="Sube una imagen de perfil (opcional)" 
+        />
 
         <button type="submit">Registrarse</button>
 
