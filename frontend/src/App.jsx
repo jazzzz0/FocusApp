@@ -9,10 +9,9 @@ import Perfil from './components/Perfil';
 import PostForm from './components/Subir';
 import './styles/Home.css';
 import PostList from "./components/PostList";
-
 import EditPost from "./components/EditPostPage";
-
-
+import PuntuarFoto from "./components/PuntuarFoto";
+import ValorarFoto from "./components/ValorarFoto";
 
 
 function App() {
@@ -31,6 +30,8 @@ function App() {
         <Route path="/editar-post/:id" element={<EditPost />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/RegisterForm" element={<Register />} />
+        <Route path="/PuntuarFoto" element={<PuntuarFoto />} />
+        <Route path="/ValorarFoto" element={<ValorarFoto />} />
       </Routes>
     </Router>
   );

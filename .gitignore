@@ -9,6 +9,8 @@
 # Backend Django
 ###################
 /backend/env/
+backend/.venv/
+backend/venv/
 /backend/__pycache__/
 **/__pycache__/
 /backend/*.sqlite3
@@ -29,6 +31,14 @@
 /frontend/.yarn/cache/
 /frontend/.next/
 /frontend/dist/
+# Virtual environments
+backend/.venv/
+backend/venv/
+
+# Node modules
+node_modules/
+package-lock.json
+
 
 # Archivos específicos de sistemas operativos o editores
 Thumbs.db

@@ -1,0 +1,174 @@
+/* concursos_puntuar.css */
+
+/* Variables de color base */
+:root {
+  --bg-dark: #242424;
+  --bg-card: #1a1a1a;
+  --color-text: #fff;
+  --color-text-light: #ccc;
+  --color-primary: #646cff;
+}
+
+/* Reset básico y tipografía */
+body {
+  margin: 0;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--color-text);
+  background-color: var(--bg-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1.heading {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: var(--color-text);
+}
+
+h3 {
+  margin: 0.5rem 0;
+  color: var(--color-text);
+}
+
+p {
+  margin: 0.3rem 0;
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+}
+
+/* Header */
+.header {
+  background-color: var(--bg-dark);
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #333;
+}
+
+.header .logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.header .navbar .nav_list {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header .navbar .nav_list li a {
+  text-decoration: none;
+  color: var(--color-text);
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.header .navbar .nav_list li a:hover {
+  color: var(--color-primary);
+}
+
+/* Box container */
+.box-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* Cada box individual */
+.box {
+  background-color: var(--bg-card);
+  border-radius: 12px;
+  padding: 1rem;
+  width: 250px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Imagen dentro del box */
+.box .image img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+/* Contenido del box */
+.box .content {
+  margin-top: 1rem;
+}
+
+/* Botones */
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: var(--color-primary);
+  color: #fff;
+  margin-top: 0.5rem;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn:hover {
+  background-color: #535bf2;
+  transform: translateY(-2px);
+}
+
+/* Footer */
+.footer {
+  padding: 1rem 2rem;
+  text-align: center;
+  background-color: var(--bg-dark);
+  border-top: 1px solid #333;
+}
+
+/* Swiper específico para concursos */
+.swiper-container {
+  padding: 2rem 0;
+}
+
+.swiper-slide {
+  background-color: var(--bg-card);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: var(--color-primary);
+}
+
+.swiper-pagination-bullet {
+  background-color: var(--color-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .box-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .box {
+    width: 90%;
+  }
+
+  h1.heading {
+    font-size: 2rem;
+  }
+}

@@ -3,6 +3,11 @@ from users.models import AppUser
 from .models import Category, Post
 from PIL import Image
 
+from rest_framework import serializers
+from users.models import AppUser
+from .models import Category, Post, PostComment
+from PIL import Image
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -106,3 +111,13 @@ class PostSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class CommentListSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(read_only=True)
+
+    class Meta:
+        model = PostComment
+        fields = ["id", "author", "content", "created_at", "updated_at"]
+        read_only_fields = ["id", "author", "created_at", "updated_at"] # El autor se asigna automáticamente    
+        depth = 1  # Para incluir detalles del autor
