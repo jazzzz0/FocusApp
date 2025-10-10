@@ -238,7 +238,7 @@ class DescriptionSuggestionView(APIView):
         except Exception as e:
             return Response({"success": False, "message": "No se pudo completar la petición.", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
    
-   # Vista para agregar comentarios a un post#     
+# Vista para agregar comentarios a un post#     
 class PostCommentView(APIView):
     permission_classes = [IsAuthenticated]
 

@@ -16,7 +16,5 @@ urlpatterns = [
     
     # URLs relacionadas a comentarios
     path("<int:post_id>/comments/", PostCommentView.as_view(), name='post-comments'),
-    
-    # URL para detalle de comentario (GET, PUT, PATCH, DELETE)
     path('<int:post_id>/comments/<int:pk>/', PostCommentDetailView.as_view(), name='post-comment-detail'),
 ]
