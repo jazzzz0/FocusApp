@@ -14,6 +14,7 @@ import PuntuarFoto from "./components/PuntuarFoto";
 import ValorarFoto from "./components/ValorarFoto";
 
 
+
 function App() {
     return (
     <Router>
@@ -24,9 +25,9 @@ function App() {
         {/* Otras rutas */}
         <Route path="/posts" element={<PostList />} />
         <Route path="/Homepage" element={<Homepage />} />
-        <Route path="/Concursos" element={<Concursos />} />
+        <Route path="/concursos" element={<Concursos />} />
         <Route path="/Perfil" element={<Perfil />} />
-         <Route path="/Subir" element={<PostForm />} />
+        <Route path="/Subir" element={<PostForm />} />
         <Route path="/editar-post/:id" element={<EditPost />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/RegisterForm" element={<Register />} />

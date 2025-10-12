@@ -211,7 +211,7 @@ const PostForm = ({ existingPost }) => {
 
       if (response.ok) {
         alert(existingPost ? "✅ Post actualizado correctamente" : "✅ Foto subida correctamente");
-        navigate("/Homepage");
+        navigate("/posts");
       } else {
         console.error("❌ Error de validación:", data);
         alert("❌ Error: " + (data?.detail || "No se pudo procesar la solicitud."));
