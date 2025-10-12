@@ -366,8 +366,17 @@ class PostCommentDetailView(APIView):
         """
         Modificar un comentario específico de una publicación
         """
+        # Verificar que el post existe
         try:
-            comment = PostComment.objects.get(pk=pk, post_id=post_id)
+            post = Post.objects.get(pk=post_id)
+        except Post.DoesNotExist:
+            return Response({
+                "success": False,
+                "message": "Publicación no encontrada."
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        try:
+            comment = PostComment.objects.get(pk=pk)
         except PostComment.DoesNotExist:
             return Response({
                 "success": False,
