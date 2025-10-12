@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.db import transaction
+from django.db.models import Count
 from django.conf import settings
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -170,6 +171,9 @@ class PostView(APIView):
 
         return queryset
 
+    def _get_posts_queryset(self):
+        return Post.objects.annotate(ratings_count=Count('ratings')).order_by('-uploaded_at') 
+
     @extend_schema(
         parameters = [
             OpenApiParameter('pk', OpenApiTypes.INT, OpenApiParameter.PATH, description="ID del post (opcional)"),
@@ -186,11 +190,13 @@ class PostView(APIView):
     def get(self, request, pk=None):
         try:
             if pk:
-                post = Post.objects.get(id=pk)
+                # post = Post.objects.get(id=pk)
+                post = self._get_posts_queryset().get(id=pk)
                 serializer = PostSerializer(post)
                 return Response({"success": True, "data": serializer.data}, status=status.HTTP_200_OK)
 
-            posts = Post.objects.all()
+            # posts = Post.objects.all()
+            posts = self._get_posts_queryset()
 
             # Si se solicita ordenamiento por ranking (seguramente en 'Explorar según categoria')
             if request.query_params.get('sort') == 'rating':
@@ -213,7 +219,6 @@ class PostView(APIView):
                     # Finalmente por fecha descendente (más recientes primero) para posts sin rating
                     '-uploaded_at'
                 )
-
 
             posts = self._apply_filters(posts, request)
 
@@ -263,7 +268,7 @@ class DescriptionSuggestionView(APIView):
         except Exception as e:
             return Response({"success": False, "message": "No se pudo completar la petición.", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
    
-# Vista para agregar comentarios a un post#     
+# Vista para agregar comentarios a un post   
 class PostCommentView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -332,7 +337,6 @@ class PostCommentView(APIView):
                 "message": "Error del servidor."
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
             
-
 class PostCommentDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
