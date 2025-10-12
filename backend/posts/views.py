@@ -307,7 +307,6 @@ class PostCommentView(APIView):
                 "message": "Error del servidor."
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
             
-#eliminar comentario
 
 class PostCommentDetailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -361,3 +360,43 @@ class PostCommentDetailView(APIView):
                 "success": False,
                 "message": f"Error interno del servidor: {str(e)}" # Incluir 'e' para debug
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+  
+
+    def put(self, request, post_id, pk):
+        """
+        Modificar un comentario específico de una publicación
+        """
+        try:
+            comment = PostComment.objects.get(pk=pk, post_id=post_id)
+        except PostComment.DoesNotExist:
+            return Response({
+                "success": False,
+                "message": "Comentario no encontrado."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        if comment.author != request.user:
+            return Response({
+                "success": False,
+                "message": "No puedes editar este comentario."
+            }, status=status.HTTP_403_FORBIDDEN)
+
+        content_text = request.data.get("content")
+        if not content_text:
+            return Response({
+                "success": False,
+                "message": "El campo 'content' es requerido."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            comment.content = content_text
+            comment.save()
+            serializer = CommentListSerializer(comment)
+            return Response({
+                "success": True,
+                "data": serializer.data
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({
+                "success": False,
+                "message": "Error del servidor."
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
