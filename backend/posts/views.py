@@ -175,12 +175,13 @@ class PostView(APIView):
             OpenApiParameter('pk', OpenApiTypes.INT, OpenApiParameter.PATH, description="ID del post (opcional)"),
             OpenApiParameter('author', OpenApiTypes.INT, OpenApiParameter.QUERY, description="Filtrar por ID de autor (opcional)"),
             OpenApiParameter('category', OpenApiTypes.INT, OpenApiParameter.QUERY, description="Filtrar por ID de categoría (opcional)"),
+            OpenApiParameter('sort', OpenApiTypes.STR, OpenApiParameter.QUERY, description="Ordenamiento: 'rating' para ordenar por promedio de valoraciones (opcional)")
         ],
         responses={
             200: PostSerializer(many=True),
             404: {"description": "Post no encontrado"}
         },
-        description="Obtener publicación por ID. \nOtros filtros: Obtener todas las publicaciones de un autor (usuario) o todas las publicaciones de una categoría."
+        description=f"Obtener publicación por ID. \nOtros filtros: Obtener todas las publicaciones de un autor (usuario) o todas las publicaciones de una categoría. \nOrdenamiento: Para 'Explorar [categoria]' el orden debe ser utilizado indicando el valor 'rating' para mostrar las publicaciones con mejor valoración a menor valoración. Para perfiles de usuario no debe usarse este parámetro, ya que se usa el ordenamiento por defecto (publicaciones más recientes primero)."
     )
     def get(self, request, pk=None):
         try:
@@ -190,6 +191,30 @@ class PostView(APIView):
                 return Response({"success": True, "data": serializer.data}, status=status.HTTP_200_OK)
 
             posts = Post.objects.all()
+
+            # Si se solicita ordenamiento por ranking (seguramente en 'Explorar según categoria')
+            if request.query_params.get('sort') == 'rating':
+                from django.db.models import Avg, F
+
+                posts = posts.annotate(
+                    # Calcular promedio de los 5 aspectos
+                    avg_rating = Avg(
+                        (F('ratings__composition') +
+                         F('ratings__clarity_focus') +
+                         F('ratings__lighting') +
+                         F('ratings__creativity') +
+                         F('ratings__technical_adaptation')) / 5.0
+                    )
+                ).order_by(
+                    # Primero ordenar por si tiene rating o no (posts con rating primero)
+                    F('avg_rating').desc(nulls_last=True),
+                    # Luego por promedio de rating descendente (mejor rating primero)
+                    '-avg_rating',
+                    # Finalmente por fecha descendente (más recientes primero) para posts sin rating
+                    '-uploaded_at'
+                )
+
+
             posts = self._apply_filters(posts, request)
 
             paginator = PostPagination()
