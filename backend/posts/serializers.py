@@ -22,14 +22,15 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
+    ratings_count = serializers.IntegerField(read_only=True)
     class Meta:
         model = Post
-        fields = ["id", "author", "image", "title", "description", "category", "allows_ratings", "uploaded_at", "updated_at"]
+        fields = ["id", "author", "image", "title", "description", "category", "allows_ratings", "ratings_count", "uploaded_at", "updated_at"]
         
         # El usuario no puede elegir quién es el author.
         # El author siempre debe ser el usuario autenticado que hace la petición.
         # Las fechas se asignan automáticamente.
-        read_only_fields = ["author", "uploaded_at", "updated_at"]
+        read_only_fields = ["author", "ratings_count", "uploaded_at", "updated_at"]
         # Sin usar read_only_fields, usuarios maliciosos podrían crear posts como si fueran otros usuarios,
         # o modificar fechas de subida y actualización.
 
