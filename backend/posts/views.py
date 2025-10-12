@@ -307,7 +307,6 @@ class PostCommentView(APIView):
                 "message": "Error del servidor."
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
             
-#eliminar comentario
 
 class PostCommentDetailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -362,40 +361,7 @@ class PostCommentDetailView(APIView):
                 "message": f"Error interno del servidor: {str(e)}" # Incluir 'e' para debug
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
   
-  # Vista para eliminar o modificar un comentario específico          
-class postCommentDetailView(APIView):
-    permission_classes = [IsAuthenticated]
 
-    def delete(self, request, post_id, pk):
-        """
-        Eliminar un comentario específico de una publicación
-        """
-        try:
-            comment = PostComment.objects.get(pk=pk, post_id=post_id)
-        except PostComment.DoesNotExist:
-            return Response({
-                "success": False,
-                "message": "Comentario no encontrado."
-            }, status=status.HTTP_404_NOT_FOUND)
-
-        if comment.author != request.user:
-            return Response({
-                "success": False,
-                "message": "No puedes eliminar este comentario."
-            }, status=status.HTTP_403_FORBIDDEN)
-
-        try:
-            comment.delete()
-            return Response({
-                "success": True,
-                "message": "Comentario eliminado correctamente."
-            }, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({
-                "success": False,
-                "message": "Error del servidor."
-            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            
     def put(self, request, post_id, pk):
         """
         Modificar un comentario específico de una publicación
