@@ -62,7 +62,7 @@ body {
 .register-form button {
   width: 100%;
   padding: 0.8rem;
-  background-color: #1c36c9;
+  background-color: #0a3563;
   border: none;
   border-radius: 6px;
   color: white;
@@ -73,7 +73,7 @@ body {
 }
 
 .register-form button:hover {
-  background-color: #1928b3;
+  background-color: #034caa;
 }
 
 /* Link */

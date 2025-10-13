@@ -29,6 +29,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 
+
 const concursosData = [
   {
     img: concurso1,
