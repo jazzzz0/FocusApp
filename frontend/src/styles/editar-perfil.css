@@ -1,0 +1,168 @@
+/* ====== PERFIL MINIMALISTA ====== */
+:root {
+  --primary-color: #176AB9;
+  --text-color: #241C24;
+  --bg-color: #f8f9fb;
+  --border-color: #e0e0e0;
+  --button-hover: #125a99;
+  --radius: 12px;
+  --transition: 0.3s ease;
+  --shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  --font: 'Inter', system-ui, sans-serif;
+}
+
+/* General */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font);
+  margin: 0;
+  padding: 0;
+}
+
+.perfil-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* ====== NAVBAR ====== */
+.perfil-navbar {
+  width: 100%;
+  padding: 1rem 2rem;
+  background-color: white;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.focusapp-link {
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  letter-spacing: 0.5px;
+  transition: var(--transition);
+}
+
+.focusapp-link:hover {
+  opacity: 0.8;
+}
+
+/* ====== CONTENEDOR DE EDICIÓN ====== */
+.editar-perfil {
+  background-color: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  margin-top: 3rem;
+  width: 90%;
+  max-width: 450px;
+  text-align: center;
+}
+
+.editar-perfil h2 {
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--primary-color);
+}
+
+/* ====== FOTO DE PERFIL ====== */
+.profile-pic-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.profile-pic-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary-color);
+  box-shadow: var(--shadow);
+  margin-bottom: 0.8rem;
+}
+
+.file-input-label {
+  font-size: 0.9rem;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.file-input-label:hover {
+  opacity: 0.8;
+}
+
+/* ====== FORMULARIO ====== */
+.editar-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form-group {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.form-group input,
+.form-group textarea {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.8rem;
+  font-size: 0.95rem;
+  font-family: var(--font);
+  transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(23, 106, 185, 0.15);
+}
+
+/* ====== BOTÓN ====== */
+.btn-guardar {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  transition: var(--transition);
+}
+
+.btn-guardar:hover {
+  background-color: var(--button-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 480px) {
+  .editar-perfil {
+    padding: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .profile-pic-preview {
+    width: 100px;
+    height: 100px;
+  }
+}

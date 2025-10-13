@@ -1,7 +1,7 @@
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/Perfil.css"; 
+import "../styles/Perfil.css";
 
 const UserProfile = ({ user }) => {
   const navigate = useNavigate();
@@ -18,16 +18,18 @@ const UserProfile = ({ user }) => {
   const { username, first_name, last_name, profile_pic, bio } = user.data;
 
   return (
-    <div className="perfil-card">
-      <img src={profile_pic || defaultAvatar} alt={`Foto de perfil de ${username}`} />
-      <h2>@{username}</h2>
-      <p>{first_name} {last_name}</p>
+    <div className="perfil-page">
+      <div className="perfil-card">
+        <img src={profile_pic || defaultAvatar} alt={`Foto de perfil de ${username}`} />
+        <h2>@{username}</h2>
+        <p>{first_name} {last_name}</p>
 
-      <button onClick={() => navigate("/editar-perfil")}>
-        ✍️ Editar perfil
-      </button>
+        <button onClick={() => navigate("/editar-perfil")}>
+          ✍️ Editar perfil
+        </button>
 
-      {bio && <div className="bio">"{bio}"</div>}
+        {bio && <div className="bio">"{bio}"</div>}
+      </div>
     </div>
   );
 };

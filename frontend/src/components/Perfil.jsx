@@ -52,7 +52,7 @@ const Perfil = () => {
       {/* 🔹 Navbar igual que el resto, pero solo con el logo */}
       <nav className="navbar perfil-navbar">
         <div className="navbar-logo">
-          <Link to="/" className="focusapp-link">FocusApp</Link>
+          <Link to="/Homepage" className="focusapp-link">FocusApp</Link>
         </div>
       </nav>
 

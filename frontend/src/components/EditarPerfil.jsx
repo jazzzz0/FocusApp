@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "../styles/Perfil.css";
+import "../styles/editar-perfil.css";
 
 const EditarPerfil = () => {
   const [userData, setUserData] = useState({
@@ -102,7 +102,7 @@ const EditarPerfil = () => {
       {/* 🔹 Navbar minimalista igual que Perfil */}
       <nav className="navbar perfil-navbar">
         <div className="navbar-logo">
-          <Link to="/" className="focusapp-link">FocusApp</Link>
+          <Link to="/Homepage" className="focusapp-link">FocusApp</Link>
         </div>
       </nav>
 

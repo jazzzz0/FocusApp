@@ -23,7 +23,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 30px;
-  align-items: center;
 }
 
 /* Header */
@@ -43,21 +42,19 @@ body {
 .perfil-card {
   background: #fff;
   border-radius: 16px;
-  padding: 50px 40px;
+  padding: 30px 20px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 25px;
-  width: 80%;
-  max-width: 1000px; /* antes era 900px */
+  gap: 20px;
 }
 
 /* Avatar */
 .perfil-card img {
-  width: 150px;
-  height: 150px;
-  border-radius: 70%;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
   object-fit: cover;
   border: 3px solid #0a3563;
 }
@@ -67,14 +64,12 @@ body {
   margin: 0;
   color: #0a3563;
   font-size: 1.8rem;
-  align-items: center;
 }
 
 .perfil-card p {
   margin: 0;
   color: #555;
   font-size: 1rem;
-  align-items: center;
 }
 
 /* Botón editar */
@@ -88,7 +83,6 @@ body {
   cursor: pointer;
   font-weight: 600;
   transition: background 0.2s;
-  align-items: center;
 }
 
 .perfil-card .btn:hover {
@@ -126,232 +120,4 @@ body {
     width: 90px;
     height: 90px;
   }
-}
-.h2  {
-  text-align: center;
-}
-.button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-/* Contenedor de edición de perfil */
-.edit-profile-card {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 30px 20px;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Título */
-.edit-profile-card h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #0a3563;
-}
-
-/* Inputs y textarea */
-.edit-profile-card input,
-.edit-profile-card textarea {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 0.95rem;
-  box-sizing: border-box;
-}
-
-.edit-profile-card textarea {
-  min-height: 100px;
-}
-
-/* Drag & Drop para foto */
-.edit-profile-dropzone {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  padding: 20px;
-  border: 2px dashed #0a3563;
-  border-radius: 12px;
-  cursor: pointer;
-  background-color: #fff;
-  transition: background 0.2s;
-}
-
-.edit-profile-dropzone.active {
-  background-color: #f0f4ff;
-}
-
-.edit-profile-dropzone img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 3px solid #0a3563;
-  object-fit: cover;
-}
-
-/* Botón guardar */
-.edit-profile-card button {
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  border: none;
-  background-color: #0a3563;
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.edit-profile-card button:hover {
-  background-color: #112d79;
-}
-/* 🔹 Navbar del perfil (solo logo, sin menú) */
-.perfil-navbar {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 15px 40px;
-  background-color: #0d1b2a;
-  color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.focusapp-link {
-  color: #f9fcfb;
-  text-decoration: none;
-  font-size: 1.8em;
-  font-weight: bold;
-  font-family: "Leckerli One", cursive;
-}
-/* ============================= */
-/* 🔹 ESTILOS DE EDITAR PERFIL */
-/* ============================= */
-
-.perfil-wrapper {
-  min-height: 100vh;
-  background-color: #0d1b2a;
-  color: #fff;
-  font-family: "Roboto", sans-serif;
-}
-
-/* Navbar minimalista (solo FocusApp) */
-.perfil-navbar {
-  background-color: #0d1b2a;
-  padding: 15px 30px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
-
-.perfil-navbar .navbar-logo .focusapp-link {
-  font-size: 1.6rem;
-  font-weight: bold;
-  color: #64ffda;
-  text-decoration: none;
-}
-
-.perfil-navbar .focusapp-link:hover {
-  color: #52e0c4;
-}
-
-/* Contenedor principal */
-.editar-perfil {
-  max-width: 600px;
-  margin: 40px auto;
-  background: #1b263b;
-  color: #fff;
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.editar-perfil h2 {
-  text-align: center;
-  color: #ffffff;
-  margin-bottom: 25px;
-}
-
-/* Imagen de perfil y botón de cambio */
-.profile-pic-section {
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-.profile-pic-preview {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 10px;
-  border: 3px solid #ffffff;
-}
-
-.file-input-label {
-  cursor: pointer;
-  background-color: #0d1b2a;
-  color: #f3fffc;
-  padding: 8px 15px;
-  border-radius: 8px;
-  transition: 0.3s;
-}
-
-.file-input-label:hover {
-  background-color: #ffffff;
-  color: #0d1b2a;
-}
-
-/* Inputs y textarea */
-.editar-form .form-group {
-  margin-bottom: 15px;
-}
-
-.editar-form label {
-  display: block;
-  margin-bottom: 5px;
-  color: #cfd8dc;
-  font-weight: 500;
-}
-
-.editar-form input,
-.editar-form textarea {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  background-color: #24344d;
-  color: #fff;
-}
-
-.editar-form input:focus,
-.editar-form textarea:focus {
-  outline: 2px solid #64ffda;
-}
-
-/* Botón de guardar */
-.btn-guardar {
-  display: block;
-  width: 100%;
-  background-color: #feffff;
-  color: #0d1b2a;
-  border: none;
-  padding: 12px;
-  border-radius: 10px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-  font-size: 1rem;
-}
-
-.btn-guardar:hover {
-  background-color: #7d7e7e;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from "react-router-dom";
 import Register from './components/RegisterForm'; 
 import Bienvenida from './components/Bienvenida';
 import Homepage from './components/Homepage';
@@ -26,7 +26,7 @@ import { CategoriesProvider } from "./context/CategoriesContext";
 
 function App() {
     return (
-    <Router>
+    
       <CategoriesProvider>
         <Routes>
           {/* Ruta principal */}
@@ -52,7 +52,7 @@ function App() {
         </Routes>
       </CategoriesProvider>
 
-    </Router>
+   
   );
 }
 export default App;
