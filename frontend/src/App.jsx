@@ -12,6 +12,7 @@ import PostList from "./components/PostList";
 import EditPost from "./components/EditPostPage";
 import PuntuarFoto from "./components/PuntuarFoto";
 import ValorarFoto from "./components/ValorarFoto";
+import EditarPerfil from "./components/EditarPerfil";
 
 
 
@@ -33,6 +34,7 @@ function App() {
         <Route path="/RegisterForm" element={<Register />} />
         <Route path="/PuntuarFoto" element={<PuntuarFoto />} />
         <Route path="/ValorarFoto" element={<ValorarFoto />} />
+        <Route path="/editar-perfil" element={<EditarPerfil />} />
       </Routes>
     </Router>
   );
