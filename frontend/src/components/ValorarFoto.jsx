@@ -1,5 +1,6 @@
 // src/components/ValorarFoto.jsx
 import React from "react";
+import { Link } from "react-router-dom";
 import "../styles/concursos_puntuar.css";
 
 const fotosParaValorar = [

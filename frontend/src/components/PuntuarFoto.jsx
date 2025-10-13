@@ -28,7 +28,7 @@ const PuntuarFoto = () => {
           </a>
           <nav className="navbar">
             <ul className="nav_list" style={{ display: "flex", gap: "20px" }}>
-              <li><a href="/loginok">Volver al Perfil</a></li>
+              <li><a href="/Homepage">Volver al Perfil</a></li>
             </ul>
           </nav>
         </div>
