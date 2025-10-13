@@ -19,16 +19,18 @@ import './styles/Bienvenida.css';
 import './styles/concursos_puntuar.css';
 import './styles/RegisterForm.css';
 import './styles/perfil.css';
-
+import CategoryPage from './pages/CategoryPage';
+import { CategoriesProvider } from "./context/CategoriesContext";
 
 
 
 function App() {
     return (
     <Router>
-      <Routes>
-        {/* Ruta principal */}
-        <Route path="/" element={<Bienvenida />} />
+      <CategoriesProvider>
+        <Routes>
+          {/* Ruta principal */}
+          <Route path="/" element={<Bienvenida />} />
 
         {/* Otras rutas */}
         <Route path="/posts" element={<PostList />} />
@@ -44,9 +46,12 @@ function App() {
         <Route path="/editar-perfil" element={<EditarPerfil />} />
         <Route path="/CarruselConcursos" element={<CarruselConcursos />} />
         <Route path="/Concursos" element={<Concursos />} />
+        <Route path="/explorar/:categorySlug" element={< CategoryPage />} />
+         
+          
+        </Routes>
+      </CategoriesProvider>
 
-
-      </Routes>
     </Router>
   );
 }
