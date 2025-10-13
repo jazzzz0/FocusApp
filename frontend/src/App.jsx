@@ -10,6 +10,13 @@ import Subir from './components/Subir';
 import './styles/Home.css';
 import PuntuarFoto from "./components/PuntuarFoto";
 import ValorarFoto from "./components/ValorarFoto";
+import CarruselConcursos from './components/CarruselConcursos';
+import './styles/focusApp.css';
+import './styles/Bienvenida.css'; 
+import './styles/concursos_puntuar.css';
+import './styles/RegisterForm.css';
+import './styles/Perfil.css';
+
 
 
 function App() {
@@ -28,6 +35,10 @@ function App() {
         <Route path="/RegisterForm" element={<Register />} />
         <Route path="/PuntuarFoto" element={<PuntuarFoto />} />
         <Route path="/ValorarFoto" element={<ValorarFoto />} />
+        <Route path="/CarruselConcursos" element={<CarruselConcursos />} />
+        <Route path="/Concursos" element={<Concursos />} />
+
+
       </Routes>
     </Router>
   );

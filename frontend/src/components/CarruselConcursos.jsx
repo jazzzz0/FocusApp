@@ -1,9 +1,10 @@
+import React from 'react';
 /* 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/pagination';
-import './CarruselConcursos.css';
+import 'swiper/css/pagination';*/
+import "../styles/CarruselConcursos.css";
 
 const CarruselConcursos = () => {
   const concursos = [
@@ -64,4 +65,4 @@ const CarruselConcursos = () => {
 };
 
 export default CarruselConcursos;
- */
+ 

@@ -12,13 +12,11 @@ export default Concursos;
 */
 // src/components/Concursos.jsx
 import React, { useEffect } from "react";
-import Swiper, { Navigation, Pagination, Autoplay } from "swiper";
-import "swiper/swiper-bundle.min.css";
-import "../styles/Focusapp.css"; // tu CSS base
-//import "../styles/concursos.css"; // estilos específicos para concursos
-import "../styles/concursos_puntuar.css"
+import '../styles/focusApp.css';
+import '../styles/Home.css';
+import '../styles/Bienvenida.css';
 
-Swiper.use([Navigation, Pagination, Autoplay]);
+
 
 const concursosData = [
   {

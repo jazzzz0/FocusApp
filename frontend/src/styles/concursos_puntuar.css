@@ -1,6 +1,9 @@
 /* concursos_puntuar.css */
 
-/* Variables de color base */
+
+/* ===============================
+   Variables de color base
+   =============================== */
 :root {
   --bg-dark: #242424;
   --bg-card: #1a1a1a;
@@ -9,7 +12,9 @@
   --color-primary: #646cff;
 }
 
-/* Reset básico y tipografía */
+/* ===============================
+   Reset y tipografía
+   =============================== */
 body {
   margin: 0;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -39,12 +44,11 @@ p {
   font-size: 0.9rem;
 }
 
-/* Header */
-.header {
-  background-color: var(--bg-dark);
-  padding: 1rem 2rem;
-  border-bottom: 1px solid #333;
-}
+/* ===============================
+   Header
+   =============================== */
+
+
 
 .header .logo {
   display: flex;
@@ -73,21 +77,13 @@ p {
   color: var(--color-primary);
 }
 
-/* Box container */
-.box-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-}
-
-/* Cada box individual */
+/* ===============================
+   Box (cada concurso)
+   =============================== */
 .box {
   background-color: var(--bg-card);
   border-radius: 12px;
   padding: 1rem;
-  width: 250px;
-  text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -103,14 +99,27 @@ p {
 .box .image img {
   width: 100%;
   border-radius: 12px;
+  display: block;
 }
 
-/* Contenido del box */
+/* Contenido dentro del box */
 .box .content {
   margin-top: 1rem;
 }
 
-/* Botones */
+/* Título del concurso */
+.box .content .title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.box .content .title:hover {
+  text-decoration: underline;
+}
+
+/* Botón */
 .btn {
   border: none;
   border-radius: 8px;
@@ -129,7 +138,9 @@ p {
   transform: translateY(-2px);
 }
 
-/* Footer */
+/* ===============================
+   Footer
+   =============================== */
 .footer {
   padding: 1rem 2rem;
   text-align: center;
@@ -137,11 +148,9 @@ p {
   border-top: 1px solid #333;
 }
 
-/* Swiper específico para concursos */
-.swiper-container {
-  padding: 2rem 0;
-}
-
+/* ===============================
+   Swiper
+   =============================== */
 .swiper-slide {
   background-color: var(--bg-card);
   border-radius: 12px;
@@ -157,18 +166,15 @@ p {
   background-color: var(--color-primary);
 }
 
-/* Responsive */
+/* ===============================
+   Responsive
+   =============================== */
 @media (max-width: 768px) {
-  .box-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .box {
-    width: 90%;
-  }
-
   h1.heading {
     font-size: 2rem;
+  }
+
+  .swiper-slide {
+    width: 90% !important;
   }
 }
