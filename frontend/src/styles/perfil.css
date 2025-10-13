@@ -1,93 +1,123 @@
+/* Perfil.css */
+
+/* Base */
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  min-height: 100vh;
+  min-width: 100vw;
+  background: #fafafa;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  margin: 0;
+  color: #111;
+}
 
 /* Contenedor principal del perfil */
-.profile-container {
-  max-width: 400px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: #1f2937; /* gris oscuro */
+.perfil-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Header */
+.perfil-page .header {
+  background: #212f4f;
+  color: #fff;
+  padding: 20px 0;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  color: #f9fafb;
-  font-family: 'Roboto', sans-serif;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* Perfil principal */
+.perfil-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 30px 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
 /* Avatar */
-.profile-container img {
-  width: 100px;
-  height: 100px;
+.perfil-card img {
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #6366f1;
-  margin-bottom: 1rem;
+  border: 3px solid #0a3563;
 }
 
-/* Nombre de usuario */
-.profile-container h2 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #f9fafb;
-  margin-bottom: 0.25rem;
+/* Nombre y username */
+.perfil-card h2 {
+  margin: 0;
+  color: #0a3563;
+  font-size: 1.8rem;
 }
 
-/* Nombre completo */
-.profile-container p {
+.perfil-card p {
+  margin: 0;
+  color: #555;
   font-size: 1rem;
-  font-weight: 500;
-  color: #818cf8;
-  margin-bottom: 1rem;
 }
 
-/* Botón de acción (Editar perfil, Guardar cambios) */
-.profile-container button {
-  background-color: #6366f1;
+/* Botón editar */
+.perfil-card .btn {
+  margin-top: 10px;
+  padding: 10px 24px;
+  background: #0a3563;
   color: #fff;
+  border-radius: 8px;
   border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  margin-bottom: 1rem;
+  font-weight: 600;
+  transition: background 0.2s;
 }
 
-.profile-container button:hover {
-  background-color: #4f46e5;
-  transform: translateY(-1px);
+.perfil-card .btn:hover {
+  background: #112d79;
 }
 
-/* Biografía */
-.profile-container .bio {
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid #374151;
-  font-size: 0.95rem;
-  color: #d1d5db;
-  font-style: italic;
+/* Links sociales */
+.perfil-links {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-/* Inputs y textarea para editar perfil */
-.profile-container input[type="text"],
-.profile-container textarea {
-  width: 100%;
-  padding: 0.6rem 0.8rem;
-  margin-bottom: 1rem;
-  border-radius: 8px;
-  border: 1px solid #4b5563;
-  background-color: #111827;
-  color: #f9fafb;
-  font-size: 0.95rem;
-  transition: border-color 0.2s;
+.perfil-links a {
+  color: #0a3563;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
 }
 
-.profile-container input[type="text"]:focus,
-.profile-container textarea:focus {
-  outline: none;
-  border-color: #6366f1;
+.perfil-links a:hover {
+  color: #ffb347;
 }
 
-/* Textarea específico */
-.profile-container textarea {
-  resize: vertical;
-  min-height: 80px;
+/* Responsive */
+@media (max-width: 600px) {
+  .perfil-card {
+    padding: 20px 10px;
+  }
+  .perfil-card h2 {
+    font-size: 1.5rem;
+  }
+  .perfil-card img {
+    width: 90px;
+    height: 90px;
+  }
 }
