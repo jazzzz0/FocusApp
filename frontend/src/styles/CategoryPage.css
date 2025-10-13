@@ -1,5 +1,7 @@
 /* CategoryPage.css */
-
+body {
+  background-color: white !important;
+}
 .category-page {
   max-width: 1200px; /* limita el ancho de la página */
   margin: 0 auto;    /* centra horizontalmente */
