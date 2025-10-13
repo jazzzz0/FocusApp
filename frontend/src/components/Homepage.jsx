@@ -7,8 +7,10 @@ import naturaleza from '../assets/imagenes/naturaleza.jpg';
 import urbano from '../assets/imagenes/urbano.webp';
 import arte from '../assets/imagenes/arte-conceptual.jpg';
 import deportivo from '../assets/imagenes/deporte.webp';
+import documental from '../assets/imagenes/documental.jpg';
+import comida from '../assets/imagenes/comida.jpg';
 import grupo from '../assets/imagenes/grupo.jpg';
-import perfil from '../assets/imagenes/perfil-del-usuario.png';
+import perfil from '../assets/imagenes/avatar.png';
 import subir from '../assets/imagenes/subir.png';
 import puntuacion from '../assets/imagenes/puntuacion.png';
 import categoria from '../assets/imagenes/categoria.png';
@@ -22,11 +24,15 @@ import '../styles/Bienvenida.css';
 
 
 const categories = [
-    { src: retrato, label: "Retratos" },
-    { src: naturaleza, label: "Naturaleza" },
-    { src: urbano, label: "Urbano" },
-    { src: arte, label: "Arte Conceptual" },
-    { src: deportivo, label: "Deportivo" }
+    { src: retrato, label: "Retratos y Moda" },
+    { src: naturaleza, label: "Naturaleza y Paisajes" },
+    { src: urbano, label: "Arquitectura y Urbanismo" },
+    { src: arte, label: "Arte Conceptual y Fotomanipulación" },
+    { src: deportivo, label: "Deportes y Acción" },
+    { src: documental, label: "Fotografía Documental y Callejera" },
+    { src: comida, label: "Comida y Estilismo Culinario" }
+
+
 ];
 
 function Homepage() {
@@ -93,6 +99,7 @@ function Homepage() {
                             alt={categories[current].label}
                             className="carousel-image-large"
                         />
+                    
                         <h3>{categories[current].label}</h3>
                     </div>
                     <div className="carousel-pagination">

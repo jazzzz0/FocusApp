@@ -22,8 +22,8 @@ import concurso5 from '../assets/imagenes/concurso5.jpg';
 import { Swiper, SwiperSlide } from "swiper/react"; // Usa Swiper y SwiperSlide desde swiper/react
 import { Navigation, Pagination, Autoplay } from "swiper/modules"; // Módulos desde swiper/modules
 import "swiper/css";
-import "../styles/Focusapp.css"; // tu CSS base
-import "../styles/concursos.css"; // estilos específicos para concursos
+
+import "../styles/concursos.css"; 
 import "../styles/concursos_puntuar.css"
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -85,7 +85,7 @@ const concursosData = [
 const Concursos = () => {
 
   return (
-    <div style={{ width: "100%", backgroundColor: "var(--bg-color, #242424)", color: "var(--text-color, #fff)" }}>
+    <div >
       {/* Header */}
       <header className="header">
         <div className="container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -128,10 +128,10 @@ const Concursos = () => {
             <SwiperSlide
               className="box"
               key={index}
-              style={{ backgroundColor: "#1a1a1a", borderRadius: "12px", padding: "1rem" }}
+              style={{ backgroundColor: "#29262636", borderRadius: "12px", padding: "1rem" }}
             >
               <div className="imagen">
-                <img src={concurso.img} alt={concurso.alt} style={{ width: "100%", borderRadius: "12px" }} />
+                <img src={concurso.img} alt={concurso.alt} style={{ width: "100%", height: "300px", borderRadius: "12px" }} />
               </div>
               <div className="content" style={{ marginTop: "1rem" }}>
                 <a href={concurso.btnLink} className="title" style={{ fontSize: "1.2rem", color: "#646cff", fontWeight: "600" }}>

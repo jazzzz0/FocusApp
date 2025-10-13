@@ -34,6 +34,7 @@ const LoginForm = () => {
       // SimpleJWT devuelve access y refresh
       localStorage.setItem('access', data.access);
       localStorage.setItem('refresh', data.refresh);
+      localStorage.setItem('username', formData.username);
       alert('Login exitoso');
       navigate('/Homepage');
     } else {

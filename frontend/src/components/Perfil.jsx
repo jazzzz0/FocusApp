@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-
-
+import UserProfile from "./UserPerfil";
 
 const Perfil = () => {
   const [user, setUser] = useState(null);
@@ -14,14 +13,31 @@ const Perfil = () => {
       }
 
       try {
+      
+        const username = localStorage.getItem("username");
+
+        if (!username) {
+          alert("No se encontró el nombre de usuario. Vuelve a iniciar sesión.");
+          return;
+        }
+
+     
         const response = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}users/`,
+          `${import.meta.env.VITE_API_BASE_URL}users/${username}/`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
+
         const data = await response.json();
-        setUser(data);
+        console.log("Datos del usuario:", data);
+
+        if (response.ok) {
+          setUser(data);
+        } else {
+          console.error("Error al obtener usuario:", data);
+          alert("No se pudo cargar el perfil.");
+        }
       } catch (error) {
         console.error("Error al cargar el perfil:", error);
       }
