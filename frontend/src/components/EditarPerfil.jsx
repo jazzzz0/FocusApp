@@ -1,53 +1,168 @@
 import React, { useState, useEffect } from "react";
-import "../styles/perfil.css";
+import { useNavigate, Link } from "react-router-dom";
+import "../styles/Perfil.css";
 
-const EditarPerfil = ({ user, onSave }) => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [bio, setBio] = useState("");
+const EditarPerfil = () => {
+  const [userData, setUserData] = useState({
+    first_name: "",
+    last_name: "",
+    bio: "",
+    profile_pic: "",
+  });
+  const [preview, setPreview] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (user?.data) {
-      setFirstName(user.data.first_name || "");
-      setLastName(user.data.last_name || "");
-      setBio(user.data.bio || "");
-    }
-  }, [user]);
+    const fetchUser = async () => {
+      const token = localStorage.getItem("access");
+      const username = localStorage.getItem("username");
 
-  const handleSave = () => {
-    const updatedData = {
-      first_name: firstName,
-      last_name: lastName,
-      bio: bio,
+      if (!token || !username) {
+        alert("Debes iniciar sesión para editar tu perfil.");
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}users/${username}/`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const data = await response.json();
+        if (response.ok) {
+          setUserData({
+            first_name: data.data.first_name || "",
+            last_name: data.data.last_name || "",
+            bio: data.data.bio || "",
+            profile_pic: data.data.profile_pic || "",
+          });
+          setPreview(data.data.profile_pic);
+        } else {
+          alert("No se pudo cargar el perfil para editar.");
+        }
+      } catch (error) {
+        console.error("Error al obtener datos del usuario:", error);
+      }
     };
-    if (onSave) onSave(updatedData);
+
+    fetchUser();
+  }, []);
+
+  const handleChange = (e) => {
+    setUserData({
+      ...userData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setUserData({ ...userData, profile_pic: file });
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("access");
+    const username = localStorage.getItem("username");
+
+    const formData = new FormData();
+    formData.append("first_name", userData.first_name);
+    formData.append("last_name", userData.last_name);
+    formData.append("bio", userData.bio);
+    if (userData.profile_pic instanceof File) {
+      formData.append("profile_pic", userData.profile_pic);
+    }
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}users/${username}/`,
+        {
+          method: "PATCH",
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        alert("✅ Perfil actualizado con éxito");
+        navigate("/perfil");
+      } else {
+        alert("⚠️ Error al guardar los cambios.");
+      }
+    } catch (error) {
+      console.error("Error al guardar perfil:", error);
+    }
   };
 
   return (
-    <div className="profile-container">
-      <h2>Editar perfil</h2>
+    <div className="perfil-wrapper">
+      {/* 🔹 Navbar minimalista igual que Perfil */}
+      <nav className="navbar perfil-navbar">
+        <div className="navbar-logo">
+          <Link to="/" className="focusapp-link">FocusApp</Link>
+        </div>
+      </nav>
 
-      <input
-        type="text"
-        placeholder="Nombre"
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
-      />
+      {/* 🔹 Contenedor de edición */}
+      <div className="editar-perfil">
+        <h2>Editar Perfil</h2>
 
-      <input
-        type="text"
-        placeholder="Apellido"
-        value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
-      />
+        <form className="editar-form" onSubmit={handleSave}>
+          <div className="profile-pic-section">
+            <img
+              src={preview || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
+              alt="Vista previa"
+              className="profile-pic-preview"
+            />
+            <label className="file-input-label">
+              Cambiar foto de perfil
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                style={{ display: "none" }}
+              />
+            </label>
+          </div>
 
-      <textarea
-        placeholder="Biografía"
-        value={bio}
-        onChange={(e) => setBio(e.target.value)}
-      />
+          <div className="form-group">
+            <label>Nombre</label>
+            <input
+              type="text"
+              name="first_name"
+              value={userData.first_name}
+              onChange={handleChange}
+            />
+          </div>
 
-      <button onClick={handleSave}>💾 Guardar cambios</button>
+          <div className="form-group">
+            <label>Apellido</label>
+            <input
+              type="text"
+              name="last_name"
+              value={userData.last_name}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Biografía</label>
+            <textarea
+              name="bio"
+              value={userData.bio}
+              onChange={handleChange}
+              rows="3"
+            />
+          </div>
+
+          <button type="submit" className="btn-guardar">
+            💾 Guardar cambios
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
