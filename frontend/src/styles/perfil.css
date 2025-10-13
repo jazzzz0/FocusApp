@@ -227,9 +227,131 @@ body {
 }
 
 .focusapp-link {
-  color: #64ffda;
+  color: #f9fcfb;
   text-decoration: none;
   font-size: 1.8em;
   font-weight: bold;
   font-family: "Leckerli One", cursive;
+}
+/* ============================= */
+/* 🔹 ESTILOS DE EDITAR PERFIL */
+/* ============================= */
+
+.perfil-wrapper {
+  min-height: 100vh;
+  background-color: #0d1b2a;
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+}
+
+/* Navbar minimalista (solo FocusApp) */
+.perfil-navbar {
+  background-color: #0d1b2a;
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.perfil-navbar .navbar-logo .focusapp-link {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #64ffda;
+  text-decoration: none;
+}
+
+.perfil-navbar .focusapp-link:hover {
+  color: #52e0c4;
+}
+
+/* Contenedor principal */
+.editar-perfil {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #1b263b;
+  color: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.editar-perfil h2 {
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 25px;
+}
+
+/* Imagen de perfil y botón de cambio */
+.profile-pic-section {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.profile-pic-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+  border: 3px solid #ffffff;
+}
+
+.file-input-label {
+  cursor: pointer;
+  background-color: #0d1b2a;
+  color: #f3fffc;
+  padding: 8px 15px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.file-input-label:hover {
+  background-color: #ffffff;
+  color: #0d1b2a;
+}
+
+/* Inputs y textarea */
+.editar-form .form-group {
+  margin-bottom: 15px;
+}
+
+.editar-form label {
+  display: block;
+  margin-bottom: 5px;
+  color: #cfd8dc;
+  font-weight: 500;
+}
+
+.editar-form input,
+.editar-form textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: #24344d;
+  color: #fff;
+}
+
+.editar-form input:focus,
+.editar-form textarea:focus {
+  outline: 2px solid #64ffda;
+}
+
+/* Botón de guardar */
+.btn-guardar {
+  display: block;
+  width: 100%;
+  background-color: #feffff;
+  color: #0d1b2a;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 1rem;
+}
+
+.btn-guardar:hover {
+  background-color: #7d7e7e;
 }
