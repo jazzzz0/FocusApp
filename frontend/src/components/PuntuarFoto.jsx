@@ -4,27 +4,17 @@ import { Link } from "react-router-dom";
 import "../styles/focusapp.css";
 //import "../styles/concursos.css";
 import "../styles/concursos_puntuar.css";
-import naturaleza from "../assets/imagenes/naturaleza.jpg";
-import retratos from "../assets/imagenes/retratos.png";
-import urbano from "../assets/imagenes/urbano.webp";
-import docu from "../assets/imagenes/13.jpeg";
-import comida from "../assets/imagenes/foto_6.jpg";
-import futuros from "../assets/imagenes/foto 4.jpg";
-import comentarios from "../assets/imagenes/foto_2.png";
-import participar from "../assets/imagenes/foto2.png";
-import logo from "../assets/imagenes/logo.png";
 
 const fotosData = [
-  { img: naturaleza, title: "Naturaleza y Paisajes", author: "Foto de Claudio Perez", btnText: "Valorar" },
-  { img: retratos, title: "Retrato y Moda", author: "Marcela Facci", btnText: "Valorar" },
-  { img: urbano, title: "Arquitectura y Urbanismo", author: "Leonardo Flarion", btnText: "Valorar" },
-  { img: docu, title: "Fotografía Documental y Callejera", author: "Julieta Cerrat", btnText: "Valorar" },
-  { img: comida, title: "Comida y Estilismo Culinario", author: "Lara Mayan", btnText: "Valorar" },
-  { img: futuros, title: "Concursos Futuros", author: "Participá en desafíos temáticos con votación abierta a todos los usuarios registrados.", btnText: "Ir" },
-  { img: comentarios, title: "Comentarios y feedback", author: "Comentá en publicaciones, dejá feedback constructivo y conectá con otros fotógrafos.", btnText: "Ir" },
-  { img: participar, title: "¿Te gustaria participar con tu foto?", author: "Mira las reglas e inscripciones en cada categoria", btnText: "Ir" },
+  { img: "/imagenes/animales.jpg", title: "Naturaleza y Paisajes", author: "Foto de Claudio Perez", btnText: "Valorar" },
+  { img: "/imagenes/retratos.png", title: "Retrato y Moda", author: "Marcela Facci", btnText: "Valorar" },
+  { img: "/imagenes/urbano.webp", title: "Arquitectura y Urbanismo", author: "Leonardo Flarion", btnText: "Valorar" },
+  { img: "/imagenes/13.jpeg", title: "Fotografía Documental y Callejera", author: "Julieta Cerrat", btnText: "Valorar" },
+  { img: "/imagenes/foto 6.jpg", title: "Comida y Estilismo Culinario", author: "Lara Mayan", btnText: "Valorar" },
+  { img: "/imagenes/foto 4.jpg", title: "Concursos Futuros", author: "Participá en desafíos temáticos con votación abierta a todos los usuarios registrados.", btnText: "Ir" },
+  { img: "/imagenes/foto 2.jpg", title: "Comentarios y feedback", author: "Comentá en publicaciones, dejá feedback constructivo y conectá con otros fotógrafos.", btnText: "Ir" },
+  { img: "/imagenes/foto2.png", title: "¿Te gustaria participar con tu foto?", author: "Mira las reglas e inscripciones en cada categoria", btnText: "Ir" },
 ];
-
 
 const PuntuarFoto = () => {
   return (
@@ -33,14 +23,12 @@ const PuntuarFoto = () => {
       <header className="header">
         <div className="container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <a href="/" className="logo leckerli-one-regular" style={{ display: "flex", alignItems: "center" }}>
-            <img src={logo} alt="FocusApp" className="logo-image" style={{ height: "50px", marginRight: "10px" }} />
+            <img src="/imagenes/logo.png" alt="FocusApp" className="logo-image" style={{ height: "50px", marginRight: "10px" }} />
             <span className="logo-text">FocusApp</span>
           </a>
           <nav className="navbar">
             <ul className="nav_list" style={{ display: "flex", gap: "20px" }}>
-              <li>
-                <Link to="/Homepage">Volver al Perfil</Link>
-              </li>
+              <li><a href="/Homepage">Volver al Perfil</a></li>
             </ul>
           </nav>
         </div>

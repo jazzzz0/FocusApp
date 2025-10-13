@@ -77,7 +77,7 @@ function Homepage() {
                             <li><a href="#about">Nosotros</a></li>
                             <li><a href="#funciones">Funciones</a></li>
                             <li><a href="#ranking">Ranking</a></li>
-                            <Link to="/concursos">Concursos</Link>
+                            <li><Link to="/concursos">Destacados</Link></li>
                             <li><Link to="/Perfil">Perfil</Link></li>
                             <li><Link to="/Subir">Subir Foto</Link></li>
                             <li>
