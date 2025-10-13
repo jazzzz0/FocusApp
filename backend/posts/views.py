@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.db import transaction
+from django.db.models import Count
 from django.conf import settings
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -8,9 +9,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
-from .models import Category, Post
+from .models import Category, Post, PostComment
 from users.models import AppUser
-from .serializers import CategorySerializer, PostSerializer
+from .serializers import CategorySerializer, PostSerializer, CommentListSerializer
 import logging
 import json
 
@@ -170,26 +171,55 @@ class PostView(APIView):
 
         return queryset
 
+    def _get_posts_queryset(self):
+        return Post.objects.annotate(ratings_count=Count('ratings')).order_by('-uploaded_at') 
+
     @extend_schema(
         parameters = [
             OpenApiParameter('pk', OpenApiTypes.INT, OpenApiParameter.PATH, description="ID del post (opcional)"),
             OpenApiParameter('author', OpenApiTypes.INT, OpenApiParameter.QUERY, description="Filtrar por ID de autor (opcional)"),
             OpenApiParameter('category', OpenApiTypes.INT, OpenApiParameter.QUERY, description="Filtrar por ID de categoría (opcional)"),
+            OpenApiParameter('sort', OpenApiTypes.STR, OpenApiParameter.QUERY, description="Ordenamiento: 'rating' para ordenar por promedio de valoraciones (opcional)")
         ],
         responses={
             200: PostSerializer(many=True),
             404: {"description": "Post no encontrado"}
         },
-        description="Obtener publicación por ID. \nOtros filtros: Obtener todas las publicaciones de un autor (usuario) o todas las publicaciones de una categoría."
+        description=f"Obtener publicación por ID. \nOtros filtros: Obtener todas las publicaciones de un autor (usuario) o todas las publicaciones de una categoría. \nOrdenamiento: Para 'Explorar [categoria]' el orden debe ser utilizado indicando el valor 'rating' para mostrar las publicaciones con mejor valoración a menor valoración. Para perfiles de usuario no debe usarse este parámetro, ya que se usa el ordenamiento por defecto (publicaciones más recientes primero)."
     )
     def get(self, request, pk=None):
         try:
             if pk:
-                post = Post.objects.get(id=pk)
+                # post = Post.objects.get(id=pk)
+                post = self._get_posts_queryset().get(id=pk)
                 serializer = PostSerializer(post)
                 return Response({"success": True, "data": serializer.data}, status=status.HTTP_200_OK)
 
-            posts = Post.objects.all()
+            # posts = Post.objects.all()
+            posts = self._get_posts_queryset()
+
+            # Si se solicita ordenamiento por ranking (seguramente en 'Explorar según categoria')
+            if request.query_params.get('sort') == 'rating':
+                from django.db.models import Avg, F
+
+                posts = posts.annotate(
+                    # Calcular promedio de los 5 aspectos
+                    avg_rating = Avg(
+                        (F('ratings__composition') +
+                         F('ratings__clarity_focus') +
+                         F('ratings__lighting') +
+                         F('ratings__creativity') +
+                         F('ratings__technical_adaptation')) / 5.0
+                    )
+                ).order_by(
+                    # Primero ordenar por si tiene rating o no (posts con rating primero)
+                    F('avg_rating').desc(nulls_last=True),
+                    # Luego por promedio de rating descendente (mejor rating primero)
+                    '-avg_rating',
+                    # Finalmente por fecha descendente (más recientes primero) para posts sin rating
+                    '-uploaded_at'
+                )
+
             posts = self._apply_filters(posts, request)
 
             paginator = PostPagination()
@@ -237,3 +267,174 @@ class DescriptionSuggestionView(APIView):
 
         except Exception as e:
             return Response({"success": False, "message": "No se pudo completar la petición.", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+   
+# Vista para agregar comentarios a un post   
+class PostCommentView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, post_id):
+        """
+        Agregar un comentario a una publicación
+        """
+        try:
+            post = Post.objects.get(pk=post_id)
+        except Post.DoesNotExist:
+            return Response({
+                "success": False,
+                "message": "Post no encontrado."
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        content_text = request.data.get("content")
+        if not content_text:
+            return Response({
+                "success": False,
+                "message": "El campo 'content' es requerido."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            comment = PostComment.objects.create(
+                post=post,
+                author=request.user, 
+                content=content_text
+            )
+            
+            serializer = CommentListSerializer(comment)
+            return Response({
+                "success": True,
+                "data": serializer.data
+            }, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({
+                "success": False,
+                "message": "Error del servidor."
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)       
+          
+
+    def get(self, request, post_id):
+        """
+        Obtener todos los comentarios de una publicación
+        """
+        try:
+            post = Post.objects.get(pk=post_id)
+        except Post.DoesNotExist:
+            return Response({
+                "success": False,
+                "message": "Post no encontrado."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            comments = PostComment.objects.filter(post=post).order_by('-created_at')
+            paginator = PostPagination()
+            result_page = paginator.paginate_queryset(comments, request)
+            # SERIALIZAR la lista de comentarios
+            serializer = CommentListSerializer(result_page, many=True)
+            return paginator.get_paginated_response(serializer.data)
+
+        except Exception as e:
+            return Response({
+                "success": False,
+                "message": "Error del servidor."
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)   
+            
+class PostCommentDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    # Modificado para recibir tanto el post_id de la URL como el pk del comentario (comment_id)
+    def delete(self, request, post_id, pk): # Usaremos 'pk' para ser consistentes con DRF
+        """
+        Elimina un comentario por su ID, verificando autoría y existencia de Post.
+        """
+        # 1. Manejo de error HTTP_404_NOT_FOUND para Post.DoesNotExist
+        try:
+            # Verificamos que el post exista primero (aunque no lo usemos después)
+            Post.objects.get(pk=post_id) 
+        except Post.DoesNotExist:
+            return Response({
+                "success": False, 
+                "message": "Publicación no encontrada."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        # 2. Manejo de error HTTP_404_NOT_FOUND para PostComment.DoesNotExist
+        try:
+            # Intentamos obtener el comentario, *verificando* que pertenezca a ese post
+            comment = PostComment.objects.get(pk=pk, post_id=post_id)
+        except PostComment.DoesNotExist:
+            return Response({
+                "success": False,
+                "message": "Comentario no encontrado."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        # 3. Validar que el usuario autenticado sea el autor (HTTP_403_FORBIDDEN)
+        if comment.author != request.user:
+            return Response({
+                "success": False,
+                "message": "No tienes permiso para eliminar este comentario."
+            }, status=status.HTTP_403_FORBIDDEN)
+
+        # 4. Eliminación exitosa (HTTP_200_OK)
+        try:
+            comment.delete()
+            
+            # Formato de respuesta exitosa: {"success": True, "data": {mensaje}}
+            # Adaptamos el requisito a DELETE, donde no hay serializer.data
+            return Response({
+                "success": True,
+                "data": {"message": "Comentario eliminado correctamente."}
+            }, status=status.HTTP_200_OK)
+
+        # 5. Manejo de errores del servidor (HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            return Response({
+                "success": False,
+                "message": f"Error interno del servidor: {str(e)}" # Incluir 'e' para debug
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+  
+
+    def put(self, request, post_id, pk):
+        """
+        Modificar un comentario específico de una publicación
+        """
+        # Verificar que el post existe
+        try:
+            post = Post.objects.get(pk=post_id)
+        except Post.DoesNotExist:
+            return Response({
+                "success": False,
+                "message": "Publicación no encontrada."
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        try:
+            comment = PostComment.objects.get(pk=pk)
+        except PostComment.DoesNotExist:
+            return Response({
+                "success": False,
+                "message": "Comentario no encontrado."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        if comment.author != request.user:
+            return Response({
+                "success": False,
+                "message": "No puedes editar este comentario."
+            }, status=status.HTTP_403_FORBIDDEN)
+
+        content_text = request.data.get("content")
+        if not content_text:
+            return Response({
+                "success": False,
+                "message": "El campo 'content' es requerido."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            comment.content = content_text
+            comment.save()
+            serializer = CommentListSerializer(comment)
+            return Response({
+                "success": True,
+                "data": serializer.data
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({
+                "success": False,
+                "message": "Error del servidor."
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        

@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserProfileSerializer
+from .models import AppUser
 
 # Create your views here.
 
@@ -41,3 +42,18 @@ class LogoutView(APIView):
             return Response({"detail": "Sesión cerrada correctamente."}, status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response({"detail": "Error al cerrar sesión. Token inválido."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, username):
+        try:
+            user = AppUser.objects.get(username=username)
+            serializer = UserProfileSerializer(user)
+            return Response({"success": True, "data": serializer.data}, status=status.HTTP_200_OK)
+        except AppUser.DoesNotExist:
+            return Response({"success": False, "message": "Usuario no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"success": False, "message": "No se pudo obtener el usuario", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            

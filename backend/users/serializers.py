@@ -80,3 +80,8 @@ class UserSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AppUser
+        fields = ['id', 'username', 'profile_pic', 'first_name', 'last_name']
