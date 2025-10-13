@@ -437,3 +437,7 @@
     gap: 0.5rem;
   }
 }
+/* Texto de las opciones del select en negro */
+.subir-form select option {
+  color: #000; /* negro */
+}
