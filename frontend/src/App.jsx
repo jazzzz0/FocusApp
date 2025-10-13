@@ -18,7 +18,7 @@ import './styles/focusApp.css';
 import './styles/Bienvenida.css'; 
 import './styles/concursos_puntuar.css';
 import './styles/RegisterForm.css';
-import './styles/Perfil.css';
+import './styles/perfil.css';
 
 
 
