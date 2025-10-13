@@ -46,7 +46,10 @@ function Bienvenida() {
           <h1>Bienvenido a FocusApp</h1>
           <p>La comunidad fotográfica donde compartimos nuestra pasión por la fotografía.</p>
           <Link to="/RegisterForm" className="btn entrar-btn">
-            Entrar a la comunidad
+            Registrarse
+          </Link>
+          <Link to="/Login" className="btn entrar-btn">
+            Iniciar sesión
           </Link>
         </div>
       </section>

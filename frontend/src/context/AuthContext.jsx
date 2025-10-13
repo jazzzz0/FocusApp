@@ -7,11 +7,13 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);   // usuario logueado
   const [loading, setLoading] = useState(true);
 
-  // Cuando arranca la app, revisamos si hay un token en localStorage
+
+  // Cuando arranca la app, revisamos si hay tokens en localStorage
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setUser({ token }); // acá se podría guardar más info del usuario si el backend la provee
+    const access = localStorage.getItem("access");
+    const refresh = localStorage.getItem("refresh");
+    if (access && refresh) {
+      setUser({ access, refresh }); // acá se podría guardar más info del usuario si el backend la provee
     }
     setLoading(false);
   }, []);
@@ -19,11 +21,11 @@ export const AuthProvider = ({ children }) => {
   // Función para loguear
   const login = async (credentials) => {
     try {
-      const res = await fetch("${import.meta.env.VITE_API_BASE_URL}", { // 🔹 cambia la URL según tu backend
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}token/`, { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
-        credentials: "include", // importante si el backend devuelve cookies HttpOnly
+        // credentials: "include", // importante si el backend devuelve cookies HttpOnly
       });
 
       if (!res.ok) {
@@ -32,10 +34,11 @@ export const AuthProvider = ({ children }) => {
 
       const data = await res.json();
 
-      if (data.token) {
+      if (data.access && data.refresh) {
         // Guardamos el token (⚠️ para producción, mejor HttpOnly cookies desde el backend)
-        localStorage.setItem("token", data.token);
-        setUser({ token: data.token });
+        localStorage.setItem("access", data.access);
+        localStorage.setItem("refresh", data.refresh);
+        setUser({ access: data.access, refresh: data.refresh });
       }
 
       return true;
@@ -46,9 +49,29 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Función para cerrar sesión
-  const logout = () => {
-    localStorage.removeItem("token");
+  const logout = async () => {
+    try {
+      const access = user?.access || localStorage.getItem("access");
+      const refresh = user?.refresh || localStorage.getItem("refresh");
+      
+      if (refresh) {
+        await fetch(`${import.meta.env.VITE_API_BASE_URL}users/logout/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${access}`,
+          },
+          body: JSON.stringify({ refresh }),
+        });
+      }
+    } catch (err) {
+      alert("Error al cerrar sesion:", err);
+    }
+
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
     setUser(null);
+
   };
 
   return (
