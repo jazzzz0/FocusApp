@@ -38,7 +38,7 @@ function App() {
         <Route path="/editar-post/:id" element={<EditPost />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/RegisterForm" element={<Register />} />
-        <Route path="/PuntuarFoto" element={<PuntuarFoto />} />
+        <Route path="/puntuar_foto" element={<PuntuarFoto />} />
         <Route path="/ValorarFoto" element={<ValorarFoto />} />
         <Route path="/CarruselConcursos" element={<CarruselConcursos />} />
         <Route path="/Concursos" element={<Concursos />} />
