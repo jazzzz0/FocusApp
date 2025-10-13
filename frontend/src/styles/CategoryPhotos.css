@@ -1,0 +1,95 @@
+.category-photos {
+  padding: 1rem;
+  max-width: 70%;
+  margin: 0 auto;
+}
+
+.photos-grid {
+  display: grid;
+  gap: 1rem; /* espacio entre fotos */
+  grid-template-columns: repeat(4, 1fr); /* 3 columnas por defecto */
+  /* padding: 0 0.5rem; */
+}
+
+.photo-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: #fff; /*TODO: tal vez cambio color*/
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+  padding: 0.25rem;
+}
+
+.photo-card:hover {
+  transform: translateY(-5px);
+}
+
+.photo-card img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.photo-card h4 {
+  margin-top: 0.25rem;
+  padding: 0.25rem;
+  font-size: 0.9rem;
+  text-align: center;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pagination-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.pagination-buttons button {
+  padding: 0.5rem 0.7rem;
+  height: fit-content;
+  width: fit-content;
+  border-radius: 5px;
+  border: 1px solid #072a51;
+  background-color: #0a3563;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pagination-buttons button:hover:not(:disabled) {
+  background-color: #072c54;
+  box-shadow: 1px 1px 5px #333;
+}
+
+.pagination-buttons button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.pagination-info {
+  text-align: center;
+  margin-top: 0.5rem;
+  font-weight: bold;
+}
+
+/* TABLET */
+@media (max-width: 1024px) {
+  .photos-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas */
+  }
+}
+
+/* MÓVIL */
+@media (max-width: 600px) {
+  .photos-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columna */
+  }
+}
