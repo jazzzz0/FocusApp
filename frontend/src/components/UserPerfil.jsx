@@ -1,68 +1,59 @@
-/*export default function PerfilUsuario() {
-  return <h1>Página del Perfil de Usuario</h1>;
-}*/
-
 import React from "react";
 
-
 const UserProfile = ({ user }) => {
-  if (!user) {
-  return (
-    <div className="text-center text-gray-600 mt-10">
-      Cargando perfil...
-    </div>
-  );
-}
-  return (
-    <div className="max-w-lg mx-auto p-6 bg-blue-50 rounded-2xl shadow-md">
-      {/* Encabezado */}
-      <div className="flex items-center gap-4">
-        <img
-          src={user.avatar || "/avatar-default.png"}
-          alt="Avatar"
-          className="w-20 h-20 rounded-full object-cover border-2 border-blue-300"
-        />
-        <div>
-          <h2 className="text-xl font-bold text-blue-900">@{user.username}</h2>
-          {user.fullName && (
-            <p className="text-blue-600 text-sm">{user.fullName}</p>
-          )}
-          <button className="mt-2 px-4 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-            Editar perfil
-          </button>
-        </div>
+  const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+  if (!user || !user.data) {
+    return (
+      <div className="text-center text-gray-500 mt-10 p-4 animate-pulse">
+        Cargando perfil... ⏳
       </div>
+    );
+  }
 
-      {/* Biografía */}
+  const { username, first_name, last_name, profile_pic } = user.data;
+
+  return (
+   
+    <div className="max-w-xs mx-auto my-8 p-6 bg-white rounded-xl shadow-lg border border-gray-100 text-center">
+      
+      
+      <img
+        src={profile_pic || defaultAvatar}
+        alt={`Foto de perfil de ${username}`}
+        
+        className="w-16 h-16 rounded-full object-cover border-2 border-indigo-400 shadow-md mx-auto mb-4"
+      />
+
+      
+      <div className="flex flex-col items-center">
+        {/* Nombre de usuario */}
+        <h2 className="text-xl font-bold text-gray-900 leading-tight mb-1">
+          @{username}
+        </h2>
+        {/* Nombre completo */}
+        <p className="text-md font-medium text-indigo-600 mb-4">
+          {first_name} {last_name}
+        </p>
+        
+        {/* Botón de acción */}
+        <button className="px-4 py-1.5 bg-indigo-500 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition duration-200">
+          ✍️ Editar perfil
+        </button>
+      </div>
+      
+      {/* 3. Biografía opcional */}
       {user.bio && (
-        <div className="mt-4 text-gray-700 text-sm">
-          <p>{user.bio}</p>
+        <div className="mt-6 pt-4 border-t border-gray-200">
+          <h3 className="text-sm font-semibold text-gray-700 mb-1">
+            Biografía
+          </h3>
+          <p className="text-gray-600 text-sm italic">
+            "{user.bio}"
+          </p>
         </div>
       )}
 
-      {/* Contacto */}
-      {user.email && (
-        <div className="mt-4 text-gray-600 text-sm">
-          <p>{user.email}</p>
-        </div>
-      )}
-
-      {/* Enlaces */}
-      {user.links && user.links.length > 0 && (
-        <div className="mt-4 flex gap-3">
-          {user.links.map((link, idx) => (
-            <a
-              key={idx}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:underline text-sm"
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
-      )}
     </div>
   );
 };
