@@ -49,8 +49,10 @@ const Perfil = () => {
   return (
     <div>
       <UserProfile user={user} />
-    </div>
+  </div>
   );
 };
 
+
 export default Perfil;
+

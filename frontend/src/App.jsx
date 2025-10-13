@@ -12,6 +12,13 @@ import PostList from "./components/PostList";
 import EditPost from "./components/EditPostPage";
 import PuntuarFoto from "./components/PuntuarFoto";
 import ValorarFoto from "./components/ValorarFoto";
+import CarruselConcursos from './components/CarruselConcursos';
+import './styles/focusApp.css';
+import './styles/Bienvenida.css'; 
+import './styles/concursos_puntuar.css';
+import './styles/RegisterForm.css';
+import './styles/Perfil.css';
+
 
 
 
@@ -31,8 +38,12 @@ function App() {
         <Route path="/editar-post/:id" element={<EditPost />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/RegisterForm" element={<Register />} />
-        <Route path="/PuntuarFoto" element={<PuntuarFoto />} />
+        <Route path="/puntuar_foto" element={<PuntuarFoto />} />
         <Route path="/ValorarFoto" element={<ValorarFoto />} />
+        <Route path="/CarruselConcursos" element={<CarruselConcursos />} />
+        <Route path="/Concursos" element={<Concursos />} />
+
+
       </Routes>
     </Router>
   );
