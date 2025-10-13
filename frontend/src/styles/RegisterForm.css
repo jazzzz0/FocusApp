@@ -21,7 +21,7 @@ body {
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
   width: 100%;
-  max-width: 400px;
+  max-width: 800px;
   box-sizing: border-box;
 }
 
@@ -45,8 +45,8 @@ body {
 /* Inputs */
 .register-form input {
   width: 100%;
-  padding: 0.6rem;
-  margin-bottom: 1rem;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 6px;
   outline: none;
@@ -90,7 +90,30 @@ body {
   text-decoration: underline;
 }
 
-/* Inputs en dos columnas */
+/* Grid de dos columnas para el formulario */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  row-gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.form-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.form-field {
+  margin-bottom: 0.4rem;
+}
+
+.form-field:last-child {
+  margin-bottom: 0;
+}
+
+/* Inputs en dos columnas (para casos específicos) */
 .form-row {
   display: flex;
   gap: 1rem;
@@ -98,4 +121,64 @@ body {
 
 .form-row div {
   flex: 1;
+}
+
+/* Responsive: En pantallas pequeñas, volver a una columna */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  
+  .register-form {
+    max-width: 500px;
+  }
+}
+
+/* Estilos para el input de archivo personalizado */
+.file-input-container {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.file-input-hidden {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.file-input-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px dashed #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.file-input-label:hover {
+  border-color: #172ad4;
+  background-color: #f0f4ff;
+  color: #172ad4;
+}
+
+.file-input-icon {
+  font-size: 1.2rem;
+}
+
+.file-input-text {
+  font-weight: 500;
+}
+
+.file-input-label:hover .file-input-icon {
+  transform: scale(1.1);
 }

@@ -66,65 +66,75 @@ const RegisterForm = () => {
       <form className="register-form" onSubmit={handleSubmit}>
         <h2>Registro de Usuario</h2>
 
-        <label>Nombre</label>
-        <input
-          type="text"
-          name="first_name"
-          value={formData.first_name}
-          onChange={handleChange}
-          maxLength="150"
-        />
+        <div className="form-grid">
+          <div className="form-field">
+            <label>Nombre</label>
+            <input
+              type="text"
+              name="first_name"
+              value={formData.first_name}
+              onChange={handleChange}
+              maxLength="150"
+            />
+          </div>
 
-        <label>Apellido</label>
-        <input
-          type="text"
-          name="last_name"
-          value={formData.last_name}
-          onChange={handleChange}
-          maxLength="150"
-        />
+          <div className="form-field">
+            <label>Apellido</label>
+            <input
+              type="text"
+              name="last_name"
+              value={formData.last_name}
+              onChange={handleChange}
+              maxLength="150"
+            />
+          </div>
 
-        <label>Usuario *</label>
-        <input
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-          required
-          maxLength="150"
-        />
+          <div className="form-field">
+            <label>Usuario *</label>
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+              maxLength="150"
+            />
+          </div>
 
-        <label>Email *</label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
+          <div className="form-field">
+            <label>Email *</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <label>Contraseña *</label>
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+          <div className="form-field">
+            <label>Contraseña *</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        
-       <label>Fecha de nacimiento *</label>
-        <input
-          type="date"
-          name="date_of_birth"
-          value={formData.date_of_birth}
-          onChange={handleChange}
-          required
-        />
+          <div className="form-field">
+            <label>Fecha de nacimiento *</label>
+            <input
+              type="date"
+              name="date_of_birth"
+              value={formData.date_of_birth}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-
-        <div className="form-row">
-          <div>
+          <div className="form-field">
             <label>País *</label>
             <input
               type="text"
@@ -135,7 +145,8 @@ const RegisterForm = () => {
               maxLength="100"
             />
           </div>
-          <div>
+
+          <div className="form-field">
             <label>Provincia *</label>
             <input
               type="text"
@@ -148,13 +159,25 @@ const RegisterForm = () => {
           </div>
         </div>
 
-        <label>Foto de perfil</label>
-        <input
-          type="file"
-          name="profile_pic"
-          onChange={handleChange}
-          accept="image/*"
-        />
+        <div className="form-field">
+          <label>Foto de perfil</label>
+          <div className="file-input-container">
+            <input
+              type="file"
+              name="profile_pic"
+              onChange={handleChange}
+              accept="image/*"
+              id="profile_pic"
+              className="file-input-hidden"
+            />
+            <label htmlFor="profile_pic" className="file-input-label">
+              <span className="file-input-icon">📷</span>
+              <span className="file-input-text">
+                {formData.profile_pic ? formData.profile_pic.name : 'Seleccionar imagen'}
+              </span>
+            </label>
+          </div>
+        </div>
 
         <button type="submit">Registrarse</button>
 

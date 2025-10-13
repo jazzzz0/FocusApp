@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import '../styles/Subir.css';
 
 
 const getDescriptionSuggestions = async (imageFile, navigate) => {
@@ -172,10 +173,7 @@ const PostForm = ({ existingPost }) => {
       alert("Debes seleccionar una imagen para subir.");
       return;
     }
-    if (!formData.description.trim()) {
-      alert("La descripción es obligatoria.");
-      return;
-    }
+
 
     formDataToSend.append("title", formData.title || "");
     formDataToSend.append("description", formData.description || "");
@@ -191,7 +189,6 @@ const PostForm = ({ existingPost }) => {
     const url = existingPost
       ? `${import.meta.env.VITE_API_BASE_URL}posts/${postId}/`
       : `${import.meta.env.VITE_API_BASE_URL}posts/`;
-
 
     const method = existingPost ? "PUT" : "POST";
 
@@ -221,140 +218,163 @@ const PostForm = ({ existingPost }) => {
       alert("Error de conexión");
     }
   };
-
+  
+  const showSuggestionsSection = loadingSuggestions || (descriptionSuggestions && descriptionSuggestions.length > 0);
 
   return (
-    <div className="register-form-center">
-      <form className="register-form" onSubmit={handleSubmit}>
+    <div className="subir-form-center">
+      <form className="subir-form" onSubmit={handleSubmit}>
         <h2>{existingPost ? "Editar Post" : "Subir Foto"}</h2>
 
-        <label>Imagen *{existingPost ? "(opcional)" : "*"}</label>
-        <input
-          type="file"
-          name="image"
-          accept="image/*"
-          onChange={handleChange}
-          {...(!existingPost && { required: true })}
-        />
+        <div className="form-row">
+          {/* Columna izquierda */}
+          <div className="form-field left-column">
+            <label>Imagen *{existingPost ? "(opcional)" : "*"}</label>
+            <div className="file-input-container">
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={handleChange}
+                id="image_upload"
+                className="file-input-hidden"
+                {...(!existingPost && { required: true })}
+              />
+              <label htmlFor="image_upload" className="file-input-label">
+                <span className="file-input-icon">📸</span>
+                <span className="file-input-text">
+                  {formData.image ? formData.image.name : 'Seleccionar imagen'}
+                </span>
+              </label>
+            </div>
 
-        {preview && (
-          <div style={{ marginTop: "10px", textAlign: "center" }}>
-            <p>Vista previa:</p>
-            <img
-              src={preview}
-              alt="Vista previa"
-              style={{
-                maxWidth: "300px",
-                maxHeight: "300px",
-                borderRadius: "10px",
-                boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-              }}
+            <label>Categoría *</label>
+            {loading ? (
+              <p>Cargando categorías...</p>
+            ) : (
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Seleccione una categoría</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            )}
+
+            <label>Título</label>
+            <input
+              type="text"
+              name="title"
+              maxLength={200}
+              value={formData.title}
+              onChange={handleChange}
             />
+
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                name="allows_ratings"
+                checked={formData.allows_ratings}
+                onChange={handleChange}
+              />
+              Permitir valoraciones
+              <span className="tooltip">⚠️
+                <span className="tooltip-text">
+                Permite que tu foto sea valorada en sus 5 aspectos clave 
+                (Composición, Iluminación, Adaptación técnica, Claridad y Enfoque, y Creatividad). 
+                El promedio de estas valoraciones influirá directamente en qué tan arriba aparece 
+                tu publicación en la sección "Explorar" de su categoría.
+                </span>
+              </span>
+            </label>
           </div>
-        )}
-        {/* --- Sección de Sugerencias de Descripción --- */}
-        {loadingSuggestions && (
-          <p style={{ textAlign: 'center', margin: '15px 0' }}>
-            Cargando sugerencias de descripción por IA... 🧠
-          </p>
-        )}
 
-        {descriptionSuggestions && descriptionSuggestions.length > 0 && (
-          <div style={{
-            marginTop: "15px",
-            padding: "10px",
-            border: "1px solid #ccc",
-            borderRadius: "8px",
-            backgroundColor: '#f9f9f9'
-          }}>
-            <p style={{ fontWeight: 'bold', marginBottom: '10px', textAlign: "center" }}>
-              💡 Sugerencias de descripción por IA
-            </p>
+          {/* Columna derecha */}
+          <div className="image-preview">
+            {preview ? (
+              <>
+                <p>Vista previa</p>
+                <img
+                  src={preview}
+                  alt="Vista previa"
+                />
+              </>
+            ) : (
+              <div className="placeholder">
+                <span>🖼️</span>
+                <p>Sin imagen</p>
+              </div>
+            )}
+          </div>
+        </div>
+        
+          {showSuggestionsSection ? (
+            /* --- 2 columnas: descripción + sugerencias --- */
+            <div className={`description-suggestions-row ${showSuggestionsSection ? 'two-columns' : 'one-column'}`}>
+              
+              {/* Columna: Descripción */}
+              <div className="description-box">
+                <label>Descripción</label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  placeholder="Describe tu fotografía."
+                />
+              </div>
 
-            <div style={{ display: 'flex', gap: '15px', justifyContent: "center", flexWrap: "wrap" }}>
-              {descriptionSuggestions.slice(0, 3).map((desc, index) => (
-                <div key={index} style={{
-                  flex: "1 1 30%",
-                  minWidth: "200px",
-                  border: "1px solid #ddd",
-                  borderRadius: "10px",
-                  padding: "15px",
-                  backgroundColor: "#fff",
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-                  textAlign: "center"
-                }}>
-                  <p style={{ fontSize: "14px", marginBottom: "10px" }}>{desc}</p>
-                  <button
-                    type="button"
-                    onClick={() => handleSuggestionSelection(desc)}
-                    style={{
-                      padding: "6px 12px",
-                      borderRadius: "6px",
-                      border: "none",
-                      background: formData.description === desc ? "#007bff" : "#6c757d",
-                      color: "#fff",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {formData.description === desc ? "Seleccionado" : "Usar esta"}
-                  </button>
+              {/* Columna: Sugerencias (solo si se muestran) */}
+              {showSuggestionsSection && (
+                <div className="ai-suggestions">
+                    {loadingSuggestions ? (
+                      <p>Cargando sugerencias...</p>
+                    ) : (
+                      <>
+                        <h3>Sugerencias de descripción</h3>
+                        <div className="suggestions-row">
+                          {descriptionSuggestions.slice(0, 3).map((desc, index) => {
+                            const isSelected = formData.description === desc;
+                            return (
+                              <div
+                                key={index}
+                                className={`suggestion-card-with-check ${isSelected ? 'selected' : ''}`}
+                                onClick={() => handleSuggestionSelection(desc)}
+                              >
+                                <p title={desc}>{desc}</p>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </>
+                    )}
                 </div>
-              ))}
+              )}
+            </div>
+          ): (
+            // --- 1 columna (full width) ---
+            <div className="description-suggestions-row one-column">
+            <div className="description-box">
+              <label>Descripción</label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Describe tu fotografía."
+              />
             </div>
           </div>
-        )}
+          )}
 
 
 
-        <label>Título</label>
-        <input
-          type="text"
-          name="title"
-          maxLength={200}
-          value={formData.title}
-          onChange={handleChange}
-        />
-
-        <label>Descripción</label>
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          placeholder="Escribe tu propia descripción aquí si no quieres usar la IA."
-
-        />
-
-        <label>Categoría *</label>
-        {loading ? (
-          <p>Cargando categorías...</p>
-        ) : (
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Seleccione una categoría</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-        )}
-
-        <label>
-          <input
-            type="checkbox"
-            name="allows_ratings"
-            checked={formData.allows_ratings}
-            onChange={handleChange}
-          />
-          Permitir calificaciones
-        </label>
-
-        <button type="submit" disabled={loading || loadingSuggestions}>
-          {existingPost ? "Actualizar" : "Subir"}
+        <button type="submit" className="subir-btn" disabled={loading || loadingSuggestions}>
+          {loading || loadingSuggestions ? "Procesando..." : (existingPost ? "Actualizar" : "Subir")}
         </button>
       </form>
     </div>
