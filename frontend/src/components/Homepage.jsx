@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import portada from '../assets/imagenes/portada.jpg';
 import logo from '../assets/imagenes/logo.png';
 import retrato from '../assets/imagenes/retrato.jpg';
@@ -39,6 +41,8 @@ function Homepage() {
     const [current, setCurrent] = useState(0);
     const timeoutRef = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
+    const { user, logout } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     // Avanza automáticamente cada 8 segundos
     useEffect(() => {
@@ -52,6 +56,11 @@ function Homepage() {
         setCurrent(idx);
         clearTimeout(timeoutRef.current);
     };
+
+    const handleLogout = async () => {
+        await logout()<
+        navigate("/Login", { replace: true });
+    }
 
     return (
         <>
@@ -71,7 +80,11 @@ function Homepage() {
                             <Link to="/concursos">Concursos</Link>
                             <li><Link to="/Perfil">Perfil</Link></li>
                             <li><Link to="/Subir">Subir Foto</Link></li>
-                            <li><Link to="/">Cerrar sesión</Link></li>
+                            <li>
+                                <button onClick={handleLogout} className="logout-btn">
+                                    Cerrar sesión
+                                </button>
+                            </li>
                         </ul>
                     </nav>
 
