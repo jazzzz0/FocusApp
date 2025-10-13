@@ -96,7 +96,7 @@ const Concursos = () => {
           <nav className="navbar">
             <ul className="nav_list" style={{ display: "flex", gap: "20px" }}>
               <li>
-                <a href="/puntuar_foto">Puntuar Fotos</a>
+                <a href="/PuntuarFoto">Puntuar Fotos</a>
               </li>
             </ul>
           </nav>
