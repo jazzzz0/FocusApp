@@ -12,6 +12,7 @@ import PostList from "./components/PostList";
 import EditPost from "./components/EditPostPage";
 import PuntuarFoto from "./components/PuntuarFoto";
 import ValorarFoto from "./components/ValorarFoto";
+import EditarPerfil from "./components/EditarPerfil";
 import CarruselConcursos from './components/CarruselConcursos';
 import './styles/focusApp.css';
 import './styles/Bienvenida.css'; 
@@ -40,6 +41,7 @@ function App() {
         <Route path="/RegisterForm" element={<Register />} />
         <Route path="/puntuar_foto" element={<PuntuarFoto />} />
         <Route path="/ValorarFoto" element={<ValorarFoto />} />
+        <Route path="/editar-perfil" element={<EditarPerfil />} />
         <Route path="/CarruselConcursos" element={<CarruselConcursos />} />
         <Route path="/Concursos" element={<Concursos />} />
 

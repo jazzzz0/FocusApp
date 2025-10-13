@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import UserProfile from "./UserPerfil";
+import "../styles/perfil.css";
 
 const Perfil = () => {
   const [user, setUser] = useState(null);

@@ -1,0 +1,93 @@
+
+/* Contenedor principal del perfil */
+.profile-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #1f2937; /* gris oscuro */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  color: #f9fafb;
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+}
+
+/* Avatar */
+.profile-container img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #6366f1;
+  margin-bottom: 1rem;
+}
+
+/* Nombre de usuario */
+.profile-container h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #f9fafb;
+  margin-bottom: 0.25rem;
+}
+
+/* Nombre completo */
+.profile-container p {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #818cf8;
+  margin-bottom: 1rem;
+}
+
+/* Botón de acción (Editar perfil, Guardar cambios) */
+.profile-container button {
+  background-color: #6366f1;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 1rem;
+}
+
+.profile-container button:hover {
+  background-color: #4f46e5;
+  transform: translateY(-1px);
+}
+
+/* Biografía */
+.profile-container .bio {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #374151;
+  font-size: 0.95rem;
+  color: #d1d5db;
+  font-style: italic;
+}
+
+/* Inputs y textarea para editar perfil */
+.profile-container input[type="text"],
+.profile-container textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid #4b5563;
+  background-color: #111827;
+  color: #f9fafb;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+
+.profile-container input[type="text"]:focus,
+.profile-container textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+/* Textarea específico */
+.profile-container textarea {
+  resize: vertical;
+  min-height: 80px;
+}
