@@ -1,10 +1,9 @@
-/// src/components/PuntuarFoto.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/focusapp.css";
 //import "../styles/concursos.css";
 import "../styles/concursos_puntuar.css";
-import naturaleza from "../assets/imagenes/naturaleza.jpg";
+import animales from "../assets/imagenes/animales.jpg";
 import retratos from "../assets/imagenes/retratos.png";
 import urbano from "../assets/imagenes/urbano.webp";
 import docu from "../assets/imagenes/13.jpeg";
@@ -12,6 +11,7 @@ import comida from "../assets/imagenes/foto_6.jpg";
 import futuros from "../assets/imagenes/foto 4.jpg";
 import comentarios from "../assets/imagenes/foto_2.png";
 import participar from "../assets/imagenes/foto2.png";
+import naturaleza from '../assets/imagenes/naturaleza.jpg';
 import logo from "../assets/imagenes/logo.png";
 
 const fotosData = [
@@ -25,7 +25,6 @@ const fotosData = [
   { img: participar, title: "¿Te gustaria participar con tu foto?", author: "Mira las reglas e inscripciones en cada categoria", btnText: "Ir" },
 ];
 
-
 const PuntuarFoto = () => {
   return (
     <div style={{ backgroundColor: "#242424", color: "#fff", minHeight: "100vh" }}>
@@ -38,9 +37,7 @@ const PuntuarFoto = () => {
           </a>
           <nav className="navbar">
             <ul className="nav_list" style={{ display: "flex", gap: "20px" }}>
-              <li>
-                <Link to="/Homepage">Volver al Perfil</Link>
-              </li>
+              <li><Link to="/Homepage">Volver al Perfil</Link></li>
             </ul>
           </nav>
         </div>
@@ -61,8 +58,14 @@ const PuntuarFoto = () => {
               </div>
 
               {/* BOTÓN: si es "Valorar" lleva a /valorar */}
-              {foto.btnText === "Valorar" ? (
+              {/*{foto.btnText === "Valorar" ? (
                 <Link to="/valorar">
+                  <button className="btn" style={{ backgroundColor: "#646cff", color: "#fff", marginTop: "0.5rem" }}>
+                    {foto.btnText}
+                  </button>
+                </Link>*/}
+                {foto.btnText === "Valorar" ? (
+                <Link to={`/valorar?categoria=${encodeURIComponent(foto.title)}`}>
                   <button className="btn" style={{ backgroundColor: "#646cff", color: "#fff", marginTop: "0.5rem" }}>
                     {foto.btnText}
                   </button>
@@ -81,3 +84,4 @@ const PuntuarFoto = () => {
 };
 
 export default PuntuarFoto;
+

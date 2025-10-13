@@ -18,7 +18,7 @@ import './styles/focusApp.css';
 import './styles/Bienvenida.css'; 
 import './styles/concursos_puntuar.css';
 import './styles/RegisterForm.css';
-import './styles/Perfil.css';
+import './styles/perfil.css';
 import CategoryPage from './pages/CategoryPage';
 import { CategoriesProvider } from "./context/CategoriesContext";
 
@@ -32,21 +32,23 @@ function App() {
           {/* Ruta principal */}
           <Route path="/" element={<Bienvenida />} />
 
-          {/* Otras rutas */}
-          <Route path="/posts" element={<PostList />} />
-          <Route path="/Homepage" element={<Homepage />} />
-          <Route path="/concursos" element={<Concursos />} />
-          <Route path="/Perfil" element={<Perfil />} />
-          <Route path="/Subir" element={<PostForm />} />
-          <Route path="/editar-post/:id" element={<EditPost />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/RegisterForm" element={<Register />} />
-          <Route path="/puntuar_foto" element={<PuntuarFoto />} />
-          <Route path="/ValorarFoto" element={<ValorarFoto />} />
-          <Route path="/editar-perfil" element={<EditarPerfil />} />
-          <Route path="/CarruselConcursos" element={<CarruselConcursos />} />
-          <Route path="/Concursos" element={<Concursos />} />
-          <Route path="/explorar/:categorySlug" element={< CategoryPage />} />
+        {/* Otras rutas */}
+        <Route path="/posts" element={<PostList />} />
+        <Route path="/Homepage" element={<Homepage />} />
+        <Route path="/concursos" element={<Concursos />} />
+        <Route path="/Perfil" element={<Perfil />} />
+        <Route path="/Subir" element={<PostForm />} />
+        <Route path="/editar-post/:id" element={<EditPost />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/RegisterForm" element={<Register />} />
+        <Route path="/PuntuarFoto" element={<PuntuarFoto />} />
+        <Route path="/valorar" element={<ValorarFoto />} />
+        <Route path="/editar-perfil" element={<EditarPerfil />} />
+        <Route path="/CarruselConcursos" element={<CarruselConcursos />} />
+        <Route path="/Concursos" element={<Concursos />} />
+        <Route path="/explorar/:categorySlug" element={< CategoryPage />} />
+         
+          
         </Routes>
       </CategoriesProvider>
 

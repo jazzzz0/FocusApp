@@ -27,6 +27,7 @@ import "../styles/concursos.css"; // estilos específicos para concursos
 import "../styles/concursos_puntuar.css"
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { Link } from "react-router-dom";
 
 
 
@@ -97,7 +98,7 @@ const Concursos = () => {
           <nav className="navbar">
             <ul className="nav_list" style={{ display: "flex", gap: "20px" }}>
               <li>
-                <a href="/PuntuarFoto">Puntuar Fotos</a>
+                <Link to="/PuntuarFoto">Puntuar Fotos</Link>
               </li>
             </ul>
           </nav>
