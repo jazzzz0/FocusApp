@@ -21,7 +21,7 @@ import './styles/RegisterForm.css';
 import './styles/Perfil.css';
 import CategoryPage from './pages/CategoryPage';
 import { CategoriesProvider } from "./context/CategoriesContext";
-
+import PostDetail from './pages/PostDetail';
 
 
 function App() {
@@ -47,7 +47,7 @@ function App() {
         <Route path="/CarruselConcursos" element={<CarruselConcursos />} />
         <Route path="/Concursos" element={<Concursos />} />
         <Route path="/explorar/:categorySlug" element={< CategoryPage />} />
-         
+        <Route path="/posts/:id/" element={< PostDetail />}></Route>
           
         </Routes>
       </CategoriesProvider>

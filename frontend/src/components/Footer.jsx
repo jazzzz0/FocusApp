@@ -22,9 +22,8 @@ const Footer = ({ onLogout }) => {
           <h3>Enlaces útiles</h3>
           <div className="footer-links">
             <Link to="/">Inicio</Link>
-            <HashLink smooth to="/Homepage#about">Sobre nosotros</HashLink>
+            <HashLink smooth to="/Homepage#about">Nosotros</HashLink>
             <HashLink smooth to="/Homepage#funciones">Funciones</HashLink>
-            <HashLink smooth to="/Homepage#ranking">Ranking</HashLink>
             <Link to="/concursos">Concursos</Link>
             <Link to="/perfil">Perfil</Link>
             <Link to="/subir">Subir Foto</Link>

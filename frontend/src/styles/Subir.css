@@ -392,7 +392,7 @@
 .subir-btn {
   width: 100%;
   padding: 0.8rem;
-  background-color: #1c36c9;
+  background-color: #0a3563;
   border: none;
   border-radius: 6px;
   color: white;
@@ -404,7 +404,7 @@
 }
 
 .subir-btn:hover:not(:disabled) {
-  background-color: #1928b3;
+  background-color: #034caa;
 }
 
 .subir-btn:disabled {

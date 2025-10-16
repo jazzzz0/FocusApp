@@ -139,10 +139,10 @@ class RatingView(APIView):
             logger.info(f"Valoración obtenida: Rater {rating.rater} - Post ID {rating.post} - Valoración {serializer.data}")
             return Response({"success": True, "data": serializer.data}, status=status.HTTP_200_OK)
 
-        # Si el Rating no existe se devuelve un objeto vacío
+        # Si el Rating no existe se devuelve success: false
         except Rating.DoesNotExist:
             logger.info(f"Usuario {user} no ha valorado el post ID {post_id}")
-            return Response({"success": True, "data": {}}, status=status.HTTP_200_OK)
+            return Response({"success": False, "message": "El usuario no ha valorado esta publicación"}, status=status.HTTP_200_OK)
 
         except Post.DoesNotExist:
             logger.warning(f"No se puede obtener la valoración de un post inexistente.")

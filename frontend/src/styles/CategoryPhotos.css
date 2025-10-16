@@ -1,6 +1,6 @@
 .category-photos {
   padding: 1rem;
-  max-width: 70%;
+  max-width: 85%;
   margin: 0 auto;
 }
 
@@ -60,6 +60,7 @@
   border-radius: 5px;
   border: 1px solid #072a51;
   background-color: #0a3563;
+  color: #fff !important;
   cursor: pointer;
   transition: all 0.2s;
 }

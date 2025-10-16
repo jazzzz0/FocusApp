@@ -22,6 +22,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
+    category = CategorySerializer(read_only=True)
     ratings_count = serializers.IntegerField(read_only=True)
     class Meta:
         model = Post

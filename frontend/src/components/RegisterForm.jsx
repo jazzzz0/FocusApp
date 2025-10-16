@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/RegisterForm.css';
 import { Link } from "react-router-dom";
+import { Snackbar, Alert } from '@mui/material';
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +17,12 @@ const RegisterForm = () => {
     profile_pic: null,
   });
 
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -25,6 +32,18 @@ const RegisterForm = () => {
     } else {
       setFormData({ ...formData, [name]: value });
     }
+  };
+
+  const showSnackbar = (message, severity = 'success') => {
+    setSnackbar({
+      open: true,
+      message,
+      severity
+    });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar(prev => ({ ...prev, open: false }));
   };
 
   const handleSubmit = async (e) => {
@@ -49,15 +68,15 @@ const RegisterForm = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert("✅ Usuario registrado exitosamente");
-        navigate("/Login");
+        showSnackbar("✅ Usuario registrado exitosamente", 'success');
+        setTimeout(() => navigate("/Login"), 700);
       } else {
         console.error("❌ Error al registrar:", data);
-        alert("Error: " + (data.detail || JSON.stringify(data)));
+        showSnackbar("Error: " + (data.detail || JSON.stringify(data)), 'error');
       }
     } catch (error) {
       console.error("🚨 Error de conexión:", error);
-      alert("Error de conexión con el servidor");
+      showSnackbar("Error de conexión con el servidor", 'error');
     }
   };
 
@@ -185,6 +204,21 @@ const RegisterForm = () => {
           ¿Ya tienes cuenta? <Link to="/Login">Inicia sesión aquí</Link>
         </p>
       </form>
+      
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
