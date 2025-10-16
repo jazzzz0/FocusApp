@@ -44,6 +44,18 @@ class LogoutView(APIView):
             return Response({"detail": "Error al cerrar sesión. Token inválido."}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class CurrentUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        """Obtener información del usuario autenticado actual"""
+        try:
+            serializer = UserProfileSerializer(request.user)
+            return Response({"success": True, "data": serializer.data}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"success": False, "message": "No se pudo obtener el usuario actual", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 class UserView(APIView):
     permission_classes = [IsAuthenticated]
 

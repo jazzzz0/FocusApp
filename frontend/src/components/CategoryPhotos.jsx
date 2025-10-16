@@ -69,7 +69,7 @@ const CategoryPhotos = ({ categoryId }) => {
   
             return (
               <div key={photo.id} className="photo-card">
-                <Link to={`/post/${photo.id}`}>
+                <Link to={`/posts/${photo.id}/`}>
                   <img src={imageUrl} alt={photo.title || `Foto de ${photo.author.username}`} />
                 </Link>
                 <h4>{photo.title || `Tomada por ${photo.author.username}`}</h4>

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import { AuthContext } from "../context/AuthContext";
@@ -11,6 +11,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { logout } = useContext(AuthContext);
   const { categories } = useContext(CategoriesContext);
 
@@ -19,37 +20,107 @@ const Navbar = () => {
     navigate("/Login");
   };
 
+  // Cerrar menú móvil al hacer clic en un enlace
+  const closeMobileMenu = () => {
+    setIsOpen(false);
+    setShowDropdown(false);
+  };
+
+  // Cerrar menú móvil al cambiar de ruta
+  useEffect(() => {
+    closeMobileMenu();
+  }, [location.pathname]);
+
+  // Función para determinar si un enlace está activo (solo para rutas normales, no hash)
+  const isActive = (path) => {
+    // Solo aplicar a rutas que no sean del Homepage con hash
+    if (path.includes('#') || path === '/Homepage') {
+      return false;
+    }
+    return location.pathname.startsWith(path);
+  };
+
   return (
     <header className="header">
       <div className="container">
-        <a href="#" className="logo leckerli-one-regular">
+        <a href="/Homepage" className="logo leckerli-one-regular">
             <img src={logo} alt="FocusApp" className="logo-image" />
             <span className="logo-text">FocusApp</span>
           </a>
 
         <nav className={`navbar ${isOpen ? "active" : ""}`}>
           <ul className="nav_list">
-            <li><HashLink smooth to="/Homepage#about">Nosotros</HashLink></li>
-            <li><HashLink smooth to="/Homepage#funciones">Funciones</HashLink></li>
-            <li><HashLink smooth to="/Homepage#ranking">Ranking</HashLink></li>
+            <li>
+              <HashLink 
+                smooth 
+                to="/Homepage#about" 
+                onClick={closeMobileMenu}
+              >
+                Nosotros
+              </HashLink>
+            </li>
+            <li>
+              <HashLink 
+                smooth 
+                to="/Homepage#funciones" 
+                onClick={closeMobileMenu}
+              >
+                Funciones
+              </HashLink>
+            </li>
+            {/* <li>
+              <HashLink 
+                smooth 
+                to="/Homepage#ranking" 
+                className={isActive('/Homepage') ? 'active' : ''}
+                onClick={closeMobileMenu}
+              >
+                Ranking
+              </HashLink>
+            </li> */}
             <li
               onMouseEnter={() => setShowDropdown(true)}
               onMouseLeave={() => setShowDropdown(false)}
+              onClick={() => setShowDropdown(!showDropdown)}
             >
-              Explorar
+              <span className={showDropdown ? 'active' : ''}>Explorar</span>
               {showDropdown && (
                 <ul className="dropdown-menu">
                   {categories.map(cat => (
                     <li key={cat.id}>
-                      <Link to={`/explorar/${cat.slug}`}>{cat.name}</Link>
+                      <Link 
+                        to={`/explorar/${cat.slug}`}
+                        className={isActive(`/explorar/${cat.slug}`) ? 'active' : ''}
+                        onClick={closeMobileMenu}
+                      >
+                        {cat.name}
+                      </Link>
                     </li>
                   ))}
                 </ul>
               )}
             </li>
-            <li><Link to="/perfil">Perfil</Link></li>
-            <li><Link to="/subir">Subir Foto</Link></li>
-            <li><button onClick={handleLogout}>Cerrar sesión</button></li>
+            <li>
+              <Link 
+                to="/perfil" 
+                className={isActive('/perfil') ? 'active' : ''}
+                onClick={closeMobileMenu}
+              >
+                Perfil
+              </Link>
+            </li>
+            <li>
+              <Link 
+                to="/subir" 
+                className={isActive('/subir') ? 'active' : ''}
+                onClick={closeMobileMenu}
+              >
+                Subir Foto
+              </Link>
+            </li>
+            <li>
+              <button onClick={handleLogout}>Cerrar sesión</button>
+            </li>
           </ul>
         </nav>
 

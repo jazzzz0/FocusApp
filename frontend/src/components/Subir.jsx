@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Snackbar, Alert } from "@mui/material";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 import '../styles/Subir.css';
 
 
@@ -60,6 +63,11 @@ const PostForm = ({ existingPost }) => {
   const [preview, setPreview] = useState(null);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success"
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -207,23 +215,60 @@ const PostForm = ({ existingPost }) => {
       }
 
       if (response.ok) {
-        alert(existingPost ? "✅ Post actualizado correctamente" : "✅ Foto subida correctamente");
-        navigate("/posts");
+        if (existingPost) {
+          setSnackbar({
+            open: true,
+            message: "✅ Post actualizado correctamente",
+            severity: "success"
+          });
+          setTimeout(() => navigate("/posts"), 1500);
+        } else {
+          setSnackbar({
+            open: true,
+            message: "✅ Foto subida correctamente",
+            severity: "success"
+          });
+          // Debug: ver qué devuelve el backend
+          console.log("🔍 Respuesta del backend:", data);
+          // Redirigir a la nueva publicación creada
+          const newPostId = data?.data?.id;
+          console.log("🆔 ID de la nueva publicación:", newPostId);
+          if (newPostId) {
+            setTimeout(() => navigate(`/posts/${newPostId}/`), 1500);
+          } else {
+            console.log("⚠️ No se encontró ID, redirigiendo a /posts");
+            setTimeout(() => navigate("/posts"), 1500);
+          }
+        }
       } else {
         console.error("❌ Error de validación:", data);
-        alert("❌ Error: " + (data?.detail || "No se pudo procesar la solicitud."));
+        setSnackbar({
+          open: true,
+          message: "❌ Error: " + (data?.errors?.image || "No se pudo procesar la solicitud."),
+          severity: "error"
+        });
       }
     } catch (error) {
       console.error("🚨 Error en fetch:", error);
-      alert("Error de conexión");
+      setSnackbar({
+        open: true,
+        message: "Error de conexión",
+        severity: "error"
+      });
     }
+  };
+  
+  const handleCloseSnackbar = () => {
+    setSnackbar(prev => ({ ...prev, open: false }));
   };
   
   const showSuggestionsSection = loadingSuggestions || (descriptionSuggestions && descriptionSuggestions.length > 0);
 
   return (
-    <div className="subir-form-center">
-      <form className="subir-form" onSubmit={handleSubmit}>
+    <>
+      <Navbar />
+      <div className="subir-form-center">
+        <form className="subir-form" onSubmit={handleSubmit}>
         <h2>{existingPost ? "Editar Post" : "Subir Foto"}</h2>
 
         <div className="form-row">
@@ -377,7 +422,25 @@ const PostForm = ({ existingPost }) => {
           {loading || loadingSuggestions ? "Procesando..." : (existingPost ? "Actualizar" : "Subir")}
         </button>
       </form>
-    </div>
+      
+      {/* Snackbar para mensajes de éxito/error */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+      </div>
+      <Footer />
+    </>
   );
 };
 

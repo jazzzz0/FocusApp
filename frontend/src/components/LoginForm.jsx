@@ -3,16 +3,35 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/RegisterForm.css'; 
 import { Link } from "react-router-dom";
 import '../components/RegisterForm';
+import { Snackbar, Alert } from '@mui/material';
 const LoginForm = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
   });
 
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
+
   const navigate = useNavigate();
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const showSnackbar = (message, severity = 'success') => {
+    setSnackbar({
+      open: true,
+      message,
+      severity
+    });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar(prev => ({ ...prev, open: false }));
   };
 
   const handleSubmit = async e => {
@@ -35,14 +54,14 @@ const LoginForm = () => {
       localStorage.setItem('access', data.access);
       localStorage.setItem('refresh', data.refresh);
       localStorage.setItem('username', formData.username);
-      alert('Login exitoso');
-      navigate('/Homepage');
+      showSnackbar('Login exitoso', 'success');
+      setTimeout(() => navigate("/Homepage"), 700);
     } else {
-      alert('Error: ' + JSON.stringify(data));
+      showSnackbar('Error: Credenciales inválidas', 'error');
     }
   } catch (error) {
     console.error(error);
-    alert('Error de conexión');
+    showSnackbar('Error de conexión', 'error');
   }
 };
 
@@ -63,6 +82,21 @@ const LoginForm = () => {
 
         <p>¿No tienes cuenta? <Link to="/RegisterForm">Regístrate aquí</Link></p>
       </form>
+      
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

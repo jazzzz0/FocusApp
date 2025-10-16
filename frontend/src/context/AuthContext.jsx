@@ -10,13 +10,49 @@ export const AuthProvider = ({ children }) => {
 
   // Cuando arranca la app, revisamos si hay tokens en localStorage
   useEffect(() => {
-    const access = localStorage.getItem("access");
-    const refresh = localStorage.getItem("refresh");
-    if (access && refresh) {
-      setUser({ access, refresh }); // acá se podría guardar más info del usuario si el backend la provee
-    }
-    setLoading(false);
+    const initializeUser = async () => {
+      const access = localStorage.getItem("access");
+      const refresh = localStorage.getItem("refresh");
+      
+      if (access && refresh) {
+        // Obtener información del usuario
+        const userInfo = await fetchCurrentUser(access);
+        
+        if (userInfo) {
+          setUser({ access, refresh, ...userInfo });
+        } else {
+          // Si no se puede obtener la info del usuario, limpiar tokens
+          localStorage.removeItem("access");
+          localStorage.removeItem("refresh");
+        }
+      }
+      
+      setLoading(false);
+    };
+
+    initializeUser();
   }, []);
+
+  // Función para obtener información del usuario actual
+  const fetchCurrentUser = async (accessToken) => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}users/me/`, {
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!res.ok) {
+        return null;
+      }
+
+      const data = await res.json();
+      return data.success ? data.data : null;
+    } catch (err) {
+      console.error("Error fetching current user:", err);
+      return null;
+    }
+  };
 
   // Función para loguear
   const login = async (credentials) => {
@@ -38,7 +74,15 @@ export const AuthProvider = ({ children }) => {
         // Guardamos el token (⚠️ para producción, mejor HttpOnly cookies desde el backend)
         localStorage.setItem("access", data.access);
         localStorage.setItem("refresh", data.refresh);
-        setUser({ access: data.access, refresh: data.refresh });
+        
+        // Obtener información del usuario
+        const userInfo = await fetchCurrentUser(data.access);
+        
+        setUser({ 
+          access: data.access, 
+          refresh: data.refresh,
+          ...userInfo // Agregar id, username, etc.
+        });
       }
 
       return true;
