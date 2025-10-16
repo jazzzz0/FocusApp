@@ -1,7 +1,10 @@
-import React from "react";
-import "../styles/perfil.css"; 
+
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../styles/Perfil.css"; 
 
 const UserProfile = ({ user }) => {
+  const navigate = useNavigate();
   const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
   if (!user || !user.data) {
@@ -15,13 +18,14 @@ const UserProfile = ({ user }) => {
   const { username, first_name, last_name, profile_pic, bio } = user.data;
 
   return (
-    <div className="profile-container">
+    <div className="perfil-card">
       <img src={profile_pic || defaultAvatar} alt={`Foto de perfil de ${username}`} />
-
       <h2>@{username}</h2>
       <p>{first_name} {last_name}</p>
 
-      <button>✍️ Editar perfil</button>
+      <button onClick={() => navigate("/editar-perfil")}>
+        ✍️ Editar perfil
+      </button>
 
       {bio && <div className="bio">"{bio}"</div>}
     </div>
