@@ -53,19 +53,10 @@ const Navbar = () => {
             <li>
               <HashLink 
                 smooth 
-                to="/Homepage#about" 
+                to="/Homepage" 
                 onClick={closeMobileMenu}
               >
-                Nosotros
-              </HashLink>
-            </li>
-            <li>
-              <HashLink 
-                smooth 
-                to="/Homepage#funciones" 
-                onClick={closeMobileMenu}
-              >
-                Funciones
+                Inicio
               </HashLink>
             </li>
             {/* <li>
