@@ -42,7 +42,7 @@ class UserSerializer(serializers.ModelSerializer):
         try:
             validate_password(value)
         except DjangoValidationError as e:
-            raise serializers.ValidationError("La contraseña debe tener al menos 10 caracteres y no puede ser completamente numérica.")
+            raise serializers.ValidationError("La contraseña debe tener al menos 10 caracteres, no puede ser completamente numérica y no debe ser una contraseña común.")
         return value
 
     def validate_date_of_birth(self, value):
