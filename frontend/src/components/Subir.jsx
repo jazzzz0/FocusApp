@@ -6,11 +6,15 @@ import Footer from "./Footer";
 import '../styles/Subir.css';
 
 
-const getDescriptionSuggestions = async (imageFile, navigate) => {
+const getDescriptionSuggestions = async (imageFile, navigate, setSnackbar) => {
   const token = localStorage.getItem("access");
   if (!token) {
-    alert("Debes iniciar sesión para continuar.");
-    navigate("/Login");
+    setSnackbar({
+      open: true,
+      message: "Debes iniciar sesión para continuar.",
+      severity: "warning"
+    });
+    setTimeout(() => navigate("/Login"), 2000);
     return;
   }
 
@@ -37,7 +41,11 @@ const getDescriptionSuggestions = async (imageFile, navigate) => {
       return data;
     } else {
       console.error("❌ Error en sugerencias:", data);
-      alert("Error: " + (data.detail || "No se pudo obtener sugerencias"));
+      setSnackbar({
+        open: true,
+        message: "Error: " + (data.detail || "No se pudo obtener sugerencias"),
+        severity: "error"
+      });
       return null;
     }
   } catch (err) {
@@ -49,7 +57,7 @@ const getDescriptionSuggestions = async (imageFile, navigate) => {
 
 
 
-const PostForm = ({ existingPost }) => {
+const PostForm = () => {
   const [formData, setFormData] = useState({
     image: null,
     title: "",
@@ -69,21 +77,6 @@ const PostForm = ({ existingPost }) => {
     severity: "success"
   });
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (existingPost) {
-      setFormData({
-        image: null,
-        title: existingPost.title || "",
-        description: existingPost.description || "",
-        category: existingPost.category?.id || existingPost.category || "",
-        allows_ratings: existingPost.allows_ratings ?? true,
-      });
-      setPreview(existingPost.image);
-    }
-    // Limpiar sugerencias al cargar un post existente
-    setDescriptionSuggestions(null);
-  }, [existingPost]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -138,7 +131,7 @@ const PostForm = ({ existingPost }) => {
       setLoadingSuggestions(true);
       setDescriptionSuggestions(null); // Limpiar sugerencias previas
 
-      getDescriptionSuggestions(files[0], navigate).then((data) => {
+      getDescriptionSuggestions(files[0], navigate, setSnackbar).then((data) => {
         setLoadingSuggestions(false);
 
         if (data?.data?.contenido_generado) {
@@ -166,21 +159,27 @@ const PostForm = ({ existingPost }) => {
     e.preventDefault();
     const token = localStorage.getItem("access");
     if (!token) {
-      alert("Debes iniciar sesión para continuar.");
-      navigate("/Login");
+      setSnackbar({
+        open: true,
+        message: "Debes iniciar sesión para continuar.",
+        severity: "warning"
+      });
+      setTimeout(() => navigate("/Login"), 2000);
       return;
     }
 
     const formDataToSend = new FormData();
 
-    if (formData.image) {
-      console.log("📸 Nueva imagen seleccionada:", formData.image);
-      formDataToSend.append("image", formData.image);
-    } else if (!existingPost) {
-      // Solo obligamos en nuevo post
-      alert("Debes seleccionar una imagen para subir.");
+    if (!formData.image) {
+      setSnackbar({
+        open: true,
+        message: "Debes seleccionar una imagen para subir.",
+        severity: "warning"
+      });
       return;
     }
+
+    formDataToSend.append("image", formData.image);
 
 
     formDataToSend.append("title", formData.title || "");
@@ -193,16 +192,11 @@ const PostForm = ({ existingPost }) => {
       console.log("🔎 FormData =>", key, value);
     }
 
-    const postId = existingPost?.id;
-    const url = existingPost
-      ? `${import.meta.env.VITE_API_BASE_URL}posts/${postId}/`
-      : `${import.meta.env.VITE_API_BASE_URL}posts/`;
-
-    const method = existingPost ? "PUT" : "POST";
+    const url = `${import.meta.env.VITE_API_BASE_URL}posts/`;
 
     try {
       const response = await fetch(url, {
-        method,
+        method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formDataToSend,
       });
@@ -215,30 +209,21 @@ const PostForm = ({ existingPost }) => {
       }
 
       if (response.ok) {
-        if (existingPost) {
-          setSnackbar({
-            open: true,
-            message: "✅ Post actualizado correctamente",
-            severity: "success"
-          });
-          setTimeout(() => navigate("/posts"), 1500);
+        setSnackbar({
+          open: true,
+          message: "✅ Foto subida correctamente",
+          severity: "success"
+        });
+        // Debug: ver qué devuelve el backend
+        console.log("🔍 Respuesta del backend:", data);
+        // Redirigir a la nueva publicación creada
+        const newPostId = data?.data?.id;
+        console.log("🆔 ID de la nueva publicación:", newPostId);
+        if (newPostId) {
+          setTimeout(() => navigate(`/posts/${newPostId}/`), 1500);
         } else {
-          setSnackbar({
-            open: true,
-            message: "✅ Foto subida correctamente",
-            severity: "success"
-          });
-          // Debug: ver qué devuelve el backend
-          console.log("🔍 Respuesta del backend:", data);
-          // Redirigir a la nueva publicación creada
-          const newPostId = data?.data?.id;
-          console.log("🆔 ID de la nueva publicación:", newPostId);
-          if (newPostId) {
-            setTimeout(() => navigate(`/posts/${newPostId}/`), 1500);
-          } else {
-            console.log("⚠️ No se encontró ID, redirigiendo a /posts");
-            setTimeout(() => navigate("/posts"), 1500);
-          }
+          console.log("⚠️ No se encontró ID, redirigiendo a /posts");
+          setTimeout(() => navigate("/posts"), 1500);
         }
       } else {
         console.error("❌ Error de validación:", data);
@@ -269,12 +254,12 @@ const PostForm = ({ existingPost }) => {
       <Navbar />
       <div className="subir-form-center">
         <form className="subir-form" onSubmit={handleSubmit}>
-        <h2>{existingPost ? "Editar Post" : "Subir Foto"}</h2>
+        <h2>Subir Foto</h2>
 
         <div className="form-row">
           {/* Columna izquierda */}
           <div className="form-field left-column">
-            <label>Imagen *{existingPost ? "(opcional)" : "*"}</label>
+            <label>Imagen *</label>
             <div className="file-input-container">
               <input
                 type="file"
@@ -283,7 +268,7 @@ const PostForm = ({ existingPost }) => {
                 onChange={handleChange}
                 id="image_upload"
                 className="file-input-hidden"
-                {...(!existingPost && { required: true })}
+                required
               />
               <label htmlFor="image_upload" className="file-input-label">
                 <span className="file-input-icon">📸</span>
@@ -419,14 +404,14 @@ const PostForm = ({ existingPost }) => {
 
 
         <button type="submit" className="subir-btn" disabled={loading || loadingSuggestions}>
-          {loading || loadingSuggestions ? "Procesando..." : (existingPost ? "Actualizar" : "Subir")}
+          {loading || loadingSuggestions ? "Procesando..." : "Subir"}
         </button>
       </form>
       
       {/* Snackbar para mensajes de éxito/error */}
       <Snackbar
         open={snackbar.open}
-        autoHideDuration={4000}
+        autoHideDuration={snackbar.message.includes("Debes iniciar sesión") ? 2000 : 4000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >

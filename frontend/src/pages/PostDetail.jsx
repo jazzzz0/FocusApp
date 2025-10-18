@@ -346,7 +346,7 @@ export default function PostDetail() {
         { title: editTitle, description: editDescription },
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
-      setPost(res.data);
+      setPost(res.data.data);
       setOpenEditDialog(false);
       setSnack({ open: true, message: "Publicación actualizada", severity: "success" });
     } catch (err) {
@@ -365,11 +365,26 @@ export default function PostDetail() {
       await axios.delete(`${API}posts/${id}/`, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
-      setSnack({ open: true, message: "Publicación eliminada", severity: "info" });
-      navigate("/Perfil"); // va a homepage tras borrado
+      
+      // Mostrar snackbar de confirmación
+      setSnack({ 
+        open: true, 
+        message: "¡Publicación eliminada correctamente!", 
+        severity: "success" 
+      });
+      
+      // Redirigir al perfil después de 2 segundos
+      setTimeout(() => {
+        navigate("/Perfil");
+      }, 2000);
+      
     } catch (err) {
       console.error("Error deleting post:", err);
-      setSnack({ open: true, message: "No se pudo eliminar la publicación", severity: "error" });
+      setSnack({ 
+        open: true, 
+        message: "No se pudo eliminar la publicación", 
+        severity: "error" 
+      });
     } finally {
       setDeletePostDialog({ open: false });
     }
@@ -505,9 +520,6 @@ export default function PostDetail() {
                   ✓ Ya valoraste esta publicación
                 </Typography>
               )}
-              
-              {/* Indicador cuando es el autor */}
-              
             </Box>
           </Box>
 
@@ -524,7 +536,7 @@ export default function PostDetail() {
 
       {/* COMMENTS AREA */}
       <Box mt={3}>
-        <Typography variant="h6">Comentarios</Typography>
+        <Typography variant="h6" color="text.primary">Comentarios</Typography>
 
         {/* New comment */}
         {user ? (
@@ -705,7 +717,11 @@ export default function PostDetail() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Snackbar open={snack.open} autoHideDuration={3000} onClose={() => setSnack((s) => ({ ...s, open:false }))}>
+      <Snackbar 
+        open={snack.open} 
+        autoHideDuration={snack.message.includes("eliminada correctamente") ? 2000 : 3000} 
+        onClose={() => setSnack((s) => ({ ...s, open:false }))}
+      >
         <Alert severity={snack.severity} sx={{ width: "100%" }}>{snack.message}</Alert>
       </Snackbar>
     </Box>
@@ -734,7 +750,7 @@ function CommentItem({ comment, currentUser, onDelete, onEdit }) {
       <Avatar src={comment.author?.profile_pic || ""} alt={comment.author?.username} />
       <Box sx={{ flex: 1 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="subtitle2">{comment.author?.username}</Typography>
+          <Typography variant="subtitle2" color="text.primary">{comment.author?.username}</Typography>
           <Typography variant="caption" color="text.secondary">
             {new Date(comment.created_at).toLocaleString?.() ?? comment.created_at}
           </Typography>

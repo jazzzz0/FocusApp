@@ -22,7 +22,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
-    category = CategorySerializer(read_only=True)
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     ratings_count = serializers.IntegerField(read_only=True)
     class Meta:
         model = Post
@@ -69,16 +69,9 @@ class PostSerializer(serializers.ModelSerializer):
         return value
 
     def validate_category(self, value):
-        try:
-            if isinstance(value, Category):
-                return value
-            category = Category.objects.get(id=value)
-            return category
-        except Category.DoesNotExist:
-            raise serializers.ValidationError("La categoría no existe")
-
-        # debe devolver el objeto que se usará en create()
-        # para el campo "category" que es clave foránea, se espera un objeto, no un ID
+        # Con PrimaryKeyRelatedField, value ya es un objeto Category
+        # No necesitamos hacer conversión adicional
+        return value
 
     # TODO: Validar contenido de texto de title y description (no se permite discurso de odio, etc.)
 
