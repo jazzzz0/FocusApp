@@ -3,6 +3,8 @@ from .models import AppUser
 from datetime import date
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
+from email_validator import validate_email, EmailNotValidError
+from api.settings import AUTH_PASSWORD_VALIDATORS
 
 class UserSerializer(serializers.ModelSerializer):
     # Campo "password" para escritura, pero no para lectura
@@ -25,11 +27,22 @@ class UserSerializer(serializers.ModelSerializer):
             'date_of_birth': {'required': True},
         }
 
+    def validate_email(self, value):
+        try:
+            emailinfo = validate_email(value, check_deliverability=True)
+            value = emailinfo.normalized
+
+        except EmailNotValidError as e:
+            raise serializers.ValidationError("El email no es válido.")
+
+        return value
+
+
     def validate_password(self, value):
         try:
             validate_password(value)
         except DjangoValidationError as e:
-            raise serializers.ValidationError(e.messages)
+            raise serializers.ValidationError("La contraseña debe tener al menos 10 caracteres y no puede ser completamente numérica.")
         return value
 
     def validate_date_of_birth(self, value):
@@ -40,7 +53,7 @@ class UserSerializer(serializers.ModelSerializer):
             - ((today.month, today.day) < (value.month, value.day))
         )
         if age < 18:
-            raise serializers.ValidationError("El usuario debe ser mayor de edad (18+).")
+            raise serializers.ValidationError("El usuario debe ser mayor de edad.")
         return value
         
 
