@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import CategoryListView, PostView, DescriptionSuggestionView, PostCommentView
 from ratings.views import PostRatingsView
-from .views import PostCommentDetailView # Importa tu vista
+from .views import PostCommentDetailView
 
 urlpatterns = [
     path('categories/', CategoryListView.as_view(), name='categories-list'),

@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
   // Función para loguear
   const login = async (credentials) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}token/`, { 
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}users/token/`, { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
