@@ -37,7 +37,7 @@ const LoginForm = () => {
   const handleSubmit = async e => {
   e.preventDefault();
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}token/`, {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}users/token/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       // SimpleJWT espera 'username' y 'password'
