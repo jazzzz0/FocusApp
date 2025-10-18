@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 
 export const CategoriesContext = createContext();
 
-export function CategoriesProvider ({ children })  {
+export const CategoriesProvider = ({ children }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -16,17 +16,19 @@ export function CategoriesProvider ({ children })  {
       } catch (err) {
         console.error("Error fetching categories:", err);
       } 
-    //   finally {
-    //     setLoading(false);
-    //   }
+      finally {
+        setLoading(false);
+      }
     };
 
     fetchCategories();
   }, []);
 
   return (
-    <CategoriesContext.Provider value={{ categories }}>
+    <CategoriesContext.Provider value={{ categories, loading }}>
       {children}
     </CategoriesContext.Provider>
   );
 };
+
+export default CategoriesProvider;

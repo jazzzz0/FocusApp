@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import { AuthContext } from "../context/AuthContext";
 import { CategoriesContext } from "../context/CategoriesContext";
+import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
 import logo from '../assets/imagenes/logo.png';
 import '../styles/Navbar.css';
 
@@ -119,7 +120,7 @@ const Navbar = () => {
           className={`menu-icon ${isOpen ? "open" : ""}`}
           onClick={() => setIsOpen(!isOpen)}
         >
-          <i className={isOpen ? "fas fa-times" : "fas fa-bars"}></i>
+          {isOpen ? <CloseIcon /> : <MenuIcon />}
         </div>
       </div>
     </header>

@@ -14,7 +14,7 @@ import './styles/concursos_puntuar.css';
 import './styles/RegisterForm.css';
 import './styles/Perfil.css';
 import CategoryPage from './pages/CategoryPage';
-import { CategoriesProvider } from "./context/CategoriesContext";
+import CategoriesProvider from "./context/CategoriesContext";
 import PostDetail from './pages/PostDetail';
 
 
