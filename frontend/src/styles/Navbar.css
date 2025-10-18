@@ -141,7 +141,6 @@ header.header .navbar .nav_list li a:hover {
   position: absolute;
   top: 100%;
   right: 0;
-
   /* Estilo de la "card" */
   background-color: #212f4f;
   border-radius: 8px;
@@ -166,6 +165,7 @@ header.header .navbar .nav_list li a:hover {
   font-size: 1rem;
   transition: background-color 0.2s;
   width: 100%;
+  justify-content: center;
 }
 
 .profile-dropdown .dropdown-btn:hover {

@@ -28,6 +28,11 @@ const Navbar = () => {
     closeMobileMenu();
   };
 
+  const handleProfileClick = () => {
+    navigate("/perfil");
+    setIsProfileMenuOpen((prev) => !prev);
+  }
+
   // Cerrar menú móvil al hacer clic en un enlace
   const closeMobileMenu = () => {
     setIsOpen(false);
@@ -89,8 +94,11 @@ const Navbar = () => {
                   {/* 2. Menú Desplegable (se muestra condicionalmente) */}
                   {isProfileMenuOpen && (
                     <div className="profile-dropdown">
+                      <button className="dropdown-btn" onClick={handleProfileClick}>
+                      Ver Mi Perfil
+                      </button>
                       <button className="dropdown-btn" onClick={handleEdit}>
-                        ✍️ Editar perfil
+                        Editar perfil
                       </button>
                       <button className="dropdown-btn logout-btn" onClick={handleLogout}>
                         Cerrar sesión
