@@ -12,8 +12,6 @@ const RegisterForm = () => {
     first_name: '',
     last_name: '',
     date_of_birth: '',
-    country: '',
-    province: '',
     profile_pic: null,
   });
 
@@ -153,29 +151,6 @@ const RegisterForm = () => {
             />
           </div>
 
-          <div className="form-field">
-            <label>País *</label>
-            <input
-              type="text"
-              name="country"
-              value={formData.country}
-              onChange={handleChange}
-              required
-              maxLength="100"
-            />
-          </div>
-
-          <div className="form-field">
-            <label>Provincia *</label>
-            <input
-              type="text"
-              name="province"
-              value={formData.province}
-              onChange={handleChange}
-              required
-              maxLength="100"
-            />
-          </div>
         </div>
 
         <div className="form-field">

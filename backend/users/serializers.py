@@ -18,13 +18,11 @@ class UserSerializer(serializers.ModelSerializer):
         # Se incluye "password"
         fields = [
             'id', 'email', 'username', 'password', 'first_name', 'last_name',
-            'date_of_birth', 'profile_pic', 'country', 'province'
+            'date_of_birth', 'profile_pic'
         ]
         extra_kwargs = {
             'email': {'required': True},
             'date_of_birth': {'required': True},
-            'country': {'required': True},
-            'province': {'required': True},
         }
 
     def validate_password(self, value):
