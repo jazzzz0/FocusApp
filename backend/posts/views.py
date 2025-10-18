@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Category, Post, PostComment
 from users.models import AppUser
 from .serializers import CategorySerializer, PostSerializer, CommentListSerializer
@@ -18,7 +18,7 @@ import json
 # Vista para listar todas las categorías
 @extend_schema(responses={200: CategorySerializer(many=True)})
 class CategoryListView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
     def get(self, request):
         """
