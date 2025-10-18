@@ -55,7 +55,7 @@ const LoginForm = () => {
       localStorage.setItem('refresh', data.refresh);
       localStorage.setItem('username', formData.username);
       showSnackbar('Login exitoso', 'success');
-      setTimeout(() => navigate("/Homepage"), 700);
+      setTimeout(() => navigate("/"), 700);
     } else {
       showSnackbar('Error: Credenciales inválidas', 'error');
     }

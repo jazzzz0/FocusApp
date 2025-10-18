@@ -31,7 +31,7 @@ const EditPost = () => {
       } catch (error) {
         console.error("Error al cargar el post:", error);
         alert("Error al cargar el post");
-        navigate("/Homepage");
+        navigate("/");
       } finally {
         setLoading(false);
       }

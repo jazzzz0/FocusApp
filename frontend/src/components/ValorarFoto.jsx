@@ -26,7 +26,7 @@ const ValorarFoto = () => {
   };
 
   const irAlPerfil = () => {
-    navigate("/Homepage");
+    navigate("/");
   };
 
   return (

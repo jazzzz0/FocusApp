@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Register from './components/RegisterForm'; 
-import Bienvenida from './components/Bienvenida';
 import Homepage from './components/Homepage';
 import Login from './components/LoginForm'; 
 import Perfil from './components/Perfil';
@@ -24,10 +23,10 @@ function App() {
       <CategoriesProvider>
         <Routes>
           {/* Ruta principal */}
-          <Route path="/" element={<Bienvenida />} />
+          <Route path="/" element={<Homepage />} />
 
           {/* Otras rutas */}
-          <Route path="/Homepage" element={<Homepage />} />
+          
           <Route path="/Perfil" element={<Perfil />} />
           <Route path="/Subir" element={<PostForm />} />
           <Route path="/Login" element={<Login />} />

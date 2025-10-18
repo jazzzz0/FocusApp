@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import "../styles/focusapp.css";
 //import "../styles/concursos.css";
 import "../styles/concursos_puntuar.css";
-import animales from "../assets/imagenes/animales.jpg";
 import retratos from "../assets/imagenes/retratos.png";
 import urbano from "../assets/imagenes/urbano.webp";
 import docu from "../assets/imagenes/13.jpeg";
@@ -37,7 +36,7 @@ const PuntuarFoto = () => {
           </a>
           <nav className="navbar">
             <ul className="nav_list" style={{ display: "flex", gap: "20px" }}>
-              <li><Link to="/Homepage">Volver al Perfil</Link></li>
+              <li><Link to="/">Volver al Perfil</Link></li>
             </ul>
           </nav>
         </div>
