@@ -28,24 +28,31 @@ class AppUser(AbstractUser):
         help_text="Opcional. Se guarda la URL de la imagen.",
     )
 
-    # Campo obligatorio: País
+    # Campo opcional: País. Por defecto, se guarda None.
+    # Es información que será útil en el futuro.
     country = models.CharField(
         max_length=100,
+        blank=True,
+        null=True,
+        default=None,
         verbose_name="País",
-        help_text="Obligatorio. País de residencia.",
+        help_text="Opcional. País de residencia.",
     )
     
 
-    # Campo obligatorio: Provincia
-    # TODO: añadir opciones predefinidas según país
+    # Campo opcional: Provincia. Por defecto, se guarda None.
+    # Es información que será útil en el futuro.
     province = models.CharField(
         max_length=100,
+        blank=True,
+        null=True,
+        default=None,
         verbose_name="Provincia",
-        help_text="Obligatorio. Provincia/Estado de residencia.",
+        help_text="Opcional. Provincia/Estado de residencia.",
     )
     
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'date_of_birth', 'country', 'province']
+    REQUIRED_FIELDS = ['email', 'date_of_birth']
 
     
     def is_adult(self):
