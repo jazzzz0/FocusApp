@@ -8,7 +8,6 @@ import Concursos from './components/Concursos';
 import Perfil from './components/Perfil';
 import PostForm from './components/Subir';
 import './styles/Home.css';
-import PostList from "./components/PostList";
 import EditPost from "./components/EditPostPage";
 import PuntuarFoto from "./components/PuntuarFoto";
 import ValorarFoto from "./components/ValorarFoto";
@@ -33,7 +32,6 @@ function App() {
           <Route path="/" element={<Bienvenida />} />
 
         {/* Otras rutas */}
-        <Route path="/posts" element={<PostList />} />
         <Route path="/Homepage" element={<Homepage />} />
         <Route path="/concursos" element={<Concursos />} />
         <Route path="/Perfil" element={<Perfil />} />
