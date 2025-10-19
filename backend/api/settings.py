@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-from decouple import Csv, config, RepositoryEnv, Config
+from decouple import config, RepositoryEnv, Config
 
 from datetime import timedelta
 import os
@@ -22,21 +22,52 @@ import google.generativeai as genai
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-#Esto le dice a 'decouple' dónde encontrar el archivo .env
-config = Config(RepositoryEnv(str(BASE_DIR / '.env')))
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
+if DEBUG:
+    env_path = BASE_DIR / '.env'
+    config = Config(RepositoryEnv(env_path))
+    SECRET_KEY = config('SECRET_KEY')
+    ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost').split(',')
+    CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='').split(',')
+    DATABASES = {
+        'default': {
+            'ENGINE': config('DB_ENGINE', default='django.db.backends.sqlite3'),
+            'NAME': config('DB_NAME', default=str(BASE_DIR / 'db.sqlite3')),
+            'USER': config('DB_USER', default=''),
+            'PASSWORD': config('DB_PASSWORD', default=''),
+            'HOST': config('DB_HOST', default=''),
+            'PORT': config('DB_PORT', default='')
+        }
+    }
+    GEMINI_API_KEY = config('GEMINI_API_KEY')
+    if GEMINI_API_KEY:
+        genai.configure(api_key=GEMINI_API_KEY)
+    GEMINI_MODEL = genai.GenerativeModel('gemini-2.5-flash')
+
+else:
+    SECRET_KEY = os.environ['SECRET_KEY']
+    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
+    CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', '').split(',')
+    DATABASES = {
+        'default': {
+            'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3'),
+            'NAME': os.environ['DB_NAME'],
+            'USER': os.environ['DB_USER'],
+            'PASSWORD': os.environ['DB_PASSWORD'],
+            'HOST': os.environ['DB_HOST'],
+            'PORT': os.environ['DB_PORT']
+        }
+    }
+    GEMINI_API_KEY = os.environ['GEMINI_API_KEY']
+    if GEMINI_API_KEY:
+        genai.configure(api_key=GEMINI_API_KEY)
+    GEMINI_MODEL = genai.GenerativeModel('gemini-2.5-flash')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default= False, cast = bool)
-
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')
-
 
 # Application definition
 
@@ -63,8 +94,6 @@ INSTALLED_APPS = [
     'ratings'
 
 ]
-
-CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='').split(',')
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -160,16 +189,6 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': config('DB_ENGINE', default='django.db.backends.sqlite3'),
-        'NAME': str(config('DB_NAME')),
-        'USER': config('DB_USER', default=''),
-        'PASSWORD': config('DB_PASSWORD', default=''),
-        'HOST': config('DB_HOST', default=''),
-        'PORT': config('DB_PORT', default='')
-    }
-}
 
 
 AUTH_USER_MODEL = 'users.AppUser'
@@ -237,12 +256,7 @@ STORAGES = {
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-GEMINI_API_KEY = config('GEMINI_API_KEY')
 
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
-
-GEMINI_MODEL = genai.GenerativeModel('gemini-2.5-flash')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
