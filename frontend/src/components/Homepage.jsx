@@ -1,5 +1,5 @@
 // pages/Homepage.jsx
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
@@ -7,7 +7,7 @@ import Footer from "./Footer";
 import CategoryCarousel from "../components/CategoryCarousel";
 
 // Imágenes locales para secciones
-import portada from '../assets/imagenes/portada.jpg';
+
 import grupo from '../assets/imagenes/grupo.jpg';
 import perfil from '../assets/imagenes/avatar.png';
 import subir from '../assets/imagenes/subir.png';
@@ -33,10 +33,10 @@ function Homepage() {
       {/* Navbar */}
       <Navbar onLogout={handleLogout} />
 
-      {/* Portada */}
-      <section className="home cover" id="home">
+       {/* Portada */}
+      {/*<section className="home cover" id="home">
         <img src={portada} className="wave" alt="FocusApp portada" />
-      </section>
+      </section> */}
 
       {/* Carousel de categorías */}
       <CategoryCarousel />
