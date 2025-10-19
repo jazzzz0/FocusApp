@@ -247,7 +247,6 @@ ul.dropdown-menu li a:hover {
   border: none;
   border-radius: 50%;
   width: 60px;
-  /* Hacer responsive el botón */
   cursor: pointer;
   font-size: 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
