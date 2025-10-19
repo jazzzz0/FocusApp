@@ -7,11 +7,11 @@ import Perfil from './components/Perfil';
 import PostForm from './components/Subir';
 import './styles/Home.css';
 import EditarPerfil from "./components/EditarPerfil";
-import './styles/focusapp.css';
 import './styles/Bienvenida.css'; 
 import './styles/concursos_puntuar.css';
 import './styles/RegisterForm.css';
 import './styles/Perfil.css';
+import './styles/focusapp.css'
 import CategoryPage from './pages/CategoryPage';
 import CategoriesProvider from "./context/CategoriesContext";
 import PostDetail from './pages/PostDetail';
