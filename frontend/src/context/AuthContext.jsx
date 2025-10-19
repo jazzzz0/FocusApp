@@ -57,10 +57,16 @@ export const AuthProvider = ({ children }) => {
   // Función para loguear
   const login = async (credentials) => {
     try {
+      // El backend espera username y password, no email
+      const loginData = {
+        username: credentials.username,
+        password: credentials.password
+      };
+      
       const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}users/token/`, { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(credentials),
+        body: JSON.stringify(loginData),
         // credentials: "include", // importante si el backend devuelve cookies HttpOnly
       });
 
@@ -74,7 +80,7 @@ export const AuthProvider = ({ children }) => {
         // Guardamos el token (⚠️ para producción, mejor HttpOnly cookies desde el backend)
         localStorage.setItem("access", data.access);
         localStorage.setItem("refresh", data.refresh);
-        
+        localStorage.setItem("username", credentials.username);
         // Obtener información del usuario
         const userInfo = await fetchCurrentUser(data.access);
         

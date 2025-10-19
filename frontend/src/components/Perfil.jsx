@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Perfil.css";
-
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 const Perfil = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
@@ -48,13 +49,9 @@ const Perfil = () => {
   };
 
   return (
+    <>
     <div className="perfil-wrapper">
-      {/* 🔹 Navbar igual que el resto, pero solo con el logo */}
-      <nav className="navbar perfil-navbar">
-        <div className="navbar-logo">
-          <Link to="/" className="focusapp-link">FocusApp</Link>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* 🔹 Contenido principal del perfil */}
       <div className="perfil-page">
@@ -85,6 +82,8 @@ const Perfil = () => {
         )}
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 

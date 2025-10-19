@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../styles/editar-perfil.css";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 const EditarPerfil = () => {
   const [userData, setUserData] = useState({
@@ -98,13 +100,10 @@ const EditarPerfil = () => {
   };
 
   return (
+    <>
     <div className="perfil-wrapper">
       {/* 🔹 Navbar minimalista igual que Perfil */}
-      <nav className="navbar perfil-navbar">
-        <div className="navbar-logo">
-          <Link to="/Homepage" className="focusapp-link">FocusApp</Link>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* 🔹 Contenedor de edición */}
       <div className="editar-perfil">
@@ -163,7 +162,9 @@ const EditarPerfil = () => {
           </button>
         </form>
       </div>
-    </div>
+      </div>
+      <Footer />
+    </>
   );
 };
 
