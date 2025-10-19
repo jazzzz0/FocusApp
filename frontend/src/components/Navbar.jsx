@@ -97,7 +97,7 @@ const Navbar = () => {
                 {/* 🔹 Si el usuario está logueado */}
                 <li>
                   <Link to="/" onClick={closeMobileMenu}>
-                    <HomeIcon fontSize="medium" />
+                    <HomeIcon fontSize="large" />
                   </Link>
                 </li>
                 {/* 🆕 CONTENEDOR DEL AVATAR Y EL MENÚ DESPLEGABLE */}

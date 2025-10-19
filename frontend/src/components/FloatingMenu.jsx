@@ -1,11 +1,10 @@
 import { useContext } from "react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
 import { CategoriesContext } from "../context/CategoriesContext";
 
 
@@ -16,13 +15,44 @@ const FloatingMenu = () => {
   const navigate = useNavigate();
   const { categories } = useContext(CategoriesContext);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [hoverTimeout, setHoverTimeout] = useState(null);
+
   const closeMobileMenu = () => {
     setShowDropdown(false);
+  };
+
+  const closeAllMenus = () => {
+    setShowMenu(false);
+    setShowDropdown(false);
+  };
+
+  const handleMouseEnter = () => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+      setHoverTimeout(null);
+    }
+    setShowDropdown(true);
+  };
+
+  const handleMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      setShowDropdown(false);
+    }, 300); // Aumentar el delay para mayor estabilidad
+    setHoverTimeout(timeout);
   };
 
   const isActive = (path) => {
     return window.location.pathname.startsWith(path);
   };
+
+  // Cleanup del timeout cuando el componente se desmonte
+  useEffect(() => {
+    return () => {
+      if (hoverTimeout) {
+        clearTimeout(hoverTimeout);
+      }
+    };
+  }, [hoverTimeout]);
 
 
   return (
@@ -37,38 +67,49 @@ const FloatingMenu = () => {
       {showMenu && (
         <div className="float-options">
           <button
-            onClick={() => navigate("/subir")}
+            onClick={() => {
+              navigate("/subir");
+              closeAllMenus();
+            }}
             className="float-option"
           >
-            <AddAPhotoIcon /> Subir Foto
-          </button>
-          <button
-            onMouseEnter={() => setShowDropdown(true)}
-            onMouseLeave={() => setShowDropdown(false)}
-            onClick={() => setShowDropdown(!showDropdown)}
-          >
-            
-            <ImageSearchIcon /><span className={showDropdown ? 'active' : ''}>Descubrir</span>
-            
-            {showDropdown && (
-              <ul className="dropdown-menu">    
-
-                {categories.map(cat => (
-                  <li key={cat.id}>
-                    <Link 
-                      to={`/explorar/${cat.slug}`}
-                      className={isActive(`/explorar/${cat.slug}`) ? 'active' : ''}
-                      onClick={closeMobileMenu} 
-                    >
-                      {cat.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul> 
-            )}
+            <AddAPhotoIcon /> <span className="float-option-text">Subir Foto</span>
           </button>
           
-
+          {/* Contenedor para Descubrir y su dropdown */}
+          <div 
+            className="discover-container"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <button
+              className="float-option"
+              onClick={() => setShowDropdown(!showDropdown)}
+            >
+              <ImageSearchIcon />
+              <span
+                className={showDropdown ? 'active' : ''}
+                style={{ fontSize: "1.1rem" }}
+              >
+                Descubrir
+              </span>
+            </button>
+            
+            {/* Dropdown menu que aparece debajo de Descubrir */}
+            <ul className={`dropdown-menu ${showDropdown ? 'show' : ''}`}>    
+              {categories.map(cat => (
+                <li key={cat.id}>
+                  <Link 
+                    to={`/explorar/${cat.slug}`}
+                    className={isActive(`/explorar/${cat.slug}`) ? 'active' : ''}
+                    onClick={closeAllMenus} 
+                  >
+                    {cat.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
   )
 }
