@@ -3,6 +3,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
+import { CategoriesContext } from "../context/CategoriesContext";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import {
@@ -45,6 +46,7 @@ export default function PostDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext); // asumo AuthContext expone user y token (o access)
+  const { categories } = useContext(CategoriesContext);
   const authToken =  localStorage.getItem("access"); // fallback
 
   // const [post, setPost] = useState([]);
@@ -396,6 +398,23 @@ export default function PostDetail() {
     return post.author?.id === user.id || post.author?.username === user.username;
   };
 
+  const getCategoryName = () => {
+    if (!post.category || !categories || categories.length === 0) return null;
+    
+    // Si post.category es un objeto con name, usarlo directamente
+    if (typeof post.category === 'object' && post.category.name) {
+      return post.category.name;
+    }
+    
+    // Si post.category es solo un ID, buscar en las categorías
+    if (typeof post.category === 'number' || typeof post.category === 'string') {
+      const category = categories.find(c => c.id === Number(post.category));
+      return category ? category.name : null;
+    }
+    
+    return null;
+  };
+
   // render averages for each aspect (safe)
   const renderRatingAverages = () => {
     // Si la publicación no permite valoraciones, no mostrar nada
@@ -480,9 +499,9 @@ export default function PostDetail() {
                 )}
                 <Typography variant="body2" color="text.secondary">
                   Por {post.author?.username || "Desconocido"} · {" "}
-                  {post.category?.name && (
+                  {getCategoryName() && (
                     <span>
-                      {post.category.name}
+                      {getCategoryName()}
                     </span>
                   )} · {" "}
                   {post.uploaded_at ? new Date(post.uploaded_at).toLocaleString() : "Fecha desconocida"}
