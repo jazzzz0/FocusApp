@@ -17,7 +17,7 @@ import ranking from '../assets/imagenes/ranking.jpg';
 import comunidad from '../assets/imagenes/comunidad.png';
 import feedback from '../assets/imagenes/feedback.png';
 
-import '../styles/focusApp.css';
+import '../styles/main.css';
 import '../styles/Home.css';
 import '../styles/Bienvenida.css';
 

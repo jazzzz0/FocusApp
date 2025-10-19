@@ -22,7 +22,7 @@ import concurso5 from '../assets/imagenes/concurso5.jpg';
 import { Swiper, SwiperSlide } from "swiper/react"; // Usa Swiper y SwiperSlide desde swiper/react
 import { Navigation, Pagination, Autoplay } from "swiper/modules"; // Módulos desde swiper/modules
 import "swiper/css";
-import "../styles/Focusapp.css"; // tu CSS base
+import "../styles/main.css"; // tu CSS base
 import "../styles/concursos.css"; // estilos específicos para concursos
 import "../styles/concursos_puntuar.css"
 import "swiper/css/navigation";
