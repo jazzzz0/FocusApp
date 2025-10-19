@@ -34,11 +34,6 @@ const Navbar = () => {
     setSnackbar(prev => ({ ...prev, open: false }));
   };
 
-  const handleEdit = () => {
-    navigate("/editar-perfil");
-    setIsProfileMenuOpen(false); // Cierra el menú después de navegar
-    closeMobileMenu();
-  };
   const handleLogout = async () => {
     const success = await logout();
     

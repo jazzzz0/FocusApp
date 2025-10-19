@@ -4,7 +4,7 @@ import { categoryImages } from "../utils/categoryImages"; // tu objeto que ya de
 import { Link } from "react-router-dom";
 import '../styles/CategoryPhotos.css'
 
-const CategoryPhotos = ({ categoryId }) => {
+const CategoryPhotos = ({ categoryId, customUrl }) => {
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [nextPageUrl, setNextPageUrl] = useState(null);
@@ -43,11 +43,13 @@ const CategoryPhotos = ({ categoryId }) => {
   };
 
   useEffect(() => {
-    if (!categoryId) return;
-    const firstPageUrl = `${import.meta.env.VITE_API_BASE_URL}posts/?sort=rating&page_size=24&category=${categoryId}`;
+    if (!categoryId && !customUrl) return;
+    const firstPageUrl = customUrl
+      ? customUrl
+      : `${import.meta.env.VITE_API_BASE_URL}posts/?sort=rating&page_size=24&category=${categoryId}`;
 
     fetchPhotos(firstPageUrl);
-  }, [categoryId]);
+  }, [categoryId , customUrl]);
 
   const handleNext = () => {
     if (nextPageUrl) fetchPhotos(nextPageUrl, currentPage + 1);

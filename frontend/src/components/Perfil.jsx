@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../styles/Perfil.css";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import CategoryPhotos from "./CategoryPhotos";
 const Perfil = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
@@ -50,39 +51,46 @@ const Perfil = () => {
 
   return (
     <>
-    <div className="perfil-wrapper">
-      <Navbar />
+      <div className="perfil-wrapper">
+        <Navbar />
 
-      {/* 🔹 Contenido principal del perfil */}
-      <div className="perfil-page">
-        {user ? (
-          <div className="perfil-card">
-            <img
-              src={
-                user.data.profile_pic ||
-                "https://cdn-icons-png.flaticon.com/512/149/149071.png"
-              }
-              alt={`Foto de perfil de ${user.data.username}`}
-            />
-            <h2>@{user.data.username}</h2>
-            <p>
-              {user.data.first_name} {user.data.last_name}
-            </p>
+        {/* 🔹 Contenido principal del perfil */}
+        <div className="perfil-page">
+          {user ? (
+            <div className="perfil-card">
+              <img
+                src={
+                  user.data.profile_pic ||
+                  "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                }
+                alt={`Foto de perfil de ${user.data.username}`}
+              />
+              <h2>@{user.data.username}</h2>
+              <p>
+                {user.data.first_name} {user.data.last_name}
+              </p>
 
-            <button className="btn" onClick={handleEdit}>
-              ✍️ Editar perfil
-            </button>
+              <button className="btn" onClick={handleEdit}>
+                ✍️ Editar perfil
+              </button>
 
-            {user.data.bio && <div className="bio">"{user.data.bio}"</div>}
-          </div>
-        ) : (
-          <div className="text-center text-gray-500 mt-10 p-4 animate-pulse">
-            Cargando perfil... ⏳
+              {user.data.bio && <div className="bio">"{user.data.bio}"</div>}
+            </div>
+          ) : (
+            <div className="text-center text-gray-500 mt-10 p-4 animate-pulse">
+              Cargando perfil... ⏳
+            </div>
+          )}
+        </div>
+        {/* 🔹 Fotos del usuario */}
+        {user && (
+          <div className="user-photos-section">
+            <h3>Mis Fotos</h3>
+            <CategoryPhotos customUrl={`${import.meta.env.VITE_API_BASE_URL}posts/?author=${user.data.id}&sort=rating&page_size=24`} />
           </div>
         )}
       </div>
-    </div>
-    <Footer />
+      <Footer />
     </>
   );
 };
