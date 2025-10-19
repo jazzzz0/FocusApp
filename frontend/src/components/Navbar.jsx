@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
+import { Snackbar, Alert } from '@mui/material';
 import logo from '../assets/imagenes/logo.png';
 import '../styles/Navbar.css';
 import defaultAvatar from '../assets/imagenes/avatar.png';
@@ -11,10 +12,27 @@ import FloatingMenu from "./FloatingMenu";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
 
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useContext(AuthContext);
+
+  const showSnackbar = (message, severity = 'success') => {
+    setSnackbar({
+      open: true,
+      message,
+      severity
+    });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar(prev => ({ ...prev, open: false }));
+  };
 
   const handleEdit = () => {
     navigate("/editar-perfil");
@@ -22,8 +40,15 @@ const Navbar = () => {
     closeMobileMenu();
   };
   const handleLogout = async () => {
-    await logout();
-    navigate("/Login");
+    const success = await logout();
+    
+    if (success) {
+      showSnackbar('Sesión cerrada exitosamente', 'success');
+      setTimeout(() => navigate("/"), 700);
+    } else {
+      showSnackbar('Error al cerrar sesión. Inténtalo de nuevo más tarde.', 'error');
+    }
+    
     setIsProfileMenuOpen(false); // Cierra el menú
     closeMobileMenu();
   };
@@ -116,6 +141,21 @@ const Navbar = () => {
         </div>
         {user && <FloatingMenu />}
       </div>
+      
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </header >
   );
 };

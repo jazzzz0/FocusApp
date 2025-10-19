@@ -105,7 +105,7 @@ export const AuthProvider = ({ children }) => {
       const refresh = user?.refresh || localStorage.getItem("refresh");
       
       if (refresh) {
-        await fetch(`${import.meta.env.VITE_API_BASE_URL}users/logout/`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}users/logout/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -113,15 +113,22 @@ export const AuthProvider = ({ children }) => {
           },
           body: JSON.stringify({ refresh }),
         });
-      }
-    } catch (err) {
-      alert("Error al cerrar sesion:", err);
-    }
 
-    localStorage.removeItem("access");
-    localStorage.removeItem("refresh");
-    localStorage.removeItem("username");
-    setUser(null);
+        // Si la petición no fue exitosa, no limpiar localStorage
+        if (!response.ok) {
+          return false;
+        }
+      }
+
+      // Solo limpiar localStorage si el logout fue exitoso
+      localStorage.removeItem("access");
+      localStorage.removeItem("refresh");
+      localStorage.removeItem("username");
+      setUser(null);
+      return true;
+    } catch (err) {
+      return false;
+    }
   };
 
   return (
