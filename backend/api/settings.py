@@ -45,6 +45,10 @@ if DEBUG:
         genai.configure(api_key=GEMINI_API_KEY)
     GEMINI_MODEL = genai.GenerativeModel('gemini-2.5-flash')
 
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+        os.path.join(BASE_DIR, "credentials", "gcs.json")
+    )
+
 else:
     SECRET_KEY = os.environ['SECRET_KEY']
     ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
@@ -63,6 +67,11 @@ else:
     if GEMINI_API_KEY:
         genai.configure(api_key=GEMINI_API_KEY)
     GEMINI_MODEL = genai.GenerativeModel('gemini-2.5-flash')
+    # Producción en Render usando Secret File
+    secret_path = "/etc/secrets/gcs.json"
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+        secret_path
+    )
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -227,9 +236,7 @@ USE_I18N = True
 USE_TZ = True
 
 # Configuración de sevicio cloud
-GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-    os.path.join(BASE_DIR, "credentials", "gcs.json")
-)
+
 GS_BUCKET_NAME = "focusapp-uploads"
 
 
