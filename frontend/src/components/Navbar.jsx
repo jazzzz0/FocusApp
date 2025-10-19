@@ -95,10 +95,7 @@ const Navbar = () => {
                   {isProfileMenuOpen && (
                     <div className="profile-dropdown">
                       <button className="dropdown-btn" onClick={handleProfileClick}>
-                      Ver Mi Perfil
-                      </button>
-                      <button className="dropdown-btn" onClick={handleEdit}>
-                        Editar perfil
+                      Ver mi perfil
                       </button>
                       <button className="dropdown-btn logout-btn" onClick={handleLogout}>
                         Cerrar sesión

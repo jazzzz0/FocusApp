@@ -48,7 +48,7 @@ const FloatingMenu = () => {
             onClick={() => setShowDropdown(!showDropdown)}
           >
             
-            <ImageSearchIcon /><span className={showDropdown ? 'active' : ''}>Categorías</span>
+            <ImageSearchIcon /><span className={showDropdown ? 'active' : ''}>Descubrir</span>
             
             {showDropdown && (
               <ul className="dropdown-menu">    

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/RegisterForm.css'; 
 import { Link } from "react-router-dom";
 import '../components/RegisterForm';
 import { Snackbar, Alert } from '@mui/material';
+import { AuthContext } from '../context/AuthContext';
 const LoginForm = () => {
   const [formData, setFormData] = useState({
     username: '',
@@ -17,6 +18,7 @@ const LoginForm = () => {
   });
 
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -35,37 +37,21 @@ const LoginForm = () => {
   };
 
   const handleSubmit = async e => {
-  e.preventDefault();
-  try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}users/token/`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      // SimpleJWT espera 'username' y 'password'
-      body: JSON.stringify({
-        username: formData.username, 
-        password: formData.password
-      }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      // SimpleJWT devuelve access y refresh
-      localStorage.setItem('access', data.access);
-      localStorage.setItem('refresh', data.refresh);
-      localStorage.setItem('username', formData.username);
-      showSnackbar('Login exitoso', 'success');
-      setTimeout(() => navigate("/"), 700);
-    } else {
-      showSnackbar('Error: Credenciales inválidas', 'error');
+    e.preventDefault();
+    try {
+      const success = await login(formData);
+      
+      if (success) {
+        showSnackbar('Login exitoso', 'success');
+        setTimeout(() => navigate("/"), 700);
+      } else {
+        showSnackbar('Error: Credenciales inválidas', 'error');
+      }
+    } catch (error) {
+      console.error(error);
+      showSnackbar('Error de conexión', 'error');
     }
-  } catch (error) {
-    console.error(error);
-    showSnackbar('Error de conexión', 'error');
-  }
-};
-
-
+  };
 
   return (
     <div className="register-form-center">
