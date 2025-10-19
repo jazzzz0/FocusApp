@@ -92,29 +92,47 @@ header.header .navbar .nav_list li a:hover {
   color: #f0a500;
 }
 
-.dropdown-menu li a.active {
+ul.dropdown-menu li a.active {
   color: #f0a500;
   font-weight: bold;
 }
 
-.dropdown-menu {
+ul.dropdown-menu {
   position: static;
-  box-shadow: none;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 0.5rem 0;
-  margin-top: 0.5rem;
-  border-radius: 5px;
-  list-style: none;
-}
-
-.dropdown-menu li {
+  background-color: rgb(241, 248, 255);
   padding: 0;
+  margin: 0;
+  border-radius: 8px;
+  list-style: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease, padding 0.5s ease, margin 0.5s ease;
 }
 
-.dropdown-menu li a {
-  padding: 0.5rem 1rem;
+ul.dropdown-menu.show {
+  max-height: 350px;
+  padding: 0.5rem 0;
+  margin: 0.5rem 0;
+}
+
+
+ul.dropdown-menu li a {
+  padding: 0.65rem 0.5rem;
   border-bottom: none;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  color: #176ab9;
+  text-decoration: none;
+  display: block;
+  transition: background-color 0.5s;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.3;
+}
+
+ul.dropdown-menu li a:hover {
+  background-color: rgba(23, 106, 185, 0.1);
+  color: #0d437d;
 }
 
 /* Overlay para cerrar menú */
@@ -182,10 +200,6 @@ header.header .navbar .nav_list li a:hover {
   background-color: #ffe8e6;
 }
 
-.dropdown-menu li a:hover {
-  color: #f0a500;
-}
-
 .menu-icon {
   display: none;
   cursor: pointer;
@@ -233,7 +247,6 @@ header.header .navbar .nav_list li a:hover {
   border: none;
   border-radius: 50%;
   width: 60px;
-  height: 60px;
   cursor: pointer;
   font-size: 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -249,7 +262,7 @@ header.header .navbar .nav_list li a:hover {
 
 .float-options {
   position: absolute;
-  bottom: 70px;
+  bottom: 80px;
   right: 0;
   display: flex;
   flex-direction: column-reverse;
@@ -258,11 +271,14 @@ header.header .navbar .nav_list li a:hover {
   border-radius: 12px;
   padding: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  min-width: 230px;
+  white-space: nowrap;
 }
 
 .float-option {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   background: transparent;
   border: none;
@@ -270,10 +286,27 @@ header.header .navbar .nav_list li a:hover {
   font-weight: 500;
   cursor: pointer;
   transition: 0.2s;
+  width: 100%;
+}
+
+.float-option-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+  white-space: nowrap;
+  text-align: center;
 }
 
 .float-option:hover {
   color: #0d437d;
+}
+
+/* Contenedor para Descubrir y su dropdown */
+.discover-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Responsivo para pantallas medianas */

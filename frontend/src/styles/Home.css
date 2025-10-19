@@ -12,6 +12,10 @@ html, body {
   height: 100%;
 }
 
+body {
+  overflow-x: hidden;
+}
+
 /* Pantalla completa */
 .welcome-screen {
   width: 100vw; 
