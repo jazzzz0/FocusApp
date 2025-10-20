@@ -250,14 +250,22 @@ ul.dropdown-menu li a:hover {
   cursor: pointer;
   font-size: 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
+}
+
+.float-btn.rotated {
+  transform: rotate(45deg);
 }
 
 .float-btn:hover {
   transform: scale(1.1);
+}
+
+.float-btn.rotated:hover {
+  transform: rotate(45deg) scale(1.1);
 }
 
 .float-options {
@@ -273,6 +281,16 @@ ul.dropdown-menu li a:hover {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   min-width: 230px;
   white-space: nowrap;
+  opacity: 0;
+  transform: translateY(30px) scale(0.7);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+
+.float-options.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
 }
 
 .float-option {
@@ -282,11 +300,30 @@ ul.dropdown-menu li a:hover {
   gap: 8px;
   background: transparent;
   border: none;
+  opacity: 0;
+  transform: translateY(20px) scale(0.8);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   color: #176ab9;
   font-weight: 500;
   cursor: pointer;
-  transition: 0.2s;
   width: 100%;
+}
+
+.float-options.show .float-option {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.float-options.show .float-option:nth-child(1) {
+  transition-delay: 0.15s;
+}
+
+.float-options.show .float-option:nth-child(2) {
+  transition-delay: 0.25s;
+}
+
+.float-options.show .float-option:nth-child(3) {
+  transition-delay: 0.35s;
 }
 
 .float-option-text {

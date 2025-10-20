@@ -12,6 +12,7 @@ import "../styles/Navbar.css";
 
 const FloatingMenu = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
   const navigate = useNavigate();
   const { categories } = useContext(CategoriesContext);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -22,8 +23,29 @@ const FloatingMenu = () => {
   };
 
   const closeAllMenus = () => {
-    setShowMenu(false);
+    setShowOptions(false);
     setShowDropdown(false);
+    // Delay para cerrar el menú principal después de que se oculten las opciones
+    setTimeout(() => {
+      setShowMenu(false);
+    }, 200);
+  };
+
+  const handleMenuToggle = () => {
+    if (showMenu) {
+      // Si está abierto, cerrar con animación
+      setShowOptions(false);
+      setTimeout(() => {
+        setShowMenu(false);
+      }, 200);
+    } else {
+      // Si está cerrado, abrir con animación
+      setShowMenu(true);
+      // Delay para que aparezcan las opciones después de que se abra el contenedor
+      setTimeout(() => {
+        setShowOptions(true);
+      }, 100);
+    }
   };
 
   const handleMouseEnter = () => {
@@ -58,14 +80,14 @@ const FloatingMenu = () => {
   return (
     <div className="floating-menu">
       <button
-        className="float-btn"
-        onClick={() => setShowMenu((prev) => !prev)}
+        className={`float-btn ${showMenu ? 'rotated' : ''}`}
+        onClick={handleMenuToggle}
       >
         <AddIcon fontSize="large" aria-label="add"/>
       </button>
 
       {showMenu && (
-        <div className="float-options">
+        <div className={`float-options ${showOptions ? 'show' : ''}`}>
           <button
             onClick={() => {
               navigate("/subir");
@@ -73,7 +95,7 @@ const FloatingMenu = () => {
             }}
             className="float-option"
           >
-            <AddAPhotoIcon /> <span className="float-option-text">Subir Foto</span>
+            <AddAPhotoIcon /> <span className="float-option-text">Publicar</span>
           </button>
           
           {/* Contenedor para Descubrir y su dropdown */}
