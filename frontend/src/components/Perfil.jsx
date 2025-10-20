@@ -86,7 +86,7 @@ const Perfil = () => {
         {user && (
           <div className="user-photos-section">
             <h3>Mis Fotos</h3>
-            <CategoryPhotos customUrl={`${import.meta.env.VITE_API_BASE_URL}posts/?author=${user.data.id}&sort=rating&page_size=24`} />
+            <CategoryPhotos customUrl={`${import.meta.env.VITE_API_BASE_URL}posts/?author=${user.data.id}&page_size=24`} />
           </div>
         )}
       </div>

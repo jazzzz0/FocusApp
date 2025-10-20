@@ -173,12 +173,14 @@ export default function PostDetail() {
       }
       
       // Actualizar información de paginación
-      setCommentsPagination({
+      setCommentsPagination(prev => ({
         next: res.data.next,
         previous: res.data.previous,
-        count: res.data.count || commentsData.length,
+        // Solo actualizar el count si es la primera carga (append = false)
+        // Si es append = true, mantener el count local que ya tiene nuestros cambios
+        count: append ? prev.count : (res.data.count || commentsData.length),
         loadingMore: false
-      });
+      }));
       
     } catch (err) {
       console.error("Error fetching comments:", err);
@@ -249,6 +251,11 @@ export default function PostDetail() {
       );
       // En muchos backends responden con el comment creado
       setComments((p) => [res.data.data, ...p]);
+      // Actualizar el contador de comentarios
+      setCommentsPagination(prev => ({
+        ...prev,
+        count: prev.count + 1
+      }));
       setNewComment("");
       setSnack({ open: true, message: "Comentario publicado", severity: "success" });
     } catch (err) {
@@ -275,6 +282,11 @@ export default function PostDetail() {
         headers: { Authorization: `Bearer ${authToken}` },
       });
       setComments((p) => p.filter((c) => c.id !== commentId));
+      // Actualizar el contador de comentarios
+      setCommentsPagination(prev => ({
+        ...prev,
+        count: Math.max(0, prev.count - 1)
+      }));
       setSnack({ open: true, message: "Comentario eliminado", severity: "info" });
     } catch (err) {
       console.error("Error deleting comment:", err);
@@ -504,7 +516,7 @@ export default function PostDetail() {
                       {getCategoryName()}
                     </span>
                   )} · {" "}
-                  {post.uploaded_at ? new Date(post.uploaded_at).toLocaleString() : "Fecha desconocida"}
+                  {post.uploaded_at ? new Date(post.uploaded_at).toLocaleDateString('es-ES') : "Fecha desconocida"}
                 </Typography>
               </Box>
             </Box>
@@ -592,8 +604,8 @@ export default function PostDetail() {
                 />
               ))}
               
-              {/* Botón Ver más comentarios */}
-              {commentsPagination.next && (
+              {/* Botón Ver más comentarios o mensaje de fin */}
+              {commentsPagination.next ? (
                 <Box display="flex" justifyContent="center" mt={2}>
                   <Button 
                     variant="outlined" 
@@ -604,14 +616,11 @@ export default function PostDetail() {
                     {commentsPagination.loadingMore ? "Cargando..." : "Ver más comentarios"}
                   </Button>
                 </Box>
-              )}
-              
-              {/* Información de paginación */}
-              {commentsPagination.count > 0 && (
-                <Typography variant="caption" color="text.secondary" display="block" textAlign="center" mt={1}>
-                  Mostrando {comments.length} de {commentsPagination.count} comentarios
+              ) : comments.length > 0 ? (
+                <Typography variant="caption" color="text.secondary" display="block" textAlign="center" mt={2}>
+                  Se han cargado todos los comentarios
                 </Typography>
-              )}
+              ) : null}
             </>
           )}
         </Box>
@@ -624,6 +633,9 @@ export default function PostDetail() {
         <DialogTitle>Valorar publicación</DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="text.secondary">Puntúa cada aspecto de 1 a 5 estrellas</Typography>
+          <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block', fontStyle: 'italic' }}>
+            Nota: Solo puedes valorar esta publicación una vez.
+          </Typography>
           <Box mt={2} display="grid" gap={2}>
             {ASPECTS.map((a) => (
               <Box key={a.key} display="flex" alignItems="center" justifyContent="space-between">
@@ -771,7 +783,7 @@ function CommentItem({ comment, currentUser, onDelete, onEdit }) {
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="subtitle2" color="text.primary">{comment.author?.username}</Typography>
           <Typography variant="caption" color="text.secondary">
-            {new Date(comment.created_at).toLocaleString?.() ?? comment.created_at}
+            {new Date(comment.created_at).toLocaleDateString?.('es-ES') ?? comment.created_at}
           </Typography>
         </Box>
 

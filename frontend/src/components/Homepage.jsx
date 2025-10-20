@@ -82,7 +82,7 @@ function Homepage() {
                   </p>
                   <p className="welcome-description">
                     Descubre, comparte y conecta con fotógrafos de todo el mundo. 
-                    Sube tus mejores capturas, participa en concursos y forma parte 
+                    Sube tus mejores capturas y forma parte 
                     de una comunidad apasionada por el arte visual.
                   </p>
                   <div className="welcome-actions">
