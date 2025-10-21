@@ -24,6 +24,8 @@ backend/venv/
 /backend/site.prod.ini
 /backend/local_settings.py
 **/gcs.json
+/backend/test_images/
+/backend/TEST_CASES.md
 
 # Frontend React
 ###################

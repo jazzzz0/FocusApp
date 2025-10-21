@@ -56,6 +56,17 @@ class UserSerializer(serializers.ModelSerializer):
         if age < 18:
             raise serializers.ValidationError("El usuario debe ser mayor de edad.")
         return value
+    
+    def validate_profile_pic(self, value):
+        """Validar la foto de perfil usando la función compartida"""
+        if value:  # Solo validar si se proporciona una imagen
+            from utils.image_validation import validate_profile_picture
+            
+            is_valid, error_message = validate_profile_picture(value)
+            if not is_valid:
+                raise serializers.ValidationError(error_message)
+        
+        return value
         
 
         # Creación de un nuevo usuario
@@ -97,6 +108,17 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = AppUser
         fields = ['id', 'username', 'profile_pic', 'first_name', 'last_name', 'bio']
+    
+    def validate_profile_pic(self, value):
+        """Validar la foto de perfil usando la función compartida"""
+        if value:  # Solo validar si se proporciona una imagen
+            from utils.image_validation import validate_profile_picture
+            
+            is_valid, error_message = validate_profile_picture(value)
+            if not is_valid:
+                raise serializers.ValidationError(error_message)
+        
+        return value
     
     def update(self, instance, validated_data):
         """

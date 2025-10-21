@@ -244,7 +244,14 @@ class DescriptionSuggestionView(APIView):
         if not image:
             return Response({"success": False, "message": "No se envió ninguna imagen"}, status=status.HTTP_400_BAD_REQUEST)
         
+        # Validar formato y tamaño de la imagen antes de enviar a la IA
+        from utils.image_validation import validate_post_image
+        is_valid, error_message = validate_post_image(image)
+        if not is_valid:
+            return Response({"success": False, "message": error_message}, status=status.HTTP_400_BAD_REQUEST)
         
+        image.seek(0)
+
         try:
             image_bytes = image.read()
 
