@@ -11,6 +11,7 @@ from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, Bl
 from django.contrib.auth import authenticate
 from .serializers import UserSerializer, UserProfileSerializer
 from .models import AppUser
+from .services import ProfilePhotoService
 
 # Create your views here.
 
@@ -187,4 +188,55 @@ class UserView(APIView):
             return Response({"success": False, "message": "Usuario no encontrado"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"success": False, "message": "No se pudo obtener el usuario", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
+class UpdateUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        request={
+            "profile_pic": OpenApiTypes.BINARY,
+            "first_name": OpenApiTypes.STR,
+            "last_name": OpenApiTypes.STR,
+            "bio": OpenApiTypes.STR
+        },
+        responses={
+            200: {"description": "Usuario actualizado correctamente"},
+            400: {"description": "Error de validación"},
+            500: {"description": "Error interno del servidor"}
+        },
+        description="Actualizar información del usuario autenticado actual, incluyendo foto de perfil."
+    )
+    def put(self, request):
+        try:
+            user = request.user
+            
+            # Validar foto de perfil si se proporciona
+            if 'profile_pic' in request.FILES:
+                new_photo = request.FILES['profile_pic']
+                
+                # Validar el tipo de archivo
+                allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+                if new_photo.content_type not in allowed_types:
+                    return Response({
+                        "success": False,
+                        "message": "Tipo de archivo no válido. Solo se permiten imágenes (JPEG, PNG, WebP)"
+                    }, status=status.HTTP_400_BAD_REQUEST)
+                
+                # Validar el tamaño del archivo (máximo 5MB)
+                max_size = 5 * 1024 * 1024  # 5MB en bytes
+                if new_photo.size > max_size:
+                    return Response({
+                        "success": False,
+                        "message": "El archivo es demasiado grande. El tamaño máximo permitido es 5MB"
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Usar el serializer para actualizar el usuario
+            serializer = UserProfileSerializer(user, data=request.data, partial=True, context={'request': request})
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"success": True, "data": serializer.data}, status=status.HTTP_200_OK)
+            else:
+                return Response({"success": False, "message": "Error de validación", "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"success": False, "message": "No se pudo actualizar el usuario", "detalle": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             

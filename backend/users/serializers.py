@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import AppUser
+from .services import ProfilePhotoService
 from datetime import date
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
@@ -20,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
         # Se incluye "password"
         fields = [
             'id', 'email', 'username', 'password', 'first_name', 'last_name',
-            'date_of_birth', 'profile_pic'
+            'date_of_birth', 'profile_pic', 'bio'
         ]
         extra_kwargs = {
             'email': {'required': True},
@@ -95,4 +96,36 @@ class UserSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = AppUser
-        fields = ['id', 'username', 'profile_pic', 'first_name', 'last_name']
+        fields = ['id', 'username', 'profile_pic', 'first_name', 'last_name', 'bio']
+    
+    def update(self, instance, validated_data):
+        """
+        Actualiza la información del usuario, manejando especialmente la foto de perfil
+        """
+        # Obtener los datos originales de la request para detectar profile_pic: null
+        request = self.context.get('request')
+        
+        # Manejar la actualización de la foto de perfil
+        new_profile_pic = validated_data.get('profile_pic')
+        
+        # Verificar si se envió profile_pic en la request (incluso como null)
+        if request and 'profile_pic' in request.data:
+            if new_profile_pic:  # Si hay una nueva foto
+                # Usar el servicio para actualizar la foto de perfil
+                success = ProfilePhotoService.update_profile_photo(instance, new_profile_pic)
+                if not success:
+                    raise serializers.ValidationError("Error al actualizar la foto de perfil")
+            else:  # Si se envía null o cadena vacía, eliminar la foto
+                success = ProfilePhotoService.remove_profile_photo(instance)
+                if not success:
+                    raise serializers.ValidationError("Error al eliminar la foto de perfil")
+            
+            # Remover profile_pic de validated_data ya que se manejó por separado
+            validated_data.pop('profile_pic', None)
+        
+        # Actualizar los demás campos normalmente
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        instance.save()
+        return instance
