@@ -49,23 +49,13 @@ class PostSerializer(serializers.ModelSerializer):
         # Resultado: Post creado con los campos necesarios.
 
     def validate_image(self, value):
-
-        # Validar tamaño de la imagen (5MB)
-        if value.size > 1024 * 1024 * 5:
-            raise serializers.ValidationError("El tamaño de la imagen no debe exceder los 5MB")
-  
-        # Validar formato de la imagen
-        if value.content_type not in ['image/jpeg', 'image/png', 'image/jpg', 'image/webp']:
-            raise serializers.ValidationError("La imagen debe ser una foto")
-
-        # Validar dimensiones de la imagen
-        try:
-            with Image.open(value) as img:
-                if img.width < 100 or img.height < 100:
-                    raise serializers.ValidationError("La imagen debe tener al menos 100x100px")
-        except Exception as e:
-            raise serializers.ValidationError("Error al validar las dimensiones de la imagen")
-
+        # Importar la función de validación desde utils
+        from utils.image_validation import validate_post_image
+        
+        is_valid, error_message = validate_post_image(value)
+        if not is_valid:
+            raise serializers.ValidationError(error_message)
+        
         return value
 
     def validate_category(self, value):
