@@ -75,6 +75,7 @@ const Perfil = () => {
               </button>
 
               {user.data.bio && <div className="bio">"{user.data.bio}"</div>}
+              
             </div>
           ) : (
             <div className="text-center text-gray-500 mt-10 p-4 animate-pulse">
