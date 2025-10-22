@@ -572,3 +572,44 @@ ul.dropdown-menu li a:hover {
     z-index: -1;
   }
 }
+
+/* Contenedor del dropdown de notificaciones */
+.notifications-dropdown {
+  position: absolute;
+  top: 100%; /* justo debajo del icono */
+  right: 0;
+  background-color: #212f4f; /* mismo color que el perfil */
+  border-radius: 8px; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* sombra sutil */
+  padding: 10px 0;
+  min-width: 180px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cada item del dropdown */
+.notification-item {
+  padding: 10px 15px;
+  color: white; /* texto visible */
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.notification-item:hover {
+  background-color: #1e3b6a; /* cambio suave al pasar el mouse */
+}
+
+/* Si es único item “Sin nuevas notificaciones” */
+.notification-item.no-notifications {
+  text-align: center;
+  color: #ccc; /* más suave, indica que no hay nada */
+  cursor: default;
+}
+
+.notification-item.no-notifications:hover {
+  background-color: #212f4f; /* sin cambio al pasar mouse */
+}
+
