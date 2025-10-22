@@ -573,43 +573,300 @@ ul.dropdown-menu li a:hover {
   }
 }
 
+/* Contenedor de notificaciones */
+.notifications-container {
+  position: relative;
+  list-style: none;
+  padding: 0;
+}
+
+/* Icono de notificaciones */
+.notification-icon {
+  position: relative;
+  cursor: default;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.notification-icon:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+/* Animación para el ícono cuando hay notificaciones no leídas */
+.notification-icon.has-notifications {
+  animation: bounceIcon 1s ease-in-out;
+}
+
+@keyframes bounceIcon {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-3px);
+  }
+  60% {
+    transform: translateY(-2px);
+  }
+}
+
+/* Badge de notificaciones no leídas */
+.notification-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #e74c3c;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  border: 2px solid #0a3563;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  
+  /* Animación de pulso mejorada */
+  animation: pulseBadge 2s infinite;
+}
+
+/* Animación de pulso mejorada para el badge */
+@keyframes pulseBadge {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    transform: scale(1.15);
+    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.4);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 /* Contenedor del dropdown de notificaciones */
 .notifications-dropdown {
   position: absolute;
-  top: 100%; /* justo debajo del icono */
+  top: 100%;
   right: 0;
-  background-color: #212f4f; /* mismo color que el perfil */
-  border-radius: 8px; 
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* sombra sutil */
-  padding: 10px 0;
-  min-width: 180px;
+  background-color: #212f4f;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 0;
+  min-width: 320px;
+  max-width: 400px;
   z-index: 1000;
+  overflow: hidden;
+  
+  /* Animaciones de entrada y salida */
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+/* Estado visible del dropdown */
+.notifications-dropdown.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Header del dropdown de notificaciones */
+.notifications-header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #212f4f;
+}
+
+.notifications-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.notifications-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Contenido de notificaciones */
+.notifications-content {
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 /* Cada item del dropdown */
 .notification-item {
-  padding: 10px 15px;
-  color: white; /* texto visible */
-  font-size: 1rem;
-  text-align: left;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: white;
+  
+  /* Animación de entrada escalonada */
+  opacity: 0;
+  transform: translateX(20px);
+  animation: slideInFromRight 0.4s ease forwards;
+}
+
+/* Animación de entrada para cada item */
+@keyframes slideInFromRight {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Delay escalonado para cada item */
+.notification-item:nth-child(1) { animation-delay: 0.1s; }
+.notification-item:nth-child(2) { animation-delay: 0.15s; }
+.notification-item:nth-child(3) { animation-delay: 0.2s; }
+.notification-item:nth-child(4) { animation-delay: 0.25s; }
+.notification-item:nth-child(5) { animation-delay: 0.3s; }
+.notification-item:nth-child(6) { animation-delay: 0.35s; }
+.notification-item:nth-child(7) { animation-delay: 0.4s; }
+.notification-item:nth-child(8) { animation-delay: 0.45s; }
+
+.notification-item:last-child {
+  border-bottom: none;
 }
 
 .notification-item:hover {
-  background-color: #1e3b6a; /* cambio suave al pasar el mouse */
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Si es único item “Sin nuevas notificaciones” */
-.notification-item.no-notifications {
+.notification-item.unread {
+  background-color: rgba(33, 150, 243, 0.2);
+  border-left: 4px solid #2196f3;
+}
+
+.notification-item.unread:hover {
+  background-color: rgba(33, 150, 243, 0.3);
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
+}
+
+.notification-item.loading,
+.notification-item.error,
+.notification-item.empty {
   text-align: center;
-  color: #ccc; /* más suave, indica que no hay nada */
+  color: rgba(255, 255, 255, 0.7);
   cursor: default;
+  font-style: italic;
 }
 
-.notification-item.no-notifications:hover {
-  background-color: #212f4f; /* sin cambio al pasar mouse */
+.notification-item.loading:hover,
+.notification-item.error:hover,
+.notification-item.empty:hover {
+  background-color: transparent;
+}
+
+.notification-item.error {
+  color: #ff6b6b;
+}
+
+/* Mensaje de la notificación */
+.notification-message {
+  font-size: 0.95rem;
+  color: white;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.notification-item.unread .notification-message {
+  font-weight: 500;
+}
+
+/* Tiempo de la notificación */
+.notification-time {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+/* Indicador de no leído */
+.unread-indicator {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background-color: #2196f3;
+  border-radius: 50%;
+}
+
+/* Scrollbar personalizado para el contenido de notificaciones */
+.notifications-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notifications-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.notifications-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+
+.notifications-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Responsivo para notificaciones */
+@media (max-width: 768px) {
+  .notifications-dropdown {
+    position: fixed;
+    top: 60px;
+    left: 20px;
+    right: 20px;
+    min-width: auto;
+    max-width: none;
+    width: auto;
+  }
+  
+  .notification-item {
+    padding: 12px 16px;
+  }
+  
+  .notifications-header {
+    padding: 12px 16px;
+  }
+  
+  .notifications-header h3 {
+    font-size: 1rem;
+  }
 }
 
