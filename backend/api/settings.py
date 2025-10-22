@@ -48,6 +48,13 @@ if DEBUG:
     GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
         os.path.join(BASE_DIR, "credentials", "gcs.json")
     )
+
+    WEBPUSH_SETTINGS = {
+        'VAPID_PUBLIC_KEY': config('VAPID_PUBLIC_KEY'),
+        'VAPID_PRIVATE_KEY': config('VAPID_PRIVATE_KEY'),
+        'VAPID_ADMIN_EMAIL': config('VAPID_ADMIN_EMAIL'),
+    }
+
     LOGGING = {
         'version': 1,
         'disable_existing_loggers': False,
@@ -140,6 +147,13 @@ else:
         secret_path
     )
 
+    WEBPUSH_SETTINGS = {
+        'VAPID_PUBLIC_KEY': os.environ['VAPID_PUBLIC_KEY'],
+        'VAPID_PRIVATE_KEY': os.environ['VAPID_PRIVATE_KEY'],
+        'VAPID_ADMIN_EMAIL': os.environ['VAPID_ADMIN_EMAIL'],
+    }
+
+
     LOGGING = {
         'version': 1,
         'disable_existing_loggers': False,
@@ -153,6 +167,9 @@ else:
             "level": "INFO",
         },
     }
+
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -172,12 +189,14 @@ INSTALLED_APPS = [
 
     'drf_spectacular',
     'storages',  # Para usar GCS
+    'webpush',
     
     # apps django propias creadas con "python manage.py startapp app_name"
     'core', 
     'users',
     'posts',
-    'ratings'
+    'ratings',
+    'notifications',
 
 ]
 
