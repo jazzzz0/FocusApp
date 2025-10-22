@@ -30,15 +30,15 @@ const EditarPerfil = () => {
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const data = await response.json();
-        if (response.ok && data) {
-          const data = data.data
+        if (response.ok && data && data.data) {
+          const user = data.data
           setUserData({
-            first_name: data.data.first_name || "",
-            last_name: data.data.last_name || "",
-            bio: data.data.bio || "",
-            profile_pic: data.data.profile_pic || "",
+            first_name: user.first_name || "",
+            last_name: user.last_name || "",
+            bio: user.bio || "",
+            profile_pic: user.profile_pic || "",
           });
-          setPreview(data.data.profile_pic);
+          setPreview(user.profile_pic);
         } else {
           alert("No se pudo cargar el perfil para editar.");
         }

@@ -65,17 +65,18 @@ const Perfil = () => {
                 }
                 alt={`Foto de perfil de ${user.data.username}`}
               />
-              <h2>@{user.data.username}</h2>
-              <p>
-                {user.data.first_name} {user.data.last_name}
-              </p>
-
-              <button className="btn" onClick={handleEdit}>
-                ✍️ Editar perfil
-              </button>
+              <div className="user-info">
+                <h2>@{user.data.username}</h2>
+                <p>
+                  {user.data.first_name} {user.data.last_name}
+                </p>
+                <button className="btn" onClick={handleEdit}>
+                  ✍️ Editar perfil
+                </button>
+              </div>
 
               {user.data.bio && <div className="bio">"{user.data.bio}"</div>}
-              
+
             </div>
           ) : (
             <div className="text-center text-gray-500 mt-10 p-4 animate-pulse">
