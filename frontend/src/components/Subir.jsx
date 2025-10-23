@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert, Tooltip } from "@mui/material";
+import InfoIcon from '@mui/icons-material/Info';
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import '../styles/Subir.css';
@@ -306,22 +307,27 @@ const PostForm = () => {
               onChange={handleChange}
             />
 
-            <label className="checkbox-label">
+            <label className="checkbox-label" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <input
                 type="checkbox"
                 name="allows_ratings"
                 checked={formData.allows_ratings}
                 onChange={handleChange}
+                style={{ margin: 0 }}
               />
-              Permitir valoraciones
-              <span className="tooltip">⚠️
-                <span className="tooltip-text">
-                Permite que tu foto sea valorada en sus 5 aspectos clave 
-                (Composición, Iluminación, Adaptación técnica, Claridad y Enfoque, y Creatividad). 
-                El promedio de estas valoraciones influirá directamente en qué tan arriba aparece 
-                tu publicación en la sección "Explorar" de su categoría.
-                </span>
-              </span>
+              <span>Permitir valoraciones</span>
+              <Tooltip 
+                title="Permite que tu foto sea valorada en sus 5 aspectos clave (Composición, Iluminación, Adaptación técnica, Claridad y Enfoque, y Creatividad). El promedio de estas valoraciones influirá directamente en qué tan arriba aparece tu publicación en la sección 'Explorar' de su categoría."
+                placement="top"
+                arrow
+                slotProps={{
+                  popper: {
+                    sx: { textAlign: 'justify' }
+                  }
+                }}
+              >
+                <InfoIcon style={{ cursor: 'help', fontSize: '18px' }} />
+              </Tooltip>
             </label>
           </div>
 

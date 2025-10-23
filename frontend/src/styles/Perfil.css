@@ -161,6 +161,34 @@ body {
     font-size: 0.9rem;
     padding: 8px 20px;
   }
+
+  /* Responsive para sección de fotos */
+  .user-photos-section {
+    margin: 30px auto;
+    padding: 0 15px;
+  }
+
+  .user-photos-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .user-photos-section .photos-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .user-photos-section .photo-card h4 {
+    font-size: 0.9rem;
+  }
+}
+
+/* Tablet responsive para sección de fotos */
+@media (max-width: 1024px) {
+  .user-photos-section .photos-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+  }
 }
 
 
@@ -391,4 +419,35 @@ body {
 
 .btn-guardar:hover {
   background-color: #7d7e7e;
+}
+
+/* 🔹 Sección de fotos del usuario */
+.user-photos-section {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+.user-photos-section h3 {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #0a3563;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  padding: 10px 0;
+  border-bottom: 2px solid #e0e0e0;
+  position: relative;
+}
+
+.user-photos-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, #0a3563, #112d79);
+  border-radius: 1px;
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Snackbar, Alert } from "@mui/material";
 import "../styles/editar-perfil.css";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -12,15 +13,28 @@ const EditarPerfil = () => {
     profile_pic: "",
   });
   const [preview, setPreview] = useState(null);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success"
+  });
   const navigate = useNavigate();
+
+  const handleCloseSnackbar = () => {
+    setSnackbar(prev => ({ ...prev, open: false }));
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("access");
 
       if (!token) {
-        alert("Debes iniciar sesión para editar tu perfil.");
-        navigate("/login");
+        setSnackbar({
+          open: true,
+          message: "Debes iniciar sesión para editar tu perfil.",
+          severity: "warning"
+        });
+        setTimeout(() => navigate("/login"), 2000);
         return;
       }
 
@@ -40,7 +54,11 @@ const EditarPerfil = () => {
           });
           setPreview(user.profile_pic);
         } else {
-          alert("No se pudo cargar el perfil para editar.");
+          setSnackbar({
+            open: true,
+            message: "No se pudo cargar el perfil para editar.",
+            severity: "error"
+          });
         }
       } catch (error) {
         console.error("Error al obtener datos del usuario:", error);
@@ -75,8 +93,12 @@ const EditarPerfil = () => {
 
     const token = localStorage.getItem("access");
     if (!token) {
-      alert("Debes iniciar sesión para guardar los cambios.");
-      navigate("/login");
+      setSnackbar({
+        open: true,
+        message: "Debes iniciar sesión para guardar los cambios.",
+        severity: "warning"
+      });
+      setTimeout(() => navigate("/login"), 2000);
       return;
     }
 
@@ -106,11 +128,19 @@ const EditarPerfil = () => {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        alert("✅ Perfil actualizado con éxito");
-        navigate("/perfil");
+        setSnackbar({
+          open: true,
+          message: "✅ Perfil actualizado con éxito",
+          severity: "success"
+        });
+        setTimeout(() => navigate("/perfil"), 1500);
       } else {
         console.error("Error en la respuesta del servidor:", data);
-        alert("⚠️ Error al guardar los cambios.");
+        setSnackbar({
+          open: true,
+          message: "⚠️ Error al guardar los cambios.",
+          severity: "error"
+        });
       }
     } catch (error) {
       console.error("Error al guardar perfil:", error);
@@ -193,6 +223,23 @@ const EditarPerfil = () => {
           </form>
         </div >
       </div >
+      
+      {/* Snackbar para mensajes de éxito/error */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={snackbar.message.includes("Debes iniciar sesión") ? 2000 : 4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+      
       <Footer />
     </>
   );
