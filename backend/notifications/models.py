@@ -51,8 +51,8 @@ class Notification(models.Model):
         else:
             base_message += "ha realizado una acción."
 
-        if self.target:
-            base_message += f" en {self.target}"
+        # if self.target:
+        #     base_message += f" en {self.target}"
 
         return base_message
 

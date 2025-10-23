@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 
 # tipos de notificaciones posibles
 from posts.models import PostComment
+from ratings.models import Rating
 
 
 @receiver(post_save, sender=PostComment)
@@ -13,6 +14,10 @@ def comment_notification(sender, instance, created, **kwargs):
     if created:
         recipient = instance.post.author
         actor = instance.author
+
+        # Evitar auto-notificaciones: no notificar al usuario de sus propias acciones
+        if recipient == actor:
+            return
 
         content_type = ContentType.objects.get_for_model(PostComment)
 

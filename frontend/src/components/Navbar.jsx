@@ -2,20 +2,17 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { Menu as MenuIcon, Close as CloseIcon, Home as HomeIcon } from "@mui/icons-material";
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import NotificationImportantIcon from '@mui/icons-material/NotificationImportant';
 import { Snackbar, Alert } from '@mui/material';
 import logo from '../assets/imagenes/logo.png';
 import defaultAvatar from '../assets/imagenes/avatar.png';
 import FloatingMenu from "./FloatingMenu";
+import NotificationBell from "./NotificationBell";
 import '../styles/Navbar.css';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
-  const [notifications, setNotifications] = useState([]); // Mock de notificaciones
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -68,32 +65,7 @@ const Navbar = () => {
                 </li>
 
                 {/* 🔔 Notificaciones */}
-                <li 
-                  className="notifications-container"
-                  onMouseEnter={() => setIsNotificationsOpen(true)}
-                  onMouseLeave={() => setIsNotificationsOpen(false)}
-                >
-                  <div className="notification-icon" onClick={() => setIsNotificationsOpen(prev => !prev)}>
-                    {notifications.length > 0 ? (
-                      <NotificationImportantIcon fontSize="large" color="primary" />
-                    ) : (
-                      <NotificationsIcon fontSize="large" />
-                    )}
-                    {notifications.length > 0 && <span className="notification-badge">{notifications.length}</span>}
-                  </div>
-
-                  {isNotificationsOpen && (
-                    <div className="notifications-dropdown">
-                      {notifications.length > 0 ? (
-                        notifications.map((note, idx) => (
-                          <div key={idx} className="notification-item">{note.message}</div>
-                        ))
-                      ) : (
-                        <div className="notification-item">Sin nuevas notificaciones</div>
-                      )}
-                    </div>
-                  )}
-                </li>
+                <NotificationBell />
 
                 {/* 🧑 Avatar y menú de perfil */}
                 <li
