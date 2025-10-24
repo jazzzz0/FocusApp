@@ -1,4 +1,3 @@
-/* Contenedor del formulario de subir */
 .subir-form-center {
   min-height: 100vh;
   display: flex;
@@ -8,7 +7,6 @@
   padding: 2rem 1rem;
 }
 
-/* Contenedor del formulario */
 .subir-form {
   background-color: white;
   padding: 2rem;
@@ -19,7 +17,6 @@
   box-sizing: border-box;
 }
 
-/* Título */
 .subir-form h2 {
   text-align: center;
   margin-bottom: 1.5rem;
@@ -27,7 +24,6 @@
   font-size: 1.5rem;
 }
 
-/* Etiquetas */
 .subir-form label {
   display: block;
   margin-bottom: 0.4rem;
@@ -36,7 +32,6 @@
   font-size: 0.9rem;
 }
 
-/* Inputs básicos */
 .subir-form input[type="text"],
 .subir-form input[type="email"],
 .subir-form input[type="password"],
@@ -56,7 +51,6 @@
   border-color: #172ad4;
 }
 
-/* Input de archivo personalizado */
 .file-input-container {
   position: relative;
   margin-bottom: 1rem;
@@ -106,7 +100,6 @@
   transform: scale(1.1);
 }
 
-/* Vista previa de imagen */
 .image-preview {
     display: flex;
     flex-direction: column;
@@ -132,7 +125,6 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
-/* Placeholder */
 .image-preview .placeholder {
     display: flex;
     flex-direction: column;
@@ -150,7 +142,6 @@
     margin-top: 0.5rem;
 }
 
-/* Textarea */
 .subir-form textarea {
   width: 100%;
   padding: 0.6rem;
@@ -171,8 +162,14 @@
 }
 
 
+.subir-form select option {
+  color: #000; /* negro */
+}
 
-/* Select */
+.subir-form select:focus {
+  border-color: #172ad4;
+}
+
 .subir-form select {
   width: 100%;
   padding: 0.6rem;
@@ -186,11 +183,6 @@
   box-sizing: border-box;
 }
 
-.subir-form select:focus {
-  border-color: #172ad4;
-}
-
-/* Checkbox */
 .subir-form input[type="checkbox"] {
   margin-right: 0.5rem;
   transform: scale(1.2);
@@ -308,7 +300,6 @@
   width: 100%;
 }
 
-
 /* Contenedor de sugerencias de IA estilo chips */
 .ai-suggestions {
     margin-top: 1.rem;
@@ -364,8 +355,6 @@
 .suggestion-card-with-check.selected {
     background-color: #ccc;
 }
-  
-
   
   /* Texto del chip */
   .suggestion-card-with-check p {
@@ -436,8 +425,4 @@
     grid-template-columns: 1fr;
     gap: 0.5rem;
   }
-}
-/* Texto de las opciones del select en negro */
-.subir-form select option {
-  color: #000; /* negro */
 }

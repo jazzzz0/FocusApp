@@ -57,7 +57,7 @@ def validate_profile_picture(image_file):
     """
     return validate_image_file(
         image_file,
-        max_size_mb=5,  # 2MB para fotos de perfil
+        max_size_mb=2,  # 2MB para fotos de perfil
         min_width=100,    # Dimensiones más pequeñas permitidas
         min_height=100,
         allowed_formats=['image/jpeg', 'image/png', 'image/jpg', 'image/webp']

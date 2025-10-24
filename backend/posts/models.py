@@ -7,10 +7,9 @@ from django.utils.text import slugify
 from users.models import AppUser
 
 
-import os, logging
+import logging
 
 class Category(models.Model):
-    # atributos ID, name, slug, description
     name = models.CharField(
         max_length=100, unique=True, verbose_name="Nombre de la categoría"
     )
@@ -48,7 +47,6 @@ class Post(models.Model):
     image = models.ImageField(
         upload_to="posts/", 
         verbose_name="Fotografía",
-        # TODO: Añadir validators (validaciones) de imagen (tamaño, formato, etc.)
     )
 
     title = models.CharField(
@@ -120,7 +118,6 @@ def delete_post_image(sender, instance, **kwargs):
         except Exception as e:
             logger.error(f"Error al eliminar la imagen {instance.image.path}: {str(e)}")
 
-# ..CLASS COMENTARIO..
 
 class PostComment(models.Model):
     author = models.ForeignKey(

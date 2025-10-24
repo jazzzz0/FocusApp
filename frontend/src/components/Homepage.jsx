@@ -1,4 +1,3 @@
-// pages/Homepage.jsx
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -6,20 +5,16 @@ import Navbar from "../components/Navbar";
 import Footer from "./Footer";
 import CategoryCarousel from "../components/CategoryCarousel";
 
-// Imágenes locales para secciones
-
 import grupo from '../assets/imagenes/grupo.jpg';
 import perfil from '../assets/imagenes/avatar.png';
 import subir from '../assets/imagenes/subir.png';
 import puntuacion from '../assets/imagenes/puntuacion.png';
 import categoria from '../assets/imagenes/categoria.png';
 import ranking from '../assets/imagenes/ranking.jpg';
-import comunidad from '../assets/imagenes/comunidad.png';
 import feedback from '../assets/imagenes/feedback.png';
 
 import '../styles/main.css';
 import '../styles/Home.css';
-import '../styles/Bienvenida.css';
 
 function Homepage() {
   const { logout, user } = useContext(AuthContext);

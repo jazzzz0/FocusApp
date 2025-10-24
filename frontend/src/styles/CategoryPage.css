@@ -3,9 +3,9 @@ body {
   background-color: white !important;
 }
 .category-page {
-  max-width: 1200px; /* limita el ancho de la página */
-  margin: 0 auto;    /* centra horizontalmente */
-  padding: 2rem 1rem; /* padding superior/inferior y lateral */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
 }
 
 .category-page h1 {
@@ -20,14 +20,13 @@ body {
   font-size: 1.1rem;
   text-align: center;
   margin-bottom: 2rem;
-  /* color: #555; */
 }
 
-/* Banner de categoría */
+
 .category-banner {
   position: relative;
   width: 85%;
-  height: 300px; /* altura del banner, podés ajustar */
+  height: 300px; 
   margin: 0 auto;
   margin-bottom: 2rem;
   border-radius: 12px;

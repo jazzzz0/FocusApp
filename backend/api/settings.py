@@ -156,8 +156,6 @@ else:
     }
 
 
-
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -173,7 +171,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
-
     'drf_spectacular',
     'storages',  # Para usar GCS
     
@@ -247,8 +244,6 @@ SIMPLE_JWT = {
     # Configuración para guardar tokens automáticamente
     'TOKEN_BLACKLIST_ENABLED': True,
 
-    # 'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
-    # 'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
 SPECTACULAR_SETTINGS = {
@@ -256,7 +251,6 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Documentación de la API de FocusApp, una comunidad para fotógrafos y amantes de la fotografía.',
     'VERSION': '1.0.0',
 }
-
 
 ROOT_URLCONF = 'api.urls'
 
@@ -276,11 +270,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'api.wsgi.application'
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-
 
 AUTH_USER_MODEL = 'users.AppUser'
 
@@ -305,7 +294,6 @@ AUTH_PASSWORD_VALIDATORS = [
     }
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -318,9 +306,7 @@ USE_I18N = True
 USE_TZ = True
 
 # Configuración de sevicio cloud
-
 GS_BUCKET_NAME = "focusapp-uploads"
-
 
 # Configuración de almacenamiento para Django 5.2+
 STORAGES = {
@@ -332,20 +318,11 @@ STORAGES = {
     },
 }
 
-
-
-# Configuración de media files para servidor (config vieja)
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# MEDIA_URL = '/media/'
-
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

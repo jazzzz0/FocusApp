@@ -7,7 +7,7 @@
 .photos-grid {
   display: grid;
   gap: 1rem; /* espacio entre fotos */
-  grid-template-columns: repeat(4, 1fr); /* 3 columnas por defecto */
+  grid-template-columns: repeat(4, 1fr); /* 4 columnas por defecto */
   /* padding: 0 0.5rem; */
 }
 
@@ -16,7 +16,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background-color: #fff; /*TODO: tal vez cambio color*/
+  background-color: #fff;
   border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);

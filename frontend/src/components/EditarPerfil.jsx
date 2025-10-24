@@ -150,7 +150,6 @@ const EditarPerfil = () => {
   return (
     <>
       <div className="perfil-wrapper">
-        {/* 🔹 Navbar minimalista igual que Perfil */}
         <Navbar />
 
         {/* 🔹 Contenedor de edición */}
