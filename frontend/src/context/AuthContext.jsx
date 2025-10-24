@@ -5,6 +5,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);   // usuario logueado
   const [loading, setLoading] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false); // estado de logout intencional
 
 
   // Cuando arranca la app, revisamos si hay tokens en localStorage
@@ -94,6 +95,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
+      setIsLoggingOut(true);
       const access = user?.access || localStorage.getItem("access");
       const refresh = user?.refresh || localStorage.getItem("refresh");
       
@@ -109,6 +111,7 @@ export const AuthProvider = ({ children }) => {
 
         // Si la petición no fue exitosa, no limpiar localStorage
         if (!response.ok) {
+          setIsLoggingOut(false);
           return false;
         }
       }
@@ -117,15 +120,23 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem("access");
       localStorage.removeItem("refresh");
       localStorage.removeItem("username");
-      setUser(null);
+      
       return true;
     } catch (err) {
+      setIsLoggingOut(false);
       return false;
     }
   };
 
+  const clearUser = () => {
+    setUser(null);
+    setTimeout(() => {
+      setIsLoggingOut(false);
+    }, 2000);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, loading, isLoggingOut, clearUser }}>
       {children}
     </AuthContext.Provider>
   );

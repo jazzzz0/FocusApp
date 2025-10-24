@@ -33,7 +33,6 @@ class NotificationService {
           localStorage.removeItem('access');
           localStorage.removeItem('refresh');
           localStorage.removeItem('username');
-          window.location.href = '/Login';
         }
         return Promise.reject(error);
       }

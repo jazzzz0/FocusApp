@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import '../styles/RegisterForm.css'; 
 import { Link } from "react-router-dom";
 import '../components/RegisterForm';
@@ -19,6 +19,7 @@ const LoginForm = () => {
 
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
+  const location = useLocation();
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -43,7 +44,7 @@ const LoginForm = () => {
       
       if (success) {
         showSnackbar('Login exitoso', 'success');
-        setTimeout(() => navigate("/"), 700);
+        setTimeout(() => navigate(location.state?.from?.pathname || "/"), 700);
       } else {
         showSnackbar('Error: Credenciales inválidas', 'error');
       }

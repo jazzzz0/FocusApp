@@ -14,29 +14,66 @@ import './styles/main.css'
 import CategoryPage from './pages/CategoryPage';
 import CategoriesProvider from "./context/CategoriesContext";
 import PostDetail from './pages/PostDetail';
+import AuthProvider from './context/AuthContext';
+import PrivateRoute from './components/PrivateRoute';
+import PublicRoute from './components/PublicRoute';
 
 
 function App() {
     return (
-    <Router>
-      <CategoriesProvider>
-        <Routes>
-          {/* Ruta principal */}
-          <Route path="/" element={<Homepage />} />
+      <>
+      <AuthProvider>
+        <Router>
+          <CategoriesProvider>
+            <Routes>
+              {/* Ruta principal */}
+              <Route path="/" element={<Homepage />} />
 
-          {/* Otras rutas */}
-          <Route path="/Perfil" element={<Perfil />} />
-          <Route path="/Subir" element={<PostForm />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/RegisterForm" element={<Register />} />
-          <Route path="/editar-perfil" element={<EditarPerfil />} />
-          <Route path="/explorar/:categorySlug" element={< CategoryPage />} />
-          <Route path="/posts/:id/" element={< PostDetail />}></Route>
-          
-        </Routes>
-      </CategoriesProvider>
+              {/* Rutas de acceso público */}
+              <Route path="/Login" element={
+                <PublicRoute>
+                  <Login />
+                </PublicRoute>
+              } />
+              <Route path="/RegisterForm" element={
+                <PublicRoute>
+                  <Register />
+                </PublicRoute>
+              } />
 
-    </Router>
+              {/* Rutas protegidas */}
+              <Route path="/Perfil" element={
+                <PrivateRoute>
+                  <Perfil />
+                </PrivateRoute>
+              } />
+              <Route path="/Subir" element={
+                <PrivateRoute>
+                  <PostForm />
+                </PrivateRoute>
+              } />
+              <Route path="/editar-perfil" element={
+                <PrivateRoute>
+                  <EditarPerfil />
+                </PrivateRoute>
+              } />
+              <Route path="/explorar/:categorySlug" element={
+                <PrivateRoute>
+                  <CategoryPage />
+                </PrivateRoute>
+              } />
+              <Route path="/posts/:id/" element={
+                <PrivateRoute>
+                  <PostDetail />
+                </PrivateRoute>
+              } />
+              
+            </Routes>
+          </CategoriesProvider>
+
+        </Router>
+    </AuthProvider>
+    </>
   );
 }
 export default App;

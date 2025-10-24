@@ -13,25 +13,37 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+  const [logoutSnackbar, setLogoutSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, logout } = useContext(AuthContext);
-
-  const showSnackbar = (message, severity = 'success') => {
-    setSnackbar({ open: true, message, severity });
-  };
+  const { user, logout, clearUser } = useContext(AuthContext);
 
   const handleCloseSnackbar = () => setSnackbar(prev => ({ ...prev, open: false }));
 
   const handleLogout = async () => {
+    
     const success = await logout();
-    if (success) showSnackbar('Sesión cerrada exitosamente', 'success');
-    else showSnackbar('Error al cerrar sesión. Inténtalo de nuevo más tarde.', 'error');
+    if (success) {
+      setLogoutSnackbar({ open: true, message: 'Sesión cerrada exitosamente', severity: 'success' });
+    } else {
+      setLogoutSnackbar({ open: true, message: 'Error al cerrar sesión. Inténtalo de nuevo más tarde.', severity: 'error' });
+    }
 
     setIsProfileMenuOpen(false);
     closeMobileMenu();
-    setTimeout(() => navigate("/"), 700);
+    
+    // Redirigir después de mostrar el mensaje
+    setTimeout(() => {
+      navigate("/");
+      setTimeout(() => {
+        clearUser();
+        // Cerrar el Snackbar después de limpiar el usuario
+        setTimeout(() => {
+          setLogoutSnackbar({ open: false, message: '', severity: 'success' });
+        }, 1000);
+      }, 200);
+    }, 1500);
   };
 
   const handleProfileClick = () => {
@@ -103,6 +115,22 @@ const Navbar = () => {
       >
         <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
           {snackbar.message}
+        </Alert>
+      </Snackbar>
+
+      {/* Snackbar específico para logout que persiste durante el proceso */}
+      <Snackbar
+        open={logoutSnackbar.open}
+        autoHideDuration={null} // No se oculta automáticamente
+        onClose={() => setLogoutSnackbar({ open: false, message: '', severity: 'success' })}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={() => setLogoutSnackbar({ open: false, message: '', severity: 'success' })} 
+          severity={logoutSnackbar.severity} 
+          sx={{ width: '100%' }}
+        >
+          {logoutSnackbar.message}
         </Alert>
       </Snackbar>
     </header>
