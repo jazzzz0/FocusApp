@@ -74,8 +74,8 @@ body {
 .file-input-label {
   font-size: 0.9rem;
   cursor: pointer;
-  background-color: #0d1b2a;
-  color: #f3fffc;
+  
+  color: #5e5f5f;
   padding: 8px 15px;
   border-radius: 8px;
   transition: var(--transition);
