@@ -52,7 +52,7 @@ def create_default_categories(apps, schema_editor):
             slug=category_data['slug'],
             defaults={
                 'name': category_data['name'],
-                'description': category_data['description']git
+                'description': category_data['description']
             }
         )
         if created:
