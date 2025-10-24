@@ -20,7 +20,7 @@ const NotificationBell = () => {
   const [cooldownTime, setCooldownTime] = useState(0);
   const [isFetching, setIsFetching] = useState(false); // Controla si hay una petición en curso
   
-  const { user } = useContext(AuthContext);
+  const { user, isLoggingOut } = useContext(AuthContext);
   const navigate = useNavigate();
 
   // Límite de tiempo entre peticiones (en milisegundos)
@@ -231,13 +231,18 @@ const NotificationBell = () => {
    * o cuando cambia el usuario
    */
   useEffect(() => {
+    // No hacer peticiones si el usuario se está deslogueando
+    if (isLoggingOut) {
+      return;
+    }
+    
     if (user?.access) {
       fetchUnreadCount();
     } else {
       setUnreadCount(0);
       setNotifications([]);
     }
-  }, [user?.access]);
+  }, [user?.access, isLoggingOut]);
 
   /**
    * Efecto para actualizar el cooldown cada segundo

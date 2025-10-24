@@ -17,11 +17,7 @@ import '../styles/main.css';
 import '../styles/Home.css';
 
 function Homepage() {
-  const { logout, user } = useContext(AuthContext);
-
-  const handleLogout = async () => {
-    await logout();
-  };
+  const { user } = useContext(AuthContext);
 
   const scrollToCategories = () => {
     const categoriesSection = document.getElementById('categories-section');
@@ -45,7 +41,7 @@ function Homepage() {
   return (
     <>
       {/* Navbar */}
-      <Navbar onLogout={handleLogout} />
+      <Navbar />
 
        {/* Sección de Bienvenida */}
       <section className="welcome-section" id="welcome">
@@ -195,7 +191,7 @@ function Homepage() {
       </section>
 
       {/* Footer */}
-      <Footer onLogout={handleLogout} />
+      <Footer />
     </>
   );
 }
