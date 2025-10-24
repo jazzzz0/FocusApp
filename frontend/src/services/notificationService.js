@@ -112,21 +112,6 @@ class NotificationService {
   }
 
   /**
-   * Suscribe al usuario a notificaciones push
-   * @param {Object} subscriptionData - Datos de la suscripción push
-   * @returns {Promise<boolean>} True si se suscribió correctamente
-   */
-  async subscribeToPush(subscriptionData) {
-    try {
-      const response = await this.api.post('/subscribe/', subscriptionData);
-      return response.data.success;
-    } catch (error) {
-      console.error('Error al suscribirse a notificaciones push:', error);
-      throw error;
-    }
-  }
-
-  /**
    * Formatea una notificación para mostrar en la UI
    * @param {Object} notification - Notificación del backend
    * @returns {Object} Notificación formateada

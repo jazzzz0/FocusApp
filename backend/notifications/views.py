@@ -1,18 +1,13 @@
-from webpush import send_user_notification
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from django.db import DatabaseError
 from django.core.exceptions import ValidationError
-from django.conf import settings
 import logging
 
-import webpush
 from .models import Notification
 from .serializers import NotificationSerializer
-import json
-from webpush.models import PushInformation, SubscriptionInfo
 
 logger = logging.getLogger(__name__)
 
@@ -145,63 +140,3 @@ class MarkAllAsReadView(APIView):
                 {"success": False, "message": "Error inesperado al marcar todas las notificaciones como leídas."}, 
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-
-class SubscribeToPushView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request, *args, **kwargs):
-        try:
-            subscription_data = request.data
-            subscription, created = SubscriptionInfo.objects.update_or_create(
-                endpoint=subscription_data['endpoint'],
-                defaults={
-                    'auth': subscription_data['keys']['auth'],
-                    'p256dh': subscription_data['keys']['p256dh'],
-                    'browser': subscription_data.get('browser', ''),
-                    'user_agent': subscription_data.get('user_agent', ''),
-                }
-            )
-
-            PushInformation.objects.update_or_create(
-                user=request.user,
-                subscription=subscription,
-            )
-            return Response({"success": True, "message": "Suscripción guardada correctamente."}, status=status.HTTP_200_OK)
-        except Exception as e:
-            logger.error(f"Error inesperado al guardar la suscripción: {str(e)}")
-            return Response({"success": False, "message": "Error inesperado al guardar la suscripción."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-def send_push_notification(user, message, payload=None):
-    """ Envía notificación push a todas las suscripciones activas de un usuario. """
-
-    data = {
-        "head": "New notification",
-        "body": message,
-        "icon": "/static/icons/notification.png",
-    }
-
-    if payload:
-        data.update(payload)
-
-    # Buscar todas las suscripciones del usuario
-    subscriptions = PushInformation.objects.filter(user=user)
-
-    for sub in subscriptions:
-        try:
-            webpush.send_webpush(
-                subscription_info={
-                    "endpoint": sub.subscription.endpoint,
-                    "keys": {
-                        "p256dh": sub.subscription.p256dh,
-                        "auth": sub.subscription.auth,
-                    },
-                },
-                data=json.dumps(data),
-                vapid_private_key=settings.WEBPUSH_SETTINGS["VAPID_PRIVATE_KEY"],
-                vapid_claims={
-                    "sub": f"mailto:{settings.WEBPUSH_SETTINGS['VAPID_ADMIN_EMAIL']}"
-                }
-            )
-        except Exception as e:
-            logger.error(f"Error al enviar notificación push al usuario {user.id}: {str(e)}")
