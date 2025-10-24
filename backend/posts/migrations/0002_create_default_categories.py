@@ -49,10 +49,10 @@ def create_default_categories(apps, schema_editor):
     # Crear cada categoría si no existe
     for category_data in categories_data:
         category, created = Category.objects.get_or_create(
-            name=category_data['name'],
+            slug=category_data['slug'],
             defaults={
-                'description': category_data['description'],
-                'slug': category_data['slug']
+                'name': category_data['name'],
+                'description': category_data['description']git
             }
         )
         if created:
