@@ -24,7 +24,10 @@ body {
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  color: var(--text-color);
+  background-color: #0d1b2a;
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+
 }
 
 
@@ -44,7 +47,9 @@ body {
 .editar-perfil h2 {
   font-weight: 600;
   margin-bottom: 1.5rem;
-  color: var(--primary-color);
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 25px;
 }
 
 /* ====== FOTO DE PERFIL ====== */
@@ -52,6 +57,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   margin-bottom: 1.5rem;
 }
 
@@ -67,8 +73,11 @@ body {
 
 .file-input-label {
   font-size: 0.9rem;
-  color: var(--primary-color);
   cursor: pointer;
+  background-color: #0d1b2a;
+  color: #f3fffc;
+  padding: 8px 15px;
+  border-radius: 8px;
   transition: var(--transition);
 }
 
@@ -77,10 +86,19 @@ body {
 }
 
 /* ====== FORMULARIO ====== */
+.editar-form .form-group {
+  margin-bottom: 15px;
+}
 .editar-form {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+}
+
+.editar-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
 }
 
 .form-group {
@@ -103,6 +121,8 @@ body {
   font-size: 0.95rem;
   font-family: var(--font);
   transition: var(--transition);
+  background-color: #24344d;
+  color: #fff;
 }
 
 .form-group input:focus,
@@ -130,6 +150,37 @@ body {
   background-color: var(--button-hover);
   transform: translateY(-1px);
   box-shadow: var(--shadow);
+}
+
+/* 🔹 Sección de fotos del usuario */
+.user-photos-section {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+.user-photos-section h3 {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #0a3563;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  padding: 10px 0;
+  border-bottom: 2px solid #e0e0e0;
+  position: relative;
+}
+
+.user-photos-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, #0a3563, #112d79);
+  border-radius: 1px;
 }
 
 /* ====== RESPONSIVE ====== */

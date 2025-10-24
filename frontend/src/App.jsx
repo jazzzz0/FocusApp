@@ -7,7 +7,6 @@ import Perfil from './components/Perfil';
 import PostForm from './components/Subir';
 import './styles/Home.css';
 import EditarPerfil from "./components/EditarPerfil";
-import './styles/concursos_puntuar.css';
 import './styles/RegisterForm.css';
 import './styles/Perfil.css';
 import './styles/main.css'
