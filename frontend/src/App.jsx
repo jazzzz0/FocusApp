@@ -16,6 +16,7 @@ import CategoriesProvider from "./context/CategoriesContext";
 import PostDetail from './pages/PostDetail';
 import AuthProvider from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
+import PublicRoute from './components/PublicRoute';
 
 
 function App() {
@@ -29,8 +30,16 @@ function App() {
               <Route path="/" element={<Homepage />} />
 
               {/* Rutas de acceso público */}
-              <Route path="/Login" element={<Login />} />
-              <Route path="/RegisterForm" element={<Register />} />
+              <Route path="/Login" element={
+                <PublicRoute>
+                  <Login />
+                </PublicRoute>
+              } />
+              <Route path="/RegisterForm" element={
+                <PublicRoute>
+                  <Register />
+                </PublicRoute>
+              } />
 
               {/* Rutas protegidas */}
               <Route path="/Perfil" element={
