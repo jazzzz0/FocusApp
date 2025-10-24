@@ -7,7 +7,6 @@ import logging
 
 logger = logging.getLogger('users')
 
-# Create your models here.
 class AppUser(AbstractUser):
     # Campo obligatorio: Email. Se sobreescribe de AbstractUser
     email = models.EmailField(
@@ -84,8 +83,6 @@ class AppUser(AbstractUser):
             )
         )
         return age >= 18
-    
-   
         
     
     class Meta:

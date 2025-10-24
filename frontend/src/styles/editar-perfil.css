@@ -27,29 +27,7 @@ body {
   color: var(--text-color);
 }
 
-/* ====== NAVBAR ====== */
-.perfil-navbar {
-  width: 100%;
-  padding: 1rem 2rem;
-  background-color: white;
-  box-shadow: var(--shadow);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
 
-.focusapp-link {
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1.2rem;
-  color: var(--primary-color);
-  letter-spacing: 0.5px;
-  transition: var(--transition);
-}
-
-.focusapp-link:hover {
-  opacity: 0.8;
-}
 
 /* ====== CONTENEDOR DE EDICIÓN ====== */
 .editar-perfil {

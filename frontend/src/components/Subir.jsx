@@ -6,6 +6,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import '../styles/Subir.css';
 
+const MAX_SUGGESTIONS = 3;
 
 const getDescriptionSuggestions = async (imageFile, navigate, setSnackbar) => {
   const token = localStorage.getItem("access");
@@ -38,10 +39,8 @@ const getDescriptionSuggestions = async (imageFile, navigate, setSnackbar) => {
 
     const data = await response.json();
     if (response.ok) {
-      console.log("✅ Sugerencias recibidas:", data);
       return data;
     } else {
-      console.error("❌ Error en sugerencias:", data);
       setSnackbar({
         open: true,
         message: "Error: " + (data.detail || "No se pudo obtener sugerencias"),
@@ -50,7 +49,6 @@ const getDescriptionSuggestions = async (imageFile, navigate, setSnackbar) => {
       return null;
     }
   } catch (err) {
-    console.error("🚨 Error de conexión:", err);
     return null;
   }
 };
@@ -68,7 +66,7 @@ const PostForm = () => {
   });
 
   const [descriptionSuggestions, setDescriptionSuggestions] = useState(null);
-  const [loadingSuggestions, setLoadingSuggestions] = useState(false); // Para mostrar carga al pedir sugerencias
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
   const [preview, setPreview] = useState(null);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -114,9 +112,6 @@ const PostForm = () => {
       ...prev,
       description: description,
     }));
-    // Opcional: Puedes dejar las sugerencias visibles o ocultarlas aquí. 
-    // Las mantendremos visibles para que pueda cambiar de opinión.
-    // setDescriptionSuggestions(null);
   };
 
   const handleChange = (e) => {
@@ -139,7 +134,7 @@ const PostForm = () => {
           // Convertir valores del objeto en array de sugerencias
           const suggestions = Object.values(data.data.contenido_generado);
 
-          setDescriptionSuggestions(suggestions.slice(0, 3)); // máximo 3
+          setDescriptionSuggestions(suggestions.slice(0, MAX_SUGGESTIONS));
           setFormData((prev) => ({
             ...prev,
             description: suggestions[0] || "",
@@ -188,11 +183,6 @@ const PostForm = () => {
     formDataToSend.append("category", formData.category);
     formDataToSend.append("allows_ratings", formData.allows_ratings);
 
-    // 👇 Debug: mostrar qué viaja
-    for (let [key, value] of formDataToSend.entries()) {
-      console.log("🔎 FormData =>", key, value);
-    }
-
     const url = `${import.meta.env.VITE_API_BASE_URL}posts/`;
 
     try {
@@ -215,19 +205,16 @@ const PostForm = () => {
           message: "✅ Foto subida correctamente",
           severity: "success"
         });
-        // Debug: ver qué devuelve el backend
-        console.log("🔍 Respuesta del backend:", data);
+;
         // Redirigir a la nueva publicación creada
         const newPostId = data?.data?.id;
-        console.log("🆔 ID de la nueva publicación:", newPostId);
+
         if (newPostId) {
           setTimeout(() => navigate(`/posts/${newPostId}/`), 1500);
         } else {
-          console.log("⚠️ No se encontró ID, redirigiendo a /posts");
           setTimeout(() => navigate("/posts"), 1500);
         }
       } else {
-        console.error("❌ Error de validación:", data);
         setSnackbar({
           open: true,
           message: "❌ Error: " + (data?.errors?.image || "No se pudo procesar la solicitud."),
@@ -235,7 +222,6 @@ const PostForm = () => {
         });
       }
     } catch (error) {
-      console.error("🚨 Error en fetch:", error);
       setSnackbar({
         open: true,
         message: "Error de conexión",
@@ -365,7 +351,7 @@ const PostForm = () => {
                 />
               </div>
 
-              {/* Columna: Sugerencias (solo si se muestran) */}
+              {/* Columna: Sugerencias (solo cuando se muestran) */}
               {showSuggestionsSection && (
                 <div className="ai-suggestions">
                     {loadingSuggestions ? (

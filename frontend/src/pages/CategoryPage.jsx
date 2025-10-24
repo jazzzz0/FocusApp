@@ -17,7 +17,6 @@ const CategoryPage = () => {
     if (!categories || categories.length === 0 || !slug) return;
 
     // Buscar la categoría correspondiente al slug
-    // const foundCategory = categories.find((c) => c.slug && c.slug.toLowerCase() === slug.toLowerCase());
     const foundCategory = categories.find((c) =>
         c.slug?.toLowerCase() === slug?.toLowerCase()
     );

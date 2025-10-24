@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { categoryImages } from "../utils/categoryImages"; // tu objeto que ya definiste
+import { categoryImages } from "../utils/categoryImages";
 import { Link } from "react-router-dom";
 import '../styles/CategoryPhotos.css'
 

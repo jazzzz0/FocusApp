@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
 
-// contexto de autenticación
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -15,15 +14,14 @@ export const AuthProvider = ({ children }) => {
       const refresh = localStorage.getItem("refresh");
       
       if (access && refresh) {
-        // Obtener información del usuario
         const userInfo = await fetchCurrentUser(access);
         
         if (userInfo) {
           setUser({ access, refresh, ...userInfo });
         } else {
-          // Si no se puede obtener la info del usuario, limpiar tokens
           localStorage.removeItem("access");
           localStorage.removeItem("refresh");
+          localStorage.removeItem("username");
         }
       }
       
@@ -33,7 +31,6 @@ export const AuthProvider = ({ children }) => {
     initializeUser();
   }, []);
 
-  // Función para obtener información del usuario actual
   const fetchCurrentUser = async (accessToken) => {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}users/me/`, {
@@ -54,10 +51,8 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Función para loguear
   const login = async (credentials) => {
     try {
-      // El backend espera username y password, no email
       const loginData = {
         username: credentials.username,
         password: credentials.password
@@ -67,7 +62,6 @@ export const AuthProvider = ({ children }) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(loginData),
-        // credentials: "include", // importante si el backend devuelve cookies HttpOnly
       });
 
       if (!res.ok) {
@@ -77,17 +71,16 @@ export const AuthProvider = ({ children }) => {
       const data = await res.json();
 
       if (data.access && data.refresh) {
-        // Guardamos el token (⚠️ para producción, mejor HttpOnly cookies desde el backend)
         localStorage.setItem("access", data.access);
         localStorage.setItem("refresh", data.refresh);
         localStorage.setItem("username", credentials.username);
-        // Obtener información del usuario
+
         const userInfo = await fetchCurrentUser(data.access);
         
         setUser({ 
           access: data.access, 
           refresh: data.refresh,
-          ...userInfo // Agregar id, username, etc.
+          ...userInfo
         });
       }
 
@@ -98,7 +91,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Función para cerrar sesión
+
   const logout = async () => {
     try {
       const access = user?.access || localStorage.getItem("access");

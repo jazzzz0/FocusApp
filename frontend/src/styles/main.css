@@ -1,4 +1,3 @@
-
 html, body, #root {
   height: 100%;
   width: 100%;
@@ -13,13 +12,6 @@ body {
   background-color: #ffffff !important;
 }
 
-
-/* .app, .homepage {
-  min-height: 100vh;
-  min-width: 100vw;
-  display: flex;
-  flex-direction: column;
-} */
 .header {
   background: #212f4f;
   color: #fff;
@@ -176,15 +168,6 @@ body {
   gap: 6px; 
 }
 
-/* Responsive */
-@media (max-width: 600px) {
-  .carousel-image-large {
-    width: 90vw;
-    height: 40vw;
-    min-height: 180px;
-    max-width: 95vw;
-  }
-}
 .categories {
   padding: 40px 0;
   background: #fafafa;
@@ -335,7 +318,7 @@ body {
 .faq .box-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 32px; /* más espacio entre cajas */
+  gap: 32px;
   justify-content: center;
   align-items: stretch;
   max-width: 1200px;
@@ -364,8 +347,8 @@ body {
 }
 
 .faq .box .image img {
-  width: 90px;      /* más grande */
-  height: 90px;     /* más grande */
+  width: 90px;
+  height: 90px;
   object-fit: contain;
 }
 
@@ -407,101 +390,11 @@ body {
     gap: 20px;
     padding: 0 10px;
   }
+
   .faq .box {
     min-height: 280px;
   }
-}
 
-@media (max-width: 700px) {
-  .faq .box-container {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
-    padding: 0 8px;
-  }
-  .faq .box {
-    min-height: 260px;
-  }
-}
-
-@media (max-width: 600px) {
-  .faq .box-container {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    padding: 0 15px;
-  }
-  .faq .box {
-    min-height: 240px;
-  }
-}
-/* --------- Footer --------- */
-.footer {
-  background: #192a56;
-  color: #fff;
-  padding: 40px 0 10px 0;
-  margin-top: 40px;
-  width: 100%;
-}
-
-.footer .box {
-  min-width: 220px;
-  text-align: center; 
-}
-
-.footer .box-links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 24px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.footer .box-links a {
-  display: inline-block;
-  color: #fff;
-  text-decoration: none;
-  font-size: 1rem;
-  margin-bottom: 0;
-  transition: color 0.2s;
-}
-
-.footer .box-links a:hover {
-  color: #ffb347;
-  text-decoration: underline;
-}
-.credit {
-  text-align: center;
-  font-size: 0.9rem;
-  color: #ccc;
-  margin-top: 20px;
-}
-/* Responsive: en pantallas chicas, vuelve a vertical */
-@media (max-width: 600px) {
-  .footer .box-links {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-}
-
-@media (max-width: 600px) {
-  .faq .box-container {
-    flex-direction: column;
-    align-items: center;
-  }
-  .faq .box {
-    width: 95vw;
-    max-width: 95vw;
-    padding: 18px 5px;
-  }
-  .faq .box .image img {
-    width: 70px;
-    height: 70px;
-  }
-}
-/* --------- Responsive --------- */
-@media (max-width: 900px) {
   .about .row {
     max-width: 100%;
     padding: 0 15px;
@@ -516,7 +409,39 @@ body {
   }
 }
 
+@media (max-width: 700px) {
+  .faq .box-container {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    padding: 0 8px;
+  }
+
+  .faq .box {
+    min-height: 260px;
+  }
+}
+
 @media (max-width: 600px) {
+  .faq .box-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 15px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .faq .box {
+    min-height: 240px;
+    width: 95vw;
+    max-width: 95vw;
+    padding: 18px 5px;
+  }
+
+  .faq .box .image img {
+    width: 70px;
+    height: 70px;
+  }
+
   .about .row {
     padding: 0 10px;
     gap: 20px;
@@ -534,13 +459,21 @@ body {
     flex-direction: column;
     gap: 10px;
   }
+
   .categories .heading,
   .about .heading,
   .faq .heading {
     font-size: 1.3rem;
   }
+
   .box {
     min-width: 140px;
     padding: 10px;
+  } 
+  .carousel-image-large {
+    width: 90vw;
+    height: 40vw;
+    min-height: 180px;
+    max-width: 95vw;
   }
 }

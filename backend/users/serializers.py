@@ -59,7 +59,7 @@ class UserSerializer(serializers.ModelSerializer):
     
     def validate_profile_pic(self, value):
         """Validar la foto de perfil usando la función compartida"""
-        if value:  # Solo validar si se proporciona una imagen
+        if value: 
             from utils.image_validation import validate_profile_picture
             
             is_valid, error_message = validate_profile_picture(value)
@@ -69,7 +69,7 @@ class UserSerializer(serializers.ModelSerializer):
         return value
         
 
-        # Creación de un nuevo usuario
+       
     def create(self, validated_data):
          # "pop" elimina el campo "password" de los datos validados
          # y lo guarda en la variable "password"
@@ -86,7 +86,8 @@ class UserSerializer(serializers.ModelSerializer):
 
         # "return user" devuelve el usuario creado
         return user
-    # Actualización de un usuario existente
+
+
     def update(self, instance, validated_data):
         # Manejar la actualización segura de la contraseña
         password = validated_data.pop('password', None)
@@ -111,7 +112,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     
     def validate_profile_pic(self, value):
         """Validar la foto de perfil usando la función compartida"""
-        if value:  # Solo validar si se proporciona una imagen
+        if value:
             from utils.image_validation import validate_profile_picture
             
             is_valid, error_message = validate_profile_picture(value)

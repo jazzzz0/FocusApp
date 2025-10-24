@@ -1,6 +1,3 @@
-/* Perfil.css */
-
-/* Base */
 html, body, #root {
   height: 100%;
   width: 100%;
@@ -57,10 +54,12 @@ body {
   position: relative;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .perfil-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
+
 /* Avatar */
 .perfil-card img {
   width: 140px;
@@ -112,25 +111,6 @@ body {
 .perfil-card .btn:hover {
   background: #112d79;
   transform: scale(1.05);
-}
-
-/* Links sociales */
-.perfil-links {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.perfil-links a {
-  color: #0a3563;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-
-.perfil-links a:hover {
-  color: #ffb347;
 }
 
 /* Responsive */
@@ -190,7 +170,6 @@ body {
     gap: 1.2rem;
   }
 }
-
 
 .h2  {
   text-align: center;
@@ -280,24 +259,7 @@ body {
 .edit-profile-card button:hover {
   background-color: #112d79;
 }
-/* 🔹 Navbar del perfil (solo logo, sin menú) */
-.perfil-navbar {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 15px 40px;
-  background-color: #0d1b2a;
-  color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
 
-.focusapp-link {
-  color: #f9fcfb;
-  text-decoration: none;
-  font-size: 1.8em;
-  font-weight: bold;
-  font-family: "Leckerli One", cursive;
-}
 /* ============================= */
 /* 🔹 ESTILOS DE EDITAR PERFIL */
 /* ============================= */
@@ -307,26 +269,6 @@ body {
   background-color: #0d1b2a;
   color: #fff;
   font-family: "Roboto", sans-serif;
-}
-
-/* Navbar minimalista (solo FocusApp) */
-.perfil-navbar {
-  background-color: #0d1b2a;
-  padding: 15px 30px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
-
-.perfil-navbar .navbar-logo .focusapp-link {
-  font-size: 1.6rem;
-  font-weight: bold;
-  color: #ffffff;
-  text-decoration: none;
-}
-
-.perfil-navbar .focusapp-link:hover {
-  color: #ffffff;
 }
 
 /* Contenedor principal */

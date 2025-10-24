@@ -33,7 +33,6 @@ import SendIcon from "@mui/icons-material/Send";
 
 const API = import.meta.env.VITE_API_BASE_URL || "/api/";
 
-// Aspectos que se puntúan — ajusta nombres si tu backend los llama distinto
 const ASPECTS = [
   { key: "composition", label: "Composición" },
   { key: "clarity_focus", label: "Claridad y enfoque" },
@@ -45,11 +44,10 @@ const ASPECTS = [
 export default function PostDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext); // asumo AuthContext expone user y token (o access)
+  const { user } = useContext(AuthContext);
   const { categories } = useContext(CategoriesContext);
-  const authToken =  localStorage.getItem("access"); // fallback
+  const authToken =  localStorage.getItem("access");
 
-  // const [post, setPost] = useState([]);
   const [post, setPost] = useState({
     author: {},
     image: null,
@@ -104,7 +102,7 @@ export default function PostDetail() {
 
     fetchPost(id);
 
-  }, [id]); // Solo depende de id, no de user
+  }, [id]);
 
   // useEffect separado para checkIfUserRated que depende de user
   useEffect(() => {
@@ -129,15 +127,7 @@ export default function PostDetail() {
       fetchRatingsSummary(postId);
 
 
-      // comprobar si el usuario actual ya valoró (backend idealmente retorna flag)
-    //   if (data.user_has_rated !== undefined) {
-    //     setUserHasRated(Boolean(data.user_has_rated));
-    //   } else {
-    //     // fallback: consultar endpoint que confirme si user ya valoró
-    //     await checkIfUserRated(data.id);
-    //   }
     } catch (err) {
-      console.error("Error fetching post:", err);
       setSnack({ open: true, message: "Error al cargar la publicación", severity: "error" });
     } finally {
       setLoading(false);
@@ -176,14 +166,11 @@ export default function PostDetail() {
       setCommentsPagination(prev => ({
         next: res.data.next,
         previous: res.data.previous,
-        // Solo actualizar el count si es la primera carga (append = false)
-        // Si es append = true, mantener el count local que ya tiene nuestros cambios
         count: append ? prev.count : (res.data.count || commentsData.length),
         loadingMore: false
       }));
       
     } catch (err) {
-      console.error("Error fetching comments:", err);
       if (!append) {
         setComments([]);
       }
@@ -203,7 +190,6 @@ export default function PostDetail() {
         setRatingsSummary(null);
       }
     } catch (err) {
-      console.error("Error fetching ratings summary:", err);
       setRatingsSummary(null);
     }
   };
@@ -234,12 +220,11 @@ export default function PostDetail() {
         setUserHasRated(false);
       }
     } catch (err) {
-      // si 404 o no existe, asumimos no valoró
       setUserHasRated(false);
     }
   };
 
-  // ---------- Actions: comments ----------
+  // ---------- Commentarios ----------
   const handleCreateComment = async () => {
     if (!newComment.trim()) return;
     setCommentLoading(true);
@@ -249,9 +234,8 @@ export default function PostDetail() {
         { content: newComment },
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
-      // En muchos backends responden con el comment creado
+      // backend responde con el comment creado
       setComments((p) => [res.data.data, ...p]);
-      // Actualizar el contador de comentarios
       setCommentsPagination(prev => ({
         ...prev,
         count: prev.count + 1
@@ -259,7 +243,6 @@ export default function PostDetail() {
       setNewComment("");
       setSnack({ open: true, message: "Comentario publicado", severity: "success" });
     } catch (err) {
-      console.error("Error creating comment:", err);
       setSnack({ open: true, message: "Error al publicar comentario", severity: "error" });
     } finally {
       setCommentLoading(false);
@@ -289,7 +272,6 @@ export default function PostDetail() {
       }));
       setSnack({ open: true, message: "Comentario eliminado", severity: "info" });
     } catch (err) {
-      console.error("Error deleting comment:", err);
       setSnack({ open: true, message: "Error al eliminar comentario", severity: "error" });
     } finally {
       setDeleteCommentDialog({ open: false, commentId: null });
@@ -306,12 +288,11 @@ export default function PostDetail() {
       setComments((p) => p.map((c) => (c.id === commentId ? res.data.data : c)));
       setSnack({ open: true, message: "Comentario editado", severity: "success" });
     } catch (err) {
-      console.error("Error editing comment:", err);
       setSnack({ open: true, message: "No se pudo editar comentario", severity: "error" });
     }
   };
 
-  // ---------- Actions: ratings ----------
+  // ---------- Valoraciones ----------
   const handleOpenRate = () => {
     setRatingValues(ASPECTS.reduce((acc, a) => ({ ...acc, [a.key]: 3 }), {}));
     setOpenRateDialog(true);
@@ -336,17 +317,17 @@ export default function PostDetail() {
       });
       setOpenRateDialog(false);
       setUserHasRated(true);
+
       // Recalcular resumen
       await fetchRatingsSummary(post.id);
       setSnack({ open: true, message: "Gracias por valorar", severity: "success" });
     } catch (err) {
-      console.error("Error submitting rating:", err);
-      console.log("Error details:", err.response?.data);
+
       setSnack({ open: true, message: err.response?.data?.message || "No se pudo enviar la valoración", severity: "error" });
     }
   };
 
-  // ---------- Actions: edit / delete post ----------
+  // ---------- Editar/Eliminar publicación ----------
   const handleOpenEdit = () => {
     setEditTitle(post.title || "");
     setEditDescription(post.description || "");
@@ -364,7 +345,6 @@ export default function PostDetail() {
       setOpenEditDialog(false);
       setSnack({ open: true, message: "Publicación actualizada", severity: "success" });
     } catch (err) {
-      console.error("Error editing post:", err);
       setSnack({ open: true, message: "Error al actualizar publicación", severity: "error" });
     }
   };
@@ -393,7 +373,6 @@ export default function PostDetail() {
       }, 2000);
       
     } catch (err) {
-      console.error("Error deleting post:", err);
       setSnack({ 
         open: true, 
         message: "No se pudo eliminar la publicación", 
@@ -427,7 +406,7 @@ export default function PostDetail() {
     return null;
   };
 
-  // render averages for each aspect (safe)
+
   const renderRatingAverages = () => {
     // Si la publicación no permite valoraciones, no mostrar nada
     if (!post.allows_ratings) {
@@ -476,7 +455,7 @@ export default function PostDetail() {
     );
   };
 
-  // ---------- JSX ----------
+  // ---------- Renderizado ----------
   if (loading) return <Typography> Cargando publicación... </Typography>;
   if (!post) return <Typography> Publicación no encontrada. </Typography>;
 
@@ -530,7 +509,7 @@ export default function PostDetail() {
                 </>
               )}
 
-              {/* Rating: si no es autor, no ha valorado, permite valoraciones y está logueado */}
+              {/* Rating: si no es autor, no ha valorado, permite valoraciones y está logueado, puede valorar */}
               {!isAuthor() && !userHasRated && user && post.allows_ratings && (
                 <Button variant="contained" startIcon={<RateReviewIcon />} onClick={handleOpenRate}>
                   Valorar
@@ -565,11 +544,11 @@ export default function PostDetail() {
         </CardContent>
       </Card>
 
-      {/* COMMENTS AREA */}
+      {/* Area de comentarios */}
       <Box mt={3}>
         <Typography variant="h6" color="text.primary">Comentarios</Typography>
 
-        {/* New comment */}
+        {/* Nuevo comentario */}
         {user ? (
           <Box display="flex" gap={1} mt={1}>
             <TextField
@@ -654,7 +633,7 @@ export default function PostDetail() {
         </DialogActions>
       </Dialog>
 
-      {/* Edit post dialog (autor) */}
+      {/* Diálogo de edición de publicación (solo para autor) */}
       <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)} maxWidth="sm" fullWidth>
         <DialogTitle>Editar publicación</DialogTitle>
         <DialogContent>
@@ -675,7 +654,7 @@ export default function PostDetail() {
         </DialogActions>
       </Dialog>
 
-      {/* Delete comment confirmation dialog */}
+      {/* Diálogo de confirmación de eliminación de comentario */}
       <Dialog 
         open={deleteCommentDialog.open} 
         onClose={() => setDeleteCommentDialog({ open: false, commentId: null })}
@@ -712,7 +691,7 @@ export default function PostDetail() {
         </DialogActions>
       </Dialog>
 
-      {/* Delete post confirmation dialog */}
+      {/* Diálogo de confirmación de eliminación de publicación */}
       <Dialog 
         open={deletePostDialog.open} 
         onClose={() => setDeletePostDialog({ open: false })}
@@ -761,7 +740,7 @@ export default function PostDetail() {
   );
 }
 
-/* ---------- small CommentItem component inside same file ---------- */
+/* ---------- Componente pequeño CommentItem dentro del mismo archivo ---------- */
 function CommentItem({ comment, currentUser, onDelete, onEdit }) {
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(comment.content || "");

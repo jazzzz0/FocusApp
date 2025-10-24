@@ -1,9 +1,6 @@
-/* Navbar.css */
-
 header.header {
   width: 100%;
   background-color: #212f4f;
-  /* color principal */
   padding: 0.5rem 1rem;
   position: sticky;
   top: 0;
@@ -154,25 +151,20 @@ ul.dropdown-menu li a:hover {
   padding: 0;
 }
 
-/* El menú que aparece */
 .profile-dropdown {
   position: absolute;
   top: 100%;
   right: 0;
-  /* Estilo de la "card" */
   background-color: #212f4f;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   padding: 10px 0;
   z-index: 1000;
   min-width: 180px;
-
-  /* Distribución de los botones */
   display: flex;
   flex-direction: column;
 }
 
-/* Estilo para los botones dentro del menú desplegable */
 .profile-dropdown .dropdown-btn {
   background: none;
   border: none;
@@ -190,7 +182,7 @@ ul.dropdown-menu li a:hover {
   background-color: #f0f0f0;
 }
 
-/* Estilo específico para el botón de Cerrar Sesión */
+
 .profile-dropdown .logout-btn {
   color: #e74c3c;
   font-weight: bold;
@@ -346,7 +338,7 @@ ul.dropdown-menu li a:hover {
   flex-direction: column;
 }
 
-/* Responsivo para pantallas medianas */
+
 @media (max-width: 600px) {
   header.header .container {
     display: grid !important;
@@ -391,7 +383,6 @@ ul.dropdown-menu li a:hover {
   }
 }
 
-/* Responsivo para pantallas muy pequeñas - CSS Grid */
 @media (max-width: 480px) {
   header.header .container {
     display: grid !important;
@@ -436,7 +427,6 @@ ul.dropdown-menu li a:hover {
   }
 }
 
-/* Responsivo para pantallas extremadamente pequeñas */
 @media (max-width: 320px) {
   header.header .container {
     padding: 0 0.25rem;
@@ -459,7 +449,6 @@ ul.dropdown-menu li a:hover {
   }
 }
 
-/* Responsivo */
 @media (max-width: 768px) {
   .navbar {
     position: fixed;
@@ -529,7 +518,6 @@ ul.dropdown-menu li a:hover {
     background: rgba(255, 255, 255, 0.2);
   }
 
-  /* Estilos adicionales para el icono */
   .menu-icon i {
     display: block;
     font-size: 1.5rem;
@@ -560,7 +548,6 @@ ul.dropdown-menu li a:hover {
     font-size: 0.95rem;
   }
 
-  /* Overlay para cerrar menú */
   .navbar.active::before {
     content: '';
     position: fixed;
@@ -594,7 +581,6 @@ ul.dropdown-menu li a:hover {
   transform: scale(1.1);
 }
 
-/* Animación para el ícono cuando hay notificaciones no leídas */
 .notification-icon.has-notifications {
   animation: bounceIcon 1s ease-in-out;
 }
@@ -712,13 +698,11 @@ ul.dropdown-menu li a:hover {
   gap: 8px;
 }
 
-/* Contenido de notificaciones */
 .notifications-content {
   max-height: 400px;
   overflow-y: auto;
 }
 
-/* Cada item del dropdown */
 .notification-item {
   padding: 16px 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -794,7 +778,6 @@ ul.dropdown-menu li a:hover {
   color: #ff6b6b;
 }
 
-/* Mensaje de la notificación */
 .notification-message {
   font-size: 0.95rem;
   color: white;
@@ -806,14 +789,12 @@ ul.dropdown-menu li a:hover {
   font-weight: 500;
 }
 
-/* Tiempo de la notificación */
 .notification-time {
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.7);
   margin: 0;
 }
 
-/* Indicador de no leído */
 .unread-indicator {
   position: absolute;
   top: 50%;
@@ -825,7 +806,6 @@ ul.dropdown-menu li a:hover {
   border-radius: 50%;
 }
 
-/* Scrollbar personalizado para el contenido de notificaciones */
 .notifications-content::-webkit-scrollbar {
   width: 6px;
 }

@@ -13,7 +13,8 @@ from .serializers import UserSerializer, UserProfileSerializer
 from .models import AppUser
 from .services import ProfilePhotoService
 
-# Create your views here.
+import logging
+logger = logging.getLogger(__name__)
 
 class SingleSessionTokenObtainPairView(TokenObtainPairView):
     """
@@ -83,9 +84,6 @@ class SingleSessionTokenObtainPairView(TokenObtainPairView):
                 BlacklistedToken.objects.get_or_create(token=token)
                 
         except Exception as e:
-            # Log del error pero no fallar el login
-            import logging
-            logger = logging.getLogger(__name__)
             logger.warning(f"Error al invalidar tokens del usuario {user.username}: {str(e)}")
     
     def _save_tokens_to_outstanding(self, user, refresh_token, access_token):
@@ -126,15 +124,11 @@ class SingleSessionTokenObtainPairView(TokenObtainPairView):
             )
             
         except Exception as e:
-            # Log del error pero no fallar el login
-            import logging
-            logger = logging.getLogger(__name__)
             logger.warning(f"Error al guardar tokens del usuario {user.username}: {str(e)}")
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
     
-    # Documentación para API de registro de usuario
     @extend_schema(request=UserSerializer, responses={201: UserSerializer}, description="Registrar nuevo usuario.")
     def post(self, request):
         serializer = UserSerializer(data=request.data)
@@ -207,6 +201,8 @@ class UpdateUserView(APIView):
         description="Actualizar información del usuario autenticado actual, incluyendo foto de perfil."
     )
     def put(self, request):
+
+        # TODO: Eliminar la doble validaciónd de imagenes ya que se hace con image_validation.py
         try:
             user = request.user
             

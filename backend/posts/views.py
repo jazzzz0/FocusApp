@@ -132,7 +132,6 @@ class PostView(APIView):
             if serializer.is_valid():
                 serializer.save()
                 
-                # Log de actualización exitosa
                 logger.info(f"Post actualizado: Usuario {post.author.username} - Post ID: {post.id} - Campos modificados: {list(request.data.keys())}")
                 
                 return Response({"success": True, "data": serializer.data}, status=status.HTTP_200_OK)
@@ -190,15 +189,12 @@ class PostView(APIView):
     def get(self, request, pk=None):
         try:
             if pk:
-                # post = Post.objects.get(id=pk)
                 post = self._get_posts_queryset().get(id=pk)
                 serializer = PostSerializer(post)
                 return Response({"success": True, "data": serializer.data}, status=status.HTTP_200_OK)
 
-            # posts = Post.objects.all()
             posts = self._get_posts_queryset()
 
-            # Si se solicita ordenamiento por ranking (seguramente en 'Explorar según categoria')
             if request.query_params.get('sort') == 'rating':
                 from django.db.models import Avg, F
 
@@ -347,14 +343,12 @@ class PostCommentView(APIView):
 class PostCommentDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
-    # Modificado para recibir tanto el post_id de la URL como el pk del comentario (comment_id)
-    def delete(self, request, post_id, pk): # Usaremos 'pk' para ser consistentes con DRF
+    def delete(self, request, post_id, pk):
         """
         Elimina un comentario por su ID, verificando autoría y existencia de Post.
         """
-        # 1. Manejo de error HTTP_404_NOT_FOUND para Post.DoesNotExist
         try:
-            # Verificamos que el post exista primero (aunque no lo usemos después)
+            # Verificar que el post exista primero
             Post.objects.get(pk=post_id) 
         except Post.DoesNotExist:
             return Response({
@@ -362,9 +356,8 @@ class PostCommentDetailView(APIView):
                 "message": "Publicación no encontrada."
             }, status=status.HTTP_404_NOT_FOUND)
 
-        # 2. Manejo de error HTTP_404_NOT_FOUND para PostComment.DoesNotExist
         try:
-            # Intentamos obtener el comentario, *verificando* que pertenezca a ese post
+            # Obtener el comentario, verificando que pertenezca a ese post
             comment = PostComment.objects.get(pk=pk, post_id=post_id)
         except PostComment.DoesNotExist:
             return Response({
@@ -372,29 +365,26 @@ class PostCommentDetailView(APIView):
                 "message": "Comentario no encontrado."
             }, status=status.HTTP_404_NOT_FOUND)
 
-        # 3. Validar que el usuario autenticado sea el autor (HTTP_403_FORBIDDEN)
+        # Validar que el usuario autenticado sea el autor
         if comment.author != request.user:
             return Response({
                 "success": False,
                 "message": "No tienes permiso para eliminar este comentario."
             }, status=status.HTTP_403_FORBIDDEN)
 
-        # 4. Eliminación exitosa (HTTP_200_OK)
+        # Eliminación exitosa
         try:
             comment.delete()
             
-            # Formato de respuesta exitosa: {"success": True, "data": {mensaje}}
-            # Adaptamos el requisito a DELETE, donde no hay serializer.data
             return Response({
                 "success": True,
                 "data": {"message": "Comentario eliminado correctamente."}
             }, status=status.HTTP_200_OK)
 
-        # 5. Manejo de errores del servidor (HTTP_500_INTERNAL_SERVER_ERROR)
         except Exception as e:
             return Response({
                 "success": False,
-                "message": f"Error interno del servidor: {str(e)}" # Incluir 'e' para debug
+                "message": f"Error interno del servidor: {str(e)}" 
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
   
 

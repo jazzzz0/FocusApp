@@ -18,7 +18,7 @@ class RatingSerializer(serializers.ModelSerializer):
             "updated_at"
         ]
         
-        read_only_fields = ["id", "rater", "post", "created_at", "updated_at"] # TODO: Chequear!! que funcione, me pide ponerlo en fields también 
+        read_only_fields = ["id", "rater", "post", "created_at", "updated_at"]
 
 
     def validate(self, data):

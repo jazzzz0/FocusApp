@@ -20,8 +20,6 @@ class Notification(models.Model):
     
     type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
     
-    # verb = models.CharField(max_length=255, blank=True, null=True)
-
     # enlace genérico al objeto relacionado (post, comentario, etc)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
     object_id = models.PositiveIntegerField(null=True, blank=True)
@@ -50,9 +48,6 @@ class Notification(models.Model):
         
         else:
             base_message += "ha realizado una acción."
-
-        # if self.target:
-        #     base_message += f" en {self.target}"
 
         return base_message
 
