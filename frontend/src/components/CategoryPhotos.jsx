@@ -89,7 +89,7 @@ const CategoryPhotos = ({ categoryId, customUrl }) => {
           <button onClick={handlePrev} disabled={!prevPageUrl}>&lt;</button>
         )}
         <div className="pagination-in">
-          <p>Página {currentPage}</p>
+          <p className="pagination-info">Página {currentPage}</p>
         </div>
         {nextPageUrl && (
           <button onClick={handleNext} disabled={!nextPageUrl}>&gt;</button>
