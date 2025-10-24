@@ -39,6 +39,7 @@ body {
   box-shadow: var(--shadow);
   padding: 2rem;
   margin-top: 3rem;
+  margin-bottom: 3rem;
   width: 90%;
   max-width: 450px;
   text-align: center;

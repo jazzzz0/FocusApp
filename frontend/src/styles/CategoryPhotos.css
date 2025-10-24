@@ -7,7 +7,7 @@
 .photos-grid {
   display: grid;
   gap: 1rem; /* espacio entre fotos */
-  grid-template-columns: repeat(4, 1fr); /* 4 columnas por defecto */
+  grid-template-columns: repeat(3, 1fr); /* 3 columnas por defecto */
   /* padding: 0 0.5rem; */
 }
 

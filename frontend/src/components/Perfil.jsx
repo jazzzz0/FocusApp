@@ -79,7 +79,7 @@ const Perfil = () => {
 
             </div>
           ) : (
-            <div className="text-center text-gray-500 mt-10 p-4 animate-pulse">
+            <div style={{ textAlign: 'center', color: '#555', marginTop: '10px', padding: '4px', animation: 'pulse 1.5s infinite' }}>
               Cargando perfil... ⏳
             </div>
           )}

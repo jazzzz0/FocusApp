@@ -60,7 +60,7 @@ const CategoryPhotos = ({ categoryId, customUrl }) => {
   }
 
   if (loading) return <p>Cargando fotos...</p>;
-  if (photos.length === 0) return <p>No hay fotos en esta categoría.</p>;
+  if (photos.length === 0) return <p style={{ color: '#555' }}>No hay fotos aún.</p>;
 
   return (
     <div className="category-photos">
