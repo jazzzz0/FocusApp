@@ -61,11 +61,11 @@ const PrivateRoute = ({ children }) => {
             Debes iniciar sesión para acceder a esta página
           </Alert>
         </Snackbar>
-        {shouldRedirect && <Navigate to="/login" />}
+        {shouldRedirect && <Navigate to="/login" state={{ from: location }} />}
       </>
     );
   }
-  return children; // TODO: si hay usuario → renderiza la página protegida 
+  return children;
 };
 
 export default PrivateRoute;
