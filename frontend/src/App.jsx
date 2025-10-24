@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Register from './components/RegisterForm'; 
 import Homepage from './components/Homepage';
 import Login from './components/LoginForm'; 
@@ -26,6 +26,7 @@ function App() {
         <Router>
           <CategoriesProvider>
             <Routes>
+              
               {/* Ruta principal */}
               <Route path="/" element={<Homepage />} />
 
@@ -68,9 +69,11 @@ function App() {
                 </PrivateRoute>
               } />
               
+              {/* Ruta catch-all para URLs no encontradas */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+              
             </Routes>
           </CategoriesProvider>
-
         </Router>
     </AuthProvider>
     </>
