@@ -29,7 +29,7 @@ const Perfil = () => {
         );
 
         const data = await response.json();
-        console.log("Datos del usuario:", data);
+        
 
         if (response.ok) {
           setUser(data);
