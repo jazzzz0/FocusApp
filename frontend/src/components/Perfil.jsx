@@ -1,25 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Snackbar, Alert } from "@mui/material";
 import "../styles/Perfil.css";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import CategoryPhotos from "./CategoryPhotos";
 const Perfil = () => {
   const [user, setUser] = useState(null);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "error"
+  });
   const navigate = useNavigate();
+
+  const showSnackbar = (message, severity = "error") => {
+    setSnackbar({
+      open: true,
+      message,
+      severity
+    });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar(prev => ({ ...prev, open: false }));
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("access");
       if (!token) {
-        alert("Debes iniciar sesión para ver tu perfil.");
+        showSnackbar("Debes iniciar sesión para ver tu perfil.", "warning");
+        setTimeout(() => navigate("/login"), 2000);
         return;
       }
 
       try {
         const username = localStorage.getItem("username");
         if (!username) {
-          alert("No se encontró el nombre de usuario. Vuelve a iniciar sesión.");
+          showSnackbar("No se encontró el nombre de usuario. Vuelve a iniciar sesión.", "error");
           return;
         }
 
@@ -35,7 +54,7 @@ const Perfil = () => {
           setUser(data);
         } else {
           console.error("Error al obtener usuario:", data);
-          alert("No se pudo cargar el perfil.");
+          showSnackbar("No se pudo cargar el perfil.", "error");
         }
       } catch (error) {
         console.error("Error al cargar el perfil:", error);
@@ -93,6 +112,22 @@ const Perfil = () => {
         )}
       </div>
       <Footer />
+      
+      {/* Snackbar para mostrar mensajes */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 };
