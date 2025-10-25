@@ -181,12 +181,6 @@ const NotificationBell = () => {
   const handleBellHover = () => {
     if (canFetchNotifications()) {
       fetchNotifications(); // Solo obtener notificaciones si ha pasado el tiempo límite
-    } else {
-      if (isFetching) {
-        console.log('Ya hay una petición en curso, esperando respuesta...');
-      } else {
-        console.log(`Espera ${cooldownTime} segundos antes de la próxima actualización`);
-      }
     }
     setIsNotificationsOpen(true);
   };
@@ -293,6 +287,7 @@ const NotificationBell = () => {
                        ? "Actualizar" 
                        : `Espera ${cooldownTime} segundos`
                  }>
+                  <span>
                    <IconButton 
                      size="small" 
                      onClick={handleRefreshNotifications}
@@ -300,6 +295,7 @@ const NotificationBell = () => {
                    >
                      <RefreshIcon fontSize="small" />
                    </IconButton>
+                  </span>
                  </Tooltip>
                  {unreadCount > 0 && (
                    <Tooltip title="Marcar todas como leídas">
