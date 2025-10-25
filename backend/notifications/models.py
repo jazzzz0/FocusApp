@@ -8,8 +8,6 @@ class Notification(models.Model):
         # posibilidad de agregar más tipos de notificaciones
         # por el momento, solo se manejarán los comentarios
         ('comment', 'Comentario'),
-        ('rating', 'Valoración'),
-        ('follow', 'Nuevo seguidor'),
     ]
     
     # usuario que recibe la notificación
@@ -39,13 +37,7 @@ class Notification(models.Model):
 
         if self.type == "comment":
             base_message += "ha comentado tu publicación."
-        
-        elif self.type == "rating":
-            base_message += "ha valorado tu publicación."
-        
-        elif self.type == "follow":
-            base_message += "ha seguido tu perfil."
-        
+
         else:
             base_message += "ha realizado una acción."
 

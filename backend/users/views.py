@@ -1,6 +1,4 @@
-from django.shortcuts import render
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiParameter
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -11,7 +9,6 @@ from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, Bl
 from django.contrib.auth import authenticate
 from .serializers import UserSerializer, UserProfileSerializer
 from .models import AppUser
-from .services import ProfilePhotoService
 
 import logging
 logger = logging.getLogger(__name__)
@@ -24,18 +21,62 @@ class SingleSessionTokenObtainPairView(TokenObtainPairView):
     permission_classes = [AllowAny]
 
     @extend_schema(
-        request={
-            "username": OpenApiTypes.STR,
-            "password": OpenApiTypes.STR
+        summary="Obtener tokens JWT con sesión única. Endpoitn para iniciar sesión.",
+        description=(
+            "Genera un par de tokens JWT (access y refresh) para un usuario.\n"
+            "Antes de emitir nuevos tokens, invalida todos los tokens anteriores del usuario.\n"
+            "No requiere autenticación previa."
+        ),
+        request= {
+            "application/json": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": "Nombre del usuario a autenticar.",
+                        "example": "juan.perez"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "Contraseña del usuario a autenticar.",
+                        "example": "password4567"
+                    }
+                },
+                "required": ["username", "password"]
+            }
         },
         responses={
             200: {
-                "access": OpenApiTypes.STR,
-                "refresh": OpenApiTypes.STR
+                "type": "object",
+                "properties": {
+                    "access": {"type": "string", "example": "token.access.jwt"},
+                    "refresh": {"type": "string", "example": "token.refresh.jwt"},
+                },
+                "description": "Tokens JWT generados exitosamente."
             },
-            401: {"detail": OpenApiTypes.STR}
+            400: {
+                "type": "object",
+                "properties": {
+                    "detail": {"type": "string", "example": "Se requieren username y password"},
+                },
+                "description": "Se requieren username y password."
+            },
+            401: {
+                "type": "object",
+                "properties": {
+                    "detail": {"type": "string", "example": "Credenciales inválidas"},
+                },
+                "description": "Credenciales inválidas."
+            },
+            500: {
+                "type": "object",
+                "properties": {
+                    "detail": {"type": "string", "example": "Error interno del servidor."},
+                },
+                "description": "Error interno del servidor."
+            },
         },
-        description="Iniciar sesión con sesión única. Invalida sesiones anteriores."
+        tags=["Usuarios"],
     )
     def post(self, request, *args, **kwargs):
         username = request.data.get('username')
@@ -129,7 +170,50 @@ class SingleSessionTokenObtainPairView(TokenObtainPairView):
 class RegisterView(APIView):
     permission_classes = [AllowAny]
     
-    @extend_schema(request=UserSerializer, responses={201: UserSerializer}, description="Registrar nuevo usuario.")
+    @extend_schema(
+        summary="Registrar nuevo usuario",
+        description="Registra un nuevo usuario en la aplicación.",
+        request={
+            "multipart/form-data": {
+                "type": "object",
+                "properties": {
+                    "username": {"type": "string", "example": "juan.perez"},
+                    "email": {"type": "string", "example": "juan.perez@gmail.com"},
+                    "password": {"type": "string", "example": "password4567"},
+                    "date_of_birth": {"type": "string", "example": "2000-01-01"},
+                    "first_name": {"type": "string", "example": "Juan"},
+                    "last_name": {"type": "string", "example": "Perez"},
+                    "profile_pic": {"type": "file", "format": "binary"},
+                    "bio": {"type": "string"},
+                },
+                "required": ["username", "email", "password", "date_of_birth"],
+            }
+        },
+        responses={
+            201: OpenApiResponse(
+                response=UserSerializer,
+                description="Usuario creado exitosamente"
+            ),
+            400: {
+                "type": "object",
+                "properties": {
+                    "username": {"type": "array", "items": {"type": "string"}},
+                    "email": {"type": "array", "items": {"type": "string"}},
+                    "password": {"type": "array", "items": {"type": "string"}},
+                    "date_of_birth": {"type": "array", "items": {"type": "string"}},
+                },
+                "description": "Error de validación",
+            },
+            500: {
+                "type": "object",
+                "properties": {
+                    "detail": {"type": "string", "example": "Error interno del servidor."},
+                },
+                "description": "Error interno del servidor.",
+            },
+        },
+        tags=["Usuarios"],
+    )
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
@@ -141,12 +225,48 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
     @extend_schema(
-        request={"refresh": OpenApiTypes.STR},
-        responses={
-            205: None,
-            400: None
+        summary="Cerrar sesión",
+        description=(
+            "Cierra la sesión del usuario autenticado invalidando el token refresh.\n"
+            "Se requiere enviar el refresh token en el body de la solicitud.\n"
+            "Requiere autenticación con token JWT."
+        ),
+        request={
+            "multipart/form-data": {
+                "type": "object",
+                "properties": {
+                    "refresh": {"type": "string", "description": "Token refresh del usuario a cerrar sesión.", "example": "token.refresh.jwt"}
+                },
+                "required": ["refresh"],
+            }
         },
-        description="Endpoint para cerrar sesión."
+        responses={
+            205: {
+                "type": "object",
+                "properties": {
+                    "detail": {"type": "string", "example": "Sesión cerrada correctamente."},
+                },
+                "description": "Sesión cerrada correctamente.",
+            },
+            400: {
+                "type": "object",
+                "properties": {
+                    "detail": {"type": "string", "example": "Error al cerrar sesión. Token inválido."},
+                },
+                "description": "Error al cerrar sesión. Token inválido.",
+            },
+            500: {
+                "type": "object",
+                "properties": {
+                    "detail": {"type": "string", "example": "Error interno del servidor."},
+                },
+                "description": "Error interno del servidor.",
+            },
+        },
+        tags=["Usuarios"],
+        auth=[{
+            "jwtAuth":[]
+        }],
     )
     def post(self, request):
         try:
@@ -154,13 +274,41 @@ class LogoutView(APIView):
             token = RefreshToken(refresh_token)
             token.blacklist()
             return Response({"detail": "Sesión cerrada correctamente."}, status=status.HTTP_205_RESET_CONTENT)
+        except BlacklistedToken.DoesNotExist:
+            return Response({"detail": "Token inválido."}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            return Response({"detail": "Error al cerrar sesión. Token inválido."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "Error al cerrar sesión: " + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class CurrentUserView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary="Obtener usuario autenticado",
+        description=(
+            "Devuelve la información del usuario actualmente autenticado.\n"
+            "Requiere autenticación con token JWT."
+        ),
+        responses={
+            200: OpenApiResponse(
+                response=UserProfileSerializer,
+                description="Usuario autenticado obtenido correctamente"
+            ),
+            500: {
+                "type": "object",
+                "properties": {
+                    "success": {"type": "boolean", "example": False},
+                    "message": {"type": "string", "example": "No se pudo obtener el usuario actual"},
+                    "detalle": {"type": "string", "example": "Detalle del error"}
+                },
+                "description": "Error interno del servidor",
+            },
+        },
+        tags=["Autenticación"],
+        auth=[{
+            "jwtAuth":[]
+        }],
+    )
     def get(self, request):
         """Obtener información del usuario autenticado actual"""
         try:
@@ -173,6 +321,49 @@ class CurrentUserView(APIView):
 class UserView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary="Obtener usuario por username",
+        description=(
+            "Devuelve la información de un usuario específico dado su username.\n"
+            "Requiere autenticación con token JWT."
+        ),
+        parameters=[
+            OpenApiParameter(
+                name="username",
+                location=OpenApiParameter.PATH,
+                description="Nombre de usuario del usuario a consultar",
+                required=True,
+                type=str,
+            )
+        ],
+        responses={
+            200: OpenApiResponse(
+                response=UserProfileSerializer,
+                description="Usuario encontrado y devuelto correctamente"
+            ),
+            404: {
+                "type": "object",
+                "properties": {
+                    "success": {"type": "boolean", "example": False},
+                    "message": {"type": "string", "example": "Usuario no encontrado"}
+                },
+                "description": "No se encontró un usuario con ese username",
+            },
+            500: {
+                "type": "object",
+                "properties": {
+                    "success": {"type": "boolean", "example": False},
+                    "message": {"type": "string", "example": "No se pudo obtener el usuario"},
+                    "detalle": {"type": "string", "example": "Detalle del error"}
+                },
+                "description": "Error interno del servidor",
+            },
+        },
+        tags=["Usuarios"],
+        auth=[{
+            "jwtAuth":[]
+        }],
+    )
     def get(self, request, username):
         try:
             user = AppUser.objects.get(username=username)
@@ -187,18 +378,51 @@ class UpdateUserView(APIView):
     permission_classes = [IsAuthenticated]
 
     @extend_schema(
+        summary="Actualizar usuario autenticado",
+        description=(
+            "Permite actualizar los datos del usuario actualmente autenticado.\n"
+            "Requiere autenticación con token JWT."
+        ),
         request={
-            "profile_pic": OpenApiTypes.BINARY,
-            "first_name": OpenApiTypes.STR,
-            "last_name": OpenApiTypes.STR,
-            "bio": OpenApiTypes.STR
+            "multipart/form-data": {
+                "type": "object",
+                "properties": {
+                    "username": {"type": "string", "example": "juan.perez"},
+                    "profile_pic": {"type": "file", "format": "binary"},
+                    "first_name": {"type": "string", "example": "Juan"},
+                    "last_name": {"type": "string", "example": "Perez"},
+                    "bio": {"type": "string"},
+                },
+            }
         },
         responses={
-            200: {"description": "Usuario actualizado correctamente"},
-            400: {"description": "Error de validación"},
-            500: {"description": "Error interno del servidor"}
+            200: OpenApiResponse(
+                response=UserProfileSerializer,
+                description="Usuario actualizado correctamente"
+            ),
+            400: {
+                "type": "object",
+                "properties": {
+                    "success": {"type": "boolean", "example": False},
+                    "message": {"type": "string", "example": "Error de validación"},
+                    "errors": {"type": "object", "description": "Errores detallados del serializer"}
+                },
+                "description": "Error de validación o archivo no válido",
+            },
+            500: {
+                "type": "object",
+                "properties": {
+                    "success": {"type": "boolean", "example": False},
+                    "message": {"type": "string", "example": "No se pudo actualizar el usuario"},
+                    "detalle": {"type": "string", "example": "Detalle del error"}
+                },
+                "description": "Error interno del servidor",
+            },
         },
-        description="Actualizar información del usuario autenticado actual, incluyendo foto de perfil."
+        tags=["Usuarios"],
+        auth=[{
+            "jwtAuth":[]
+        }],
     )
     def put(self, request):
 

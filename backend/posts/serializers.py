@@ -1,13 +1,6 @@
 from rest_framework import serializers
 from users.models import AppUser
-from .models import Category, Post
-from PIL import Image
-
-from rest_framework import serializers
-from users.models import AppUser
 from .models import Category, Post, PostComment
-from PIL import Image
-
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:

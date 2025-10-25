@@ -1,8 +1,7 @@
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field
 
 from .models import Notification
-from users.models import AppUser
-from posts.models import Post
 from posts.serializers import AuthorSerializer
 
 class NotificationSerializer(serializers.ModelSerializer):
@@ -13,6 +12,11 @@ class NotificationSerializer(serializers.ModelSerializer):
     # enlace genérico al objeto relacionado (post, comentario, etc)
     target_id = serializers.IntegerField(source='object_id', read_only=True)
     target_type = serializers.CharField(source='content_type.model', read_only=True)
+    message = serializers.SerializerMethodField()
+    
+    @extend_schema_field(serializers.CharField())
+    def get_message(self, obj):
+        return obj.message
 
     class Meta:
         model = Notification
