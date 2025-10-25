@@ -1,12 +1,12 @@
 from django.urls import path
-from .views import CategoryListView, PostView, DescriptionSuggestionView, PostCommentView
+from .views import CategoryListView, PostListCreateView, PostDetailView, DescriptionSuggestionView, PostCommentView
 from ratings.views import PostRatingsView
 from .views import PostCommentDetailView
 
 urlpatterns = [
     path('categories/', CategoryListView.as_view(), name='categories-list'),
-    path("", PostView.as_view(), name='post-list'),
-    path("<int:pk>/", PostView.as_view(), name='post-detail'),
+    path("", PostListCreateView.as_view(), name='post-list'),
+    path("<int:pk>/", PostDetailView.as_view(), name='post-detail'),
     
     # URLs relacionadas a ratings
     path("<int:post_id>/ratings/averages/", PostRatingsView.as_view(), name='post-ratings-average'),

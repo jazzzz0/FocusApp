@@ -1,0 +1,2307 @@
+openapi: 3.0.3
+info:
+  title: api-focusapp
+  version: 1.0.0
+  description: Documentación de la API de FocusApp, una comunidad para fotógrafos
+    y amantes de la fotografía.
+paths:
+  /api/notifications/:
+    get:
+      operationId: api_notifications_retrieve
+      description: Retorna todas las notificaciones del usuario autenticado, ordenadas
+        de más recientes a más antiguas. Requiere autenticación con token JWT.
+      summary: Obtener todas las notificaciones del usuario
+      tags:
+      - Notificaciones
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+          description: Lista de notificaciones del usuario
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error del servidor.
+                description: Error interno del servidor al obtener las notificaciones.
+          description: ''
+  /api/notifications/count/:
+    get:
+      operationId: api_notifications_count_retrieve
+      description: Retorna el número de notificaciones no leídas del usuario autenticado.
+        Requiere autenticación con token JWT.
+      summary: Obtener el contador de notificaciones no leídas del usuario
+      tags:
+      - Notificaciones
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  unread_count:
+                    type: integer
+                    example: 10
+                description: Contador de notificaciones no leídas del usuario
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error del servidor.
+                description: Error interno del servidor al contar las notificaciones
+                  no leídas.
+          description: ''
+  /api/notifications/mark-all-as-read/:
+    patch:
+      operationId: api_notifications_mark_all_as_read_partial_update
+      description: |-
+        Marca todas las notificaciones no leídas del usuario autenticado como leídas.
+        Requiere autenticación con token JWT.
+      summary: Marcar todas las notificaciones como leídas
+      tags:
+      - Notificaciones
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Se marcaron 5 notificaciones como leídas.
+                description: Todas las notificaciones no leídas del usuario han sido
+                  marcadas como leídas.
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error del servidor.
+                description: Error interno del servidor al marcar todas las notificaciones
+                  como leídas.
+          description: ''
+  /api/notifications/mark-as-read/{id}/:
+    patch:
+      operationId: api_notifications_mark_as_read_partial_update
+      description: |-
+        Marca como leída una notificación específica del usuario autenticado.
+        Verifica que la notificación exista y pertenezca al usuario.
+        Requiere autenticación con token JWT.
+      summary: Marcar una notificación como leída
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID de la notificación a marcar como leída
+        required: true
+      tags:
+      - Notificaciones
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Notificación marcada como leída.
+                description: Notificación marcada como leída exitosamente.
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: ID de notificación inválido.
+                description: ID inválido para la notificación.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Notificación no encontrada.
+                description: No se encontró la notificación especificada.
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error del servidor.
+                description: Error interno del servidor al marcar la notificación
+                  como leída.
+          description: ''
+  /api/notifications/unread/:
+    get:
+      operationId: api_notifications_unread_retrieve
+      description: Retorna todas las notificaciones no leídas del usuario autenticado,
+        ordenadas de más recientes a más antiguas. Requiere autenticación con token
+        JWT.
+      summary: Obtener todas las notificaciones no leídas del usuario
+      tags:
+      - Notificaciones
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+          description: Lista de notificaciones no leídas del usuario
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error del servidor.
+                description: Error interno del servidor al obtener las notificaciones
+                  no leídas.
+          description: ''
+  /api/posts/:
+    get:
+      operationId: api_posts_list
+      description: |-
+        Este endpoint permite obtener: una **lista paginada de publicaciones**.
+
+        Admite parámetros opcionales de filtrado y ordenamiento.
+        Requiere autenticación con token JWT.
+      summary: Obtener todas las publicaciones
+      parameters:
+      - in: query
+        name: author
+        schema:
+          type: integer
+        description: Filtrar por ID de autor (opcional)
+      - in: query
+        name: category
+        schema:
+          type: integer
+        description: Filtrar por ID de categoría (opcional)
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Número de página (opcional, por defecto 1)
+        examples:
+          NúmeroDePágina:
+            value: 1
+            summary: Número de página
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Tamaño de la página (opcional, por defecto 10)
+        examples:
+          TamañoDePágina:
+            value: 10
+            summary: Tamaño de página
+      - in: query
+        name: sort
+        schema:
+          type: string
+        description: 'Ordenamiento: ''rating'' para ordenar por promedio de valoraciones
+          (opcional)'
+        examples:
+          OrdenarPorRating:
+            value: rating
+            summary: Ordenar por rating
+      tags:
+      - Publicaciones
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+          description: Lista de publicaciones obtenidas exitosamente o una publicación
+            específica.
+        '404':
+          description: No se encontró la publicación, usuario o categoría especificada.
+        '500':
+          description: Error interno del servidor al obtener las publicaciones.
+    post:
+      operationId: api_posts_create
+      description: "Crea una nueva publicación incluyendo una imagen y otros datos\
+        \ proporcionados en el cuerpo de la solicitud. \nRequiere autenticación con\
+        \ token JWT."
+      summary: Crear una nueva publicación
+      tags:
+      - Publicaciones
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: file
+                  format: binary
+                title:
+                  type: string
+                  example: Título
+                description:
+                  type: string
+                  example: Descripción
+                category:
+                  type: integer
+                  example: 1
+                allows_ratings:
+                  type: boolean
+                  example: true
+              required:
+              - image
+              - category
+              - allows_ratings
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+          description: Publicación creada exitosamente
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error de validación
+                  errors:
+                    type: object
+                description: Error de validación
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error interno del servidor
+                description: Error interno del servidor
+          description: ''
+  /api/posts/{id}/:
+    get:
+      operationId: api_posts_retrieve
+      description: "Obtiene una publicación específica proporcionando su ID (`pk`).\
+        \ \nRequiere autenticación con token JWT."
+      summary: Obtener una publicación por ID
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID de la publicación a obtener
+        required: true
+      tags:
+      - Publicaciones
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+          description: Publicación obtenida exitosamente
+        '404':
+          description: No se encontró la publicación especificada
+        '500':
+          description: Error interno del servidor al obtener la publicación
+    put:
+      operationId: api_posts_update
+      description: |-
+        Actualiza una publicación existente proporcionando su ID (`pk`) y los datos a modificar. Solo el autor de la publicación puede editarla.
+        Requiere autenticación con token JWT.
+      summary: Editar una publicación
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID de la publicación a actualizar
+        required: true
+      tags:
+      - Publicaciones
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Post'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Post'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Post'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+          description: Publicación actualizada exitosamente.
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error de validación
+                  errors:
+                    type: object
+                description: Error de validación
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: No tienes permisos para editar esta publicación.
+                description: El usuario no tiene permisos para editar esta publicación.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Publicación no encontrada.
+                description: No existe publicación con el ID especificado.
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error interno del servidor.
+                description: Error interno del servidor.
+          description: ''
+    delete:
+      operationId: api_posts_destroy
+      description: |-
+        Elimina una publicación existente proporcionando su ID (`pk`). Solo el autor de la publicación puede eliminarla.
+        Requiere autenticación con token JWT.
+      summary: Eliminar una publicación
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID de la publicación a eliminar
+        required: true
+      tags:
+      - Publicaciones
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Publicación eliminada correctamente
+                description: Publicación eliminada exitosamente.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: No puedes eliminar este post.
+                description: El usuario no tiene permisos para eliminar esta publicación.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Publicación no encontrada.
+                description: No existe publicación con el ID especificado.
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error interno del servidor.
+                description: Error interno del servidor.
+          description: ''
+  /api/posts/{post_id}/comments/:
+    get:
+      operationId: api_posts_comments_retrieve
+      description: |-
+        Obtiene todos los comentarios de una publicación existente proporcionando su ID (`post_id`).
+        Requiere autenticación con token JWT.
+      summary: Obtener todos los comentarios de una publicación
+      parameters:
+      - in: path
+        name: post_id
+        schema:
+          type: integer
+        description: ID de la publicación de la que se obtienen los comentarios
+        required: true
+      tags:
+      - Comentarios
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommentList'
+          description: Lista paginada de comentarios.
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Post no encontrado.
+                description: No se encontró la publicación especificada.
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error del servidor.
+                description: Error interno del servidor al obtener los comentarios.
+          description: ''
+    post:
+      operationId: api_posts_comments_create
+      description: |-
+        Agrega un comentario a una publicación existente proporcionando su ID (`post_id`).
+        Requiere autenticación con token JWT.
+      summary: Agregar un comentario a una publicación
+      parameters:
+      - in: path
+        name: post_id
+        schema:
+          type: integer
+        description: ID de la publicación a la que se agregará el comentario
+        required: true
+      tags:
+      - Comentarios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentList'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CommentList'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CommentList'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentList'
+          description: Comentario agregado exitosamente.
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: El campo 'content' es requerido.
+                description: Error de validación
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Post no encontrado.
+                description: No se encontró la publicación especificada.
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error del servidor.
+                description: Error interno del servidor al agregar el comentario.
+          description: ''
+  /api/posts/{post_id}/comments/{id}/:
+    put:
+      operationId: api_posts_comments_update
+      description: |-
+        Permite modificar el contenido de un comentario específico de un post.
+        Verifica que:
+        - El post exista
+        - El comentario exista
+        - El usuario autenticado sea el autor del comentario
+
+        Requiere autenticación con token JWT.
+      summary: Editar un comentario de una publicación
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID del comentario a editar
+        required: true
+      - in: path
+        name: post_id
+        schema:
+          type: integer
+        description: ID del post al que pertenece el comentario
+        required: true
+      tags:
+      - Comentarios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentList'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CommentList'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CommentList'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentList'
+          description: Comentario actualizado correctamente
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: El campo 'content' es requerido.
+                description: Falta el campo obligatorio 'content'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: No puedes editar este comentario.
+                description: Usuario no autorizado para editar el comentario
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Publicación no encontrada.
+                description: El post o el comentario no existen
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error del servidor
+                description: Error interno del servidor al editar el comentario
+          description: ''
+    delete:
+      operationId: api_posts_comments_destroy
+      description: |-
+        Elimina un comentario específico de un post, verificando que:
+        - El post exista
+        - El comentario exista y pertenezca al post
+        - El usuario autenticado sea el autor del comentario
+
+        Requiere autenticación con token JWT.
+      summary: Eliminar un comentario de una publicación
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID del comentario a eliminar
+        required: true
+      - in: path
+        name: post_id
+        schema:
+          type: integer
+        description: ID de la publicación a la que pertenece el comentario
+        required: true
+      tags:
+      - Comentarios
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Comentario eliminado correctamente.
+                description: Comentario eliminado exitosamente.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: No tienes permiso para eliminar este comentario.
+                description: El usuario no tiene permisos para eliminar este comentario.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Comentario no encontrado.
+                description: No se encontró el comentario o la publicación.
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error del servidor.
+                description: Error interno del servidor al eliminar el comentario.
+          description: ''
+  /api/posts/{post_id}/ratings/averages/:
+    get:
+      operationId: api_posts_ratings_average
+      description: |-
+        Devuelve el promedio de cada aspecto evaluado y el promedio general de las valoraciones de una publicación.
+        Incluye también el total de valoraciones.
+        Si el post no tiene valoraciones, devuelve 0 en todos los campos.
+      summary: Obtener promedio de valoraciones de un post
+      parameters:
+      - in: path
+        name: post_id
+        schema:
+          type: integer
+        description: ID del post para calcular el promedio de valoraciones
+        required: true
+      tags:
+      - Valoraciones
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      composition:
+                        type: number
+                        example: 4.5
+                      clarity_focus:
+                        type: number
+                        example: 4.0
+                      lighting:
+                        type: number
+                        example: 3.5
+                      creativity:
+                        type: number
+                        example: 5.0
+                      technical_adaptation:
+                        type: number
+                        example: 4.0
+                      overall:
+                        type: number
+                        example: 4.2
+                      total_ratings:
+                        type: integer
+                        example: 12
+                description: Promedio de valoraciones del post
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Post no encontrado.
+                description: El post indicado no existe
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error interno del servidor
+                description: Error inesperado en el servidor
+          description: ''
+  /api/posts/categories/:
+    get:
+      operationId: api_posts_categories_retrieve
+      description: Devuelve una lista con todas las categorías disponibles.
+      summary: Lista todas las categorías disponibles
+      tags:
+      - Categorías
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+          description: Lista de categorías obtenida exitosamente
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  detalle:
+                    type: string
+          description: ''
+  /api/posts/description-suggestions/:
+    post:
+      operationId: api_posts_description_suggestions_create
+      description: |-
+        Recibe una imagen y devuelve tres sugerencias de descripciones generadas por Gemini AI.
+        Requiere autenticación con token JWT.
+      summary: Sugerir descripciones para una publicación
+      tags:
+      - Descripciones de imágenes con Gemini AI
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: Imagen a analizar (archivo JPG, PNG o WebP).
+              required:
+              - image
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      contenido_generado:
+                        type: object
+                        properties:
+                          lenguaje_tecnico_imagen:
+                            type: string
+                            example: '...'
+                          lenguaje_natural_imagen:
+                            type: string
+                            example: '...'
+                          lenguaje_natural_ameno_imagen:
+                            type: string
+                            example: '...'
+                description: Sugerencias de descripciones generadas exitosamente.
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error de validación
+                description: Error de validación
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error interno del servidor
+                description: Error interno del servidor o respuesta de Gemini no válida.
+          description: ''
+  /api/ratings/:
+    get:
+      operationId: api_ratings_get_by_post
+      description: |-
+        Obtiene la valoración de un post realizada por el usuario autenticado.
+        Se requiere el parámetro de consulta 'post_id'.
+        Si el usuario no ha valorado el post, se devuelve `success: False`.
+        No permite que el autor valore su propia publicación.
+      summary: Obtener valoración de un post por el usuario
+      parameters:
+      - in: query
+        name: post_id
+        schema:
+          type: integer
+        description: ID del post a consultar
+        required: true
+      tags:
+      - Valoraciones
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    nullable: true
+                    description: Datos de la valoración si existe
+                  message:
+                    type: string
+                    example: El usuario no ha valorado esta publicación
+                    nullable: true
+                description: Valoración obtenida o mensaje indicando que no hay valoración
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: El parámetro 'post_id' es requerido.
+                description: Error en parámetros de consulta
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: No puedes valorar tu propia publicación
+                description: El usuario es el autor del post
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Post no encontrado.
+                description: No se encontró el post indicado
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error interno del servidor
+                description: Error interno del servidor
+          description: ''
+    post:
+      operationId: api_ratings_create
+      description: |-
+        Permite crear una nueva valoración para una publicación existente.
+        El usuario no puede valorar su propia publicación ni valorar la misma publicación más de una vez.
+        Requiere autenticación con token JWT.
+      summary: Crear valoración de publicación
+      tags:
+      - Valoraciones
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rating'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Rating'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Rating'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rating'
+          description: Valoración creada correctamente
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error de validación
+                  errors:
+                    type: object
+                    description: Errores detallados del serializer
+                description: Error de validación o campos inválidos
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: La publicación no existe
+                description: No se encontró la publicación indicada
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Ya has valorado esta publicación
+                description: El usuario ya valoró esta publicación
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error interno del servidor
+                description: Error interno del servidor
+          description: ''
+  /api/ratings/{id}/:
+    put:
+      operationId: api_ratings_update
+      description: |-
+        Permite actualizar una valoración existente por su ID.
+        Solo el usuario que creó la valoración puede actualizarla y solo dentro de las primeras 24 horas.
+        Requiere autenticación con token JWT.
+      summary: Actualizar valoración
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: ID de la valoración a actualizar
+        required: true
+      tags:
+      - Valoraciones
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rating'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Rating'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Rating'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rating'
+          description: Valoración actualizada correctamente
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error de validación
+                  errors:
+                    type: object
+                    description: Errores detallados del serializer
+                description: Error de validación o restricciones de edición
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: No puedes actualizar esta valoración.
+                description: El usuario no es el autor de la valoración
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Valoración no encontrada.
+                description: No se encontró la valoración indicada
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error interno del servidor
+                description: Error interno del servidor
+          description: ''
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/users/{username}/:
+    get:
+      operationId: api_users_retrieve
+      description: |-
+        Devuelve la información de un usuario específico dado su username.
+        Requiere autenticación con token JWT.
+      summary: Obtener usuario por username
+      parameters:
+      - in: path
+        name: username
+        schema:
+          type: string
+        description: Nombre de usuario del usuario a consultar
+        required: true
+      tags:
+      - Usuarios
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: Usuario encontrado y devuelto correctamente
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Usuario no encontrado
+                description: No se encontró un usuario con ese username
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: No se pudo obtener el usuario
+                  detalle:
+                    type: string
+                    example: Detalle del error
+                description: Error interno del servidor
+          description: ''
+  /api/users/logout/:
+    post:
+      operationId: api_users_logout_create
+      description: |-
+        Cierra la sesión del usuario autenticado invalidando el token refresh.
+        Se requiere enviar el refresh token en el body de la solicitud.
+        Requiere autenticación con token JWT.
+      summary: Cerrar sesión
+      tags:
+      - Usuarios
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                refresh:
+                  type: string
+                  description: Token refresh del usuario a cerrar sesión.
+                  example: token.refresh.jwt
+              required:
+              - refresh
+      security:
+      - jwtAuth: []
+      responses:
+        '205':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Sesión cerrada correctamente.
+                description: Sesión cerrada correctamente.
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Error al cerrar sesión. Token inválido.
+                description: Error al cerrar sesión. Token inválido.
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Error interno del servidor.
+                description: Error interno del servidor.
+          description: ''
+  /api/users/me/:
+    get:
+      operationId: api_users_me_retrieve
+      description: |-
+        Devuelve la información del usuario actualmente autenticado.
+        Requiere autenticación con token JWT.
+      summary: Obtener usuario autenticado
+      tags:
+      - Autenticación
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: Usuario autenticado obtenido correctamente
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: No se pudo obtener el usuario actual
+                  detalle:
+                    type: string
+                    example: Detalle del error
+                description: Error interno del servidor
+          description: ''
+  /api/users/me/update/:
+    put:
+      operationId: api_users_me_update_update
+      description: |-
+        Permite actualizar los datos del usuario actualmente autenticado.
+        Requiere autenticación con token JWT.
+      summary: Actualizar usuario autenticado
+      tags:
+      - Usuarios
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: juan.perez
+                profile_pic:
+                  type: file
+                  format: binary
+                first_name:
+                  type: string
+                  example: Juan
+                last_name:
+                  type: string
+                  example: Perez
+                bio:
+                  type: string
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: Usuario actualizado correctamente
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Error de validación
+                  errors:
+                    type: object
+                    description: Errores detallados del serializer
+                description: Error de validación o archivo no válido
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: No se pudo actualizar el usuario
+                  detalle:
+                    type: string
+                    example: Detalle del error
+                description: Error interno del servidor
+          description: ''
+  /api/users/register/:
+    post:
+      operationId: api_users_register_create
+      description: Registra un nuevo usuario en la aplicación.
+      summary: Registrar nuevo usuario
+      tags:
+      - Usuarios
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: juan.perez
+                email:
+                  type: string
+                  example: juan.perez@gmail.com
+                password:
+                  type: string
+                  example: password4567
+                date_of_birth:
+                  type: string
+                  example: '2000-01-01'
+                first_name:
+                  type: string
+                  example: Juan
+                last_name:
+                  type: string
+                  example: Perez
+                profile_pic:
+                  type: file
+                  format: binary
+                bio:
+                  type: string
+              required:
+              - username
+              - email
+              - password
+              - date_of_birth
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: Usuario creado exitosamente
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: array
+                    items:
+                      type: string
+                  email:
+                    type: array
+                    items:
+                      type: string
+                  password:
+                    type: array
+                    items:
+                      type: string
+                  date_of_birth:
+                    type: array
+                    items:
+                      type: string
+                description: Error de validación
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Error interno del servidor.
+                description: Error interno del servidor.
+          description: ''
+  /api/users/token/:
+    post:
+      operationId: api_users_token_create
+      description: |-
+        Genera un par de tokens JWT (access y refresh) para un usuario.
+        Antes de emitir nuevos tokens, invalida todos los tokens anteriores del usuario.
+        No requiere autenticación previa.
+      summary: Obtener tokens JWT con sesión única. Endpoitn para iniciar sesión.
+      tags:
+      - Usuarios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Nombre del usuario a autenticar.
+                  example: juan.perez
+                password:
+                  type: string
+                  description: Contraseña del usuario a autenticar.
+                  example: password4567
+              required:
+              - username
+              - password
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access:
+                    type: string
+                    example: token.access.jwt
+                  refresh:
+                    type: string
+                    example: token.refresh.jwt
+                description: Tokens JWT generados exitosamente.
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Se requieren username y password
+                description: Se requieren username y password.
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Credenciales inválidas
+                description: Credenciales inválidas.
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Error interno del servidor.
+                description: Error interno del servidor.
+          description: ''
+  /api/users/token/refresh/:
+    post:
+      operationId: api_users_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+components:
+  schemas:
+    Author:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        profile_pic:
+          type: string
+          format: uri
+          nullable: true
+          title: Foto de perfil
+          description: Opcional. Se guarda la URL de la imagen.
+      required:
+      - id
+      - username
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nombre de la categoría
+          maxLength: 100
+        slug:
+          type: string
+          description: Un identificador único para usar en URLs
+          maxLength: 100
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+          nullable: true
+          title: Descripción
+      required:
+      - id
+      - name
+    CommentList:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/Author'
+          readOnly: true
+        content:
+          type: string
+          title: Contenido del comentario
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Fecha de creación
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Fecha de actualización
+      required:
+      - author
+      - content
+      - created_at
+      - id
+      - updated_at
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        recipient:
+          type: string
+          readOnly: true
+        actor:
+          allOf:
+          - $ref: '#/components/schemas/Author'
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        target_id:
+          type: integer
+          readOnly: true
+        target_type:
+          type: string
+          readOnly: true
+        is_read:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        message:
+          type: string
+          readOnly: true
+      required:
+      - actor
+      - created_at
+      - id
+      - message
+      - recipient
+      - target_id
+      - target_type
+      - type
+    PatchedNotification:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        recipient:
+          type: string
+          readOnly: true
+        actor:
+          allOf:
+          - $ref: '#/components/schemas/Author'
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        target_id:
+          type: integer
+          readOnly: true
+        target_type:
+          type: string
+          readOnly: true
+        is_read:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        message:
+          type: string
+          readOnly: true
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/Author'
+          readOnly: true
+        image:
+          type: string
+          format: uri
+          title: Fotografía
+        title:
+          type: string
+          nullable: true
+          title: Título
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+          title: Descripción
+        category:
+          type: integer
+        allows_ratings:
+          type: boolean
+          title: Permite calificaciones
+          description: Indica si este post puede ser valorado por otros usuarios.
+        ratings_count:
+          type: integer
+          readOnly: true
+        uploaded_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Fecha de subida
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Fecha de actualización
+      required:
+      - allows_ratings
+      - author
+      - category
+      - id
+      - image
+      - ratings_count
+      - updated_at
+      - uploaded_at
+    Rating:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        rater:
+          type: integer
+          readOnly: true
+          title: Usuario que valora
+        post:
+          type: integer
+          readOnly: true
+          title: Publicación
+        composition:
+          type: integer
+          maximum: 5
+          minimum: 1
+          title: Composición
+          description: Valoración de la composición fotográfica (1-5 estrellas)
+        clarity_focus:
+          type: integer
+          maximum: 5
+          minimum: 1
+          title: Claridad y enfoque
+          description: Valoración de la claridad y enfoque (1-5 estrellas)
+        lighting:
+          type: integer
+          maximum: 5
+          minimum: 1
+          title: Iluminación
+          description: Valoración de la iluminación (1-5 estrellas)
+        creativity:
+          type: integer
+          maximum: 5
+          minimum: 1
+          title: Creatividad
+          description: Valoración de la creatividad (1-5 estrellas)
+        technical_adaptation:
+          type: integer
+          maximum: 5
+          minimum: 1
+          title: Adaptación técnica
+          description: Valoración de la adaptación técnica (1-5 estrellas)
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Fecha de valoración
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Fecha de última actualización
+      required:
+      - clarity_focus
+      - composition
+      - created_at
+      - creativity
+      - id
+      - lighting
+      - post
+      - rater
+      - technical_adaptation
+      - updated_at
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    TypeEnum:
+      enum:
+      - comment
+      type: string
+      description: '* `comment` - Comentario'
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          title: Dirección de correo electrónico
+          maxLength: 254
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        date_of_birth:
+          type: string
+          format: date
+          title: Fecha de nacimiento
+          description: 'Formato: DD-MM-AAAA. Obligatorio para verificar la edad.'
+        profile_pic:
+          type: string
+          format: uri
+          nullable: true
+          title: Foto de perfil
+          description: Opcional. Se guarda la URL de la imagen.
+        bio:
+          type: string
+          nullable: true
+          title: Biografía
+          description: Opcional. Biografía del usuario.
+          maxLength: 160
+      required:
+      - date_of_birth
+      - email
+      - id
+      - password
+      - username
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        profile_pic:
+          type: string
+          format: uri
+          nullable: true
+          title: Foto de perfil
+          description: Opcional. Se guarda la URL de la imagen.
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        bio:
+          type: string
+          nullable: true
+          title: Biografía
+          description: Opcional. Biografía del usuario.
+          maxLength: 160
+      required:
+      - id
+      - username
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT authentication with token blacklist checking.
