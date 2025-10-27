@@ -9,10 +9,9 @@ from users.models import AppUser
 
 import logging
 
+
 class Category(models.Model):
-    name = models.CharField(
-        max_length=100, unique=True, verbose_name="Nombre de la categoría"
-    )
+    name = models.CharField(max_length=100, unique=True, verbose_name="Nombre de la categoría")
     slug = models.SlugField(
         max_length=100,
         unique=True,
@@ -45,34 +44,32 @@ class Post(models.Model):
     )
 
     image = models.ImageField(
-        upload_to="posts/", 
+        upload_to="posts/",
         verbose_name="Fotografía",
     )
 
     title = models.CharField(
         max_length=200,
-        blank=True, # Opcional
-        null=True, # Opcional
-        verbose_name="Título"
+        blank=True,  # Opcional
+        null=True,  # Opcional
+        verbose_name="Título",
     )
 
     description = models.TextField(
-        blank=True, # Opcional
-        null=True, # Opcional
-        verbose_name="Descripción"
+        blank=True, null=True, verbose_name="Descripción"  # Opcional  # Opcional
     )
 
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
-        related_name="posts", # Para acceder a los posts de una categoría con category.posts.all()
+        related_name="posts",  # Para acceder a los posts de una categoría con category.posts.all()
         verbose_name="Categoría",
     )
-    
+
     allows_ratings = models.BooleanField(
         default=True,
         help_text="Indica si este post puede ser valorado por otros usuarios.",
-        verbose_name="Permite calificaciones"
+        verbose_name="Permite calificaciones",
     )
 
     uploaded_at = models.DateTimeField(
@@ -80,12 +77,10 @@ class Post(models.Model):
         verbose_name="Fecha de subida",
     )
 
-    updated_at = models.DateTimeField(
-        auto_now=True, verbose_name="Fecha de actualización"
-    )
-    
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Fecha de actualización")
+
     class Meta:
-        ordering = ['-uploaded_at'] # Más recientes a más antiguos
+        ordering = ["-uploaded_at"]  # Más recientes a más antiguos
         # ordering = ['uploaded_at'] # Más antiguos a más recientes
         verbose_name = "Publicación"
         verbose_name_plural = "Publicaciones"
@@ -93,22 +88,24 @@ class Post(models.Model):
     def can_be_rated_by(self, user):
         if user == self.author:
             return False, "No puedes valorar tu propia publicación."
-        
+
         if not self.allows_ratings:
             return False, "Esta publicación no permite valoraciones."
 
         from ratings.models import Rating
+
         if Rating.objects.filter(post=self, rater=user).exists():
             return False, "Ya has valorado esta publicación."
 
         return True, "Puedes valorar esta publicación."
-    
+
     def __str__(self):
         return self.title or f"Post de {self.author} ({self.uploaded_at.date()})"
 
+
 @receiver(pre_delete, sender=Post)
 def delete_post_image(sender, instance, **kwargs):
-    logger = logging.getLogger('posts')
+    logger = logging.getLogger("posts")
     if instance.image:
         try:
             # Borrar usando el storage backend
@@ -124,20 +121,20 @@ class PostComment(models.Model):
         AppUser,
         on_delete=models.CASCADE,
         related_name="post_commenter",
-        verbose_name="Autor del comentario"
+        verbose_name="Autor del comentario",
     )
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
-        related_name= "commented_post",
-        verbose_name="Publicación comentada"
+        related_name="commented_post",
+        verbose_name="Publicación comentada",
     )
     content = models.TextField(verbose_name="Contenido del comentario")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Fecha de actualización")
 
     def __str__(self):
-        return f'Comentario de {self.author} en {self.post}'
+        return f"Comentario de {self.author} en {self.post}"
 
     class Meta:
         verbose_name = "Comentario"

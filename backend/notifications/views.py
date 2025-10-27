@@ -11,6 +11,7 @@ from .serializers import NotificationSerializer
 
 logger = logging.getLogger(__name__)
 
+
 class NotificationListView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -20,33 +21,37 @@ class NotificationListView(APIView):
         responses={
             200: OpenApiResponse(
                 response=NotificationSerializer(many=True),
-                description="Lista de notificaciones del usuario"
+                description="Lista de notificaciones del usuario",
             ),
             500: {
                 "type": "object",
-                "properties":{
+                "properties": {
                     "success": {"type": "boolean", "example": False},
                     "message": {"type": "string", "example": "Error del servidor."},
                 },
-                "description": "Error interno del servidor al obtener las notificaciones."
-            }
+                "description": "Error interno del servidor al obtener las notificaciones.",
+            },
         },
         tags=["Notificaciones"],
-        auth=[{
-            "jwtAuth":[]
-        }],
+        auth=[{"jwtAuth": []}],
     )
     def get(self, request):
         try:
-            notifications = Notification.objects.filter(recipient=request.user).order_by('-created_at')
+            notifications = Notification.objects.filter(recipient=request.user).order_by(
+                "-created_at"
+            )
             serializer = NotificationSerializer(notifications, many=True)
             return Response({"success": True, "data": serializer.data}, status=status.HTTP_200_OK)
         except Exception as e:
             logger.error(f"Error inesperado al obtener notificaciones: {str(e)}")
             return Response(
-                {"success": False, "message": "Error inesperado al obtener las notificaciones."}, 
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {
+                    "success": False,
+                    "message": "Error inesperado al obtener las notificaciones.",
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
 
 class UnreadNotificationView(APIView):
     permission_classes = [IsAuthenticated]
@@ -57,33 +62,37 @@ class UnreadNotificationView(APIView):
         responses={
             200: OpenApiResponse(
                 response=NotificationSerializer(many=True),
-                description="Lista de notificaciones no leídas del usuario"
+                description="Lista de notificaciones no leídas del usuario",
             ),
             500: {
                 "type": "object",
-                "properties":{
+                "properties": {
                     "success": {"type": "boolean", "example": False},
                     "message": {"type": "string", "example": "Error del servidor."},
                 },
-                "description": "Error interno del servidor al obtener las notificaciones no leídas."
-            }
+                "description": "Error interno del servidor al obtener las notificaciones no leídas.",
+            },
         },
         tags=["Notificaciones"],
-        auth=[{
-            "jwtAuth":[]
-        }],
+        auth=[{"jwtAuth": []}],
     )
     def get(self, request):
         try:
-            notifications = Notification.objects.filter(recipient=request.user, is_read=False).order_by('-created_at')
+            notifications = Notification.objects.filter(
+                recipient=request.user, is_read=False
+            ).order_by("-created_at")
             serializer = NotificationSerializer(notifications, many=True)
             return Response({"success": True, "data": serializer.data}, status=status.HTTP_200_OK)
         except Exception as e:
             logger.error(f"Error inesperado al obtener notificaciones no leídas: {str(e)}")
             return Response(
-                {"success": False, "message": "Error inesperado al obtener las notificaciones no leídas."}, 
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {
+                    "success": False,
+                    "message": "Error inesperado al obtener las notificaciones no leídas.",
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
 
 class UnreadNotificationCountView(APIView):
     permission_classes = [IsAuthenticated]
@@ -94,25 +103,23 @@ class UnreadNotificationCountView(APIView):
         responses={
             200: {
                 "type": "object",
-                "properties":{
+                "properties": {
                     "success": {"type": "boolean", "example": True},
                     "unread_count": {"type": "integer", "example": 10},
                 },
-                "description": "Contador de notificaciones no leídas del usuario"
+                "description": "Contador de notificaciones no leídas del usuario",
             },
             500: {
                 "type": "object",
-                "properties":{
+                "properties": {
                     "success": {"type": "boolean", "example": False},
                     "message": {"type": "string", "example": "Error del servidor."},
                 },
-                "description": "Error interno del servidor al contar las notificaciones no leídas."
-            }
+                "description": "Error interno del servidor al contar las notificaciones no leídas.",
+            },
         },
         tags=["Notificaciones"],
-        auth=[{
-            "jwtAuth":[]
-        }],
+        auth=[{"jwtAuth": []}],
     )
     def get(self, request):
         try:
@@ -121,9 +128,13 @@ class UnreadNotificationCountView(APIView):
         except Exception as e:
             logger.error(f"Error inesperado al contar notificaciones no leídas: {str(e)}")
             return Response(
-                {"success": False, "message": "Error inesperado al contar las notificaciones no leídas."}, 
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {
+                    "success": False,
+                    "message": "Error inesperado al contar las notificaciones no leídas.",
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
 
 class MarkAsReadView(APIView):
     permission_classes = [IsAuthenticated]
@@ -150,25 +161,34 @@ class MarkAsReadView(APIView):
                 "type": "object",
                 "properties": {
                     "success": {"type": "boolean", "example": True},
-                    "message": {"type": "string", "example": "Notificación marcada como leída."},
+                    "message": {
+                        "type": "string",
+                        "example": "Notificación marcada como leída.",
+                    },
                 },
-                "description": "Notificación marcada como leída exitosamente."
+                "description": "Notificación marcada como leída exitosamente.",
             },
             400: {
                 "type": "object",
                 "properties": {
                     "success": {"type": "boolean", "example": False},
-                    "message": {"type": "string", "example": "ID de notificación inválido."},
+                    "message": {
+                        "type": "string",
+                        "example": "ID de notificación inválido.",
+                    },
                 },
-                "description": "ID inválido para la notificación."
+                "description": "ID inválido para la notificación.",
             },
             404: {
                 "type": "object",
                 "properties": {
                     "success": {"type": "boolean", "example": False},
-                    "message": {"type": "string", "example": "Notificación no encontrada."},
+                    "message": {
+                        "type": "string",
+                        "example": "Notificación no encontrada.",
+                    },
                 },
-                "description": "No se encontró la notificación especificada."
+                "description": "No se encontró la notificación especificada.",
             },
             500: {
                 "type": "object",
@@ -176,44 +196,49 @@ class MarkAsReadView(APIView):
                     "success": {"type": "boolean", "example": False},
                     "message": {"type": "string", "example": "Error del servidor."},
                 },
-                "description": "Error interno del servidor al marcar la notificación como leída."
+                "description": "Error interno del servidor al marcar la notificación como leída.",
             },
         },
         tags=["Notificaciones"],
-        auth=[{
-            "jwtAuth":[]
-        }],
+        auth=[{"jwtAuth": []}],
     )
     def patch(self, request, pk):
         try:
             # Validar que pk sea un número válido
             if not pk or not str(pk).isdigit():
                 return Response(
-                    {"success": False, "message": "ID de notificación inválido."}, 
-                    status=status.HTTP_400_BAD_REQUEST
+                    {"success": False, "message": "ID de notificación inválido."},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
-            
+
             notification = Notification.objects.get(pk=pk, recipient=request.user)
             notification.is_read = True
             notification.save()
-            return Response({"success": True, "message": "Notificación marcada como leída."}, status=status.HTTP_200_OK)
+            return Response(
+                {"success": True, "message": "Notificación marcada como leída."},
+                status=status.HTTP_200_OK,
+            )
         except Notification.DoesNotExist:
             return Response(
-                {"success": False, "message": "Notificación no encontrada."}, 
-                status=status.HTTP_404_NOT_FOUND
+                {"success": False, "message": "Notificación no encontrada."},
+                status=status.HTTP_404_NOT_FOUND,
             )
         except ValidationError as e:
             logger.error(f"Error de validación al marcar notificación como leída: {str(e)}")
             return Response(
-                {"success": False, "message": "Datos de notificación inválidos."}, 
-                status=status.HTTP_400_BAD_REQUEST
+                {"success": False, "message": "Datos de notificación inválidos."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
         except Exception as e:
             logger.error(f"Error inesperado al marcar notificación como leída: {str(e)}")
             return Response(
-                {"success": False, "message": "Error inesperado al marcar la notificación como leída."}, 
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {
+                    "success": False,
+                    "message": "Error inesperado al marcar la notificación como leída.",
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+
 
 class MarkAllAsReadView(APIView):
     permission_classes = [IsAuthenticated]
@@ -221,7 +246,7 @@ class MarkAllAsReadView(APIView):
 
     @extend_schema(
         summary="Marcar todas las notificaciones como leídas",
-        description=(   
+        description=(
             "Marca todas las notificaciones no leídas del usuario autenticado como leídas.\n"
             "Requiere autenticación con token JWT."
         ),
@@ -230,9 +255,12 @@ class MarkAllAsReadView(APIView):
                 "type": "object",
                 "properties": {
                     "success": {"type": "boolean", "example": True},
-                    "message": {"type": "string", "example": "Se marcaron 5 notificaciones como leídas."},
+                    "message": {
+                        "type": "string",
+                        "example": "Se marcaron 5 notificaciones como leídas.",
+                    },
                 },
-                "description": "Todas las notificaciones no leídas del usuario han sido marcadas como leídas."
+                "description": "Todas las notificaciones no leídas del usuario han sido marcadas como leídas.",
             },
             500: {
                 "type": "object",
@@ -240,25 +268,31 @@ class MarkAllAsReadView(APIView):
                     "success": {"type": "boolean", "example": False},
                     "message": {"type": "string", "example": "Error del servidor."},
                 },
-                "description": "Error interno del servidor al marcar todas las notificaciones como leídas."
-            }
+                "description": "Error interno del servidor al marcar todas las notificaciones como leídas.",
+            },
         },
         tags=["Notificaciones"],
-        auth=[{
-            "jwtAuth":[]
-        }],
+        auth=[{"jwtAuth": []}],
     )
     def patch(self, request):
         try:
             notifications = Notification.objects.filter(recipient=request.user, is_read=False)
             updated_count = notifications.update(is_read=True)
             return Response(
-                {"success": True, "message": f"Se marcaron {updated_count} notificaciones como leídas."}, 
-                status=status.HTTP_200_OK
+                {
+                    "success": True,
+                    "message": f"Se marcaron {updated_count} notificaciones como leídas.",
+                },
+                status=status.HTTP_200_OK,
             )
         except Exception as e:
-            logger.error(f"Error inesperado al marcar todas las notificaciones como leídas: {str(e)}")
+            logger.error(
+                f"Error inesperado al marcar todas las notificaciones como leídas: {str(e)}"
+            )
             return Response(
-                {"success": False, "message": "Error inesperado al marcar todas las notificaciones como leídas."}, 
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {
+                    "success": False,
+                    "message": "Error inesperado al marcar todas las notificaciones como leídas.",
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )

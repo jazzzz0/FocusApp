@@ -3,7 +3,6 @@ from django.dispatch import receiver
 from .models import Notification
 from django.contrib.contenttypes.models import ContentType
 
-# modelos de los tipos de notificaciones posibles
 from posts.models import PostComment
 
 
@@ -19,11 +18,10 @@ def comment_notification(sender, instance, created, **kwargs):
 
         content_type = ContentType.objects.get_for_model(PostComment)
 
-        # Crear notificación en DB
-        notification = Notification.objects.create(
+        Notification.objects.create(
             recipient=recipient,
             actor=actor,
-            type='comment',
+            type="comment",
             content_type=content_type,
             object_id=instance.post.id,
         )
