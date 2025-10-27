@@ -1,12 +1,40 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
+import { setForceLogoutCallback, initializeFetchInterceptor } from "../utils/fetchInterceptor";
+import { setNotificationLogoutCallback } from "../services/notificationService";
+import { setAxiosForceLogoutCallback, initializeAxiosInterceptor } from "../utils/axiosInterceptor";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);   // usuario logueado
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isLoggingOut, setIsLoggingOut] = useState(false); // estado de logout intencional
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
+  const forceLogout = useCallback(() => {
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
+    localStorage.removeItem("username");
+    // Limpiar el estado del usuario inmediatamente y sincrónicamente
+    setUser(null);
+    setIsLoggingOut(false);
+    setLoading(false);
+    
+    if (window.location.pathname !== '/Login' && window.location.pathname !== '/RegisterForm') {
+      setTimeout(() => {
+        window.location.href = '/Login';
+      }, 2000);
+    }
+  }, []);
+
+  // Configurar el callback para forceLogout al montar el componente
+  useEffect(() => {
+    setForceLogoutCallback(forceLogout);
+    setNotificationLogoutCallback(forceLogout);
+    setAxiosForceLogoutCallback(forceLogout);
+    // Inicializar los interceptores globales
+    initializeFetchInterceptor();
+    initializeAxiosInterceptor();
+  }, [forceLogout]);
 
   // Cuando arranca la app, revisamos si hay tokens en localStorage
   useEffect(() => {
@@ -136,7 +164,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading, isLoggingOut, clearUser }}>
+    <AuthContext.Provider value={{ user, login, logout, loading, isLoggingOut, clearUser, forceLogout }}>
       {children}
     </AuthContext.Provider>
   );

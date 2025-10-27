@@ -43,7 +43,7 @@ const getDescriptionSuggestions = async (imageFile, navigate, setSnackbar) => {
     } else {
       setSnackbar({
         open: true,
-        message: "Error: " + (data.detail || "No se pudo obtener sugerencias"),
+        message: "Error: " + (data?.message || "No se pudo obtener sugerencias"),
         severity: "error"
       });
       return null;
@@ -52,9 +52,6 @@ const getDescriptionSuggestions = async (imageFile, navigate, setSnackbar) => {
     return null;
   }
 };
-
-
-
 
 const PostForm = () => {
   const [formData, setFormData] = useState({
@@ -150,7 +147,6 @@ const PostForm = () => {
     }
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("access");
@@ -205,7 +201,6 @@ const PostForm = () => {
           message: "✅ Foto subida correctamente",
           severity: "success"
         });
-;
         // Redirigir a la nueva publicación creada
         const newPostId = data?.data?.id;
 
@@ -251,7 +246,7 @@ const PostForm = () => {
               <input
                 type="file"
                 name="image"
-                accept="image/*"
+                accept="image/jpeg, image/jpg, image/png, image/webp"
                 onChange={handleChange}
                 id="image_upload"
                 className="file-input-hidden"

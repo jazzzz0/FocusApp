@@ -568,9 +568,7 @@ class DescriptionSuggestionView(APIView):
 
             # Obtener el texto devuelto y parsear JSON
             clean_response_text = result.text.replace("```json", "").replace("```", "").strip()
-            
-            print("RESPUESTA GEMINI:\n", clean_response_text)
-            
+
             data = json.loads(clean_response_text)
 
             return Response({"success": True, "data": data}, status=status.HTTP_200_OK)

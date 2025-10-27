@@ -1,5 +1,18 @@
 import axios from 'axios';
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/';
+
+// Variable para almacenar el callback de forceLogout
+let forceLogoutCallback = null;
+let isProcessingSessionExpired = false;
+
+/**
+ * Configura el callback para forceLogout desde NotificationService
+ * @param {Function} callback - Función que se ejecutará al detectar un 401
+ */
+export const setNotificationLogoutCallback = (callback) => {
+  forceLogoutCallback = callback;
+};
 
 class NotificationService {
   constructor() {
@@ -28,11 +41,24 @@ class NotificationService {
     this.api.interceptors.response.use(
       (response) => response,
       (error) => {
-        if (error.response?.status === 401) {
-          // Token expirado o inválido
+        if (error.response?.status === 401 && !isProcessingSessionExpired) {
+          isProcessingSessionExpired = true;
+          console.warn('Sesión expirada.');
+          
+          // Limpiar localStorage
           localStorage.removeItem('access');
           localStorage.removeItem('refresh');
           localStorage.removeItem('username');
+          
+          // Llamar al callback de logout si está configurado
+          if (forceLogoutCallback) {
+            forceLogoutCallback();
+          }
+          
+          // Resetear el flag después de un tiempo
+          setTimeout(() => {
+            isProcessingSessionExpired = false;
+          }, 500);
         }
         return Promise.reject(error);
       }
