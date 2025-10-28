@@ -177,6 +177,18 @@ export const AuthProvider = ({ children }) => {
     }, 2000)
   }
 
+  const updateUser = async () => {
+    const access = localStorage.getItem('access')
+    const refresh = localStorage.getItem('refresh')
+
+    if (access && refresh) {
+      const userInfo = await fetchCurrentUser(access)
+      if (userInfo) {
+        setUser({ access, refresh, ...userInfo })
+      }
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -187,6 +199,7 @@ export const AuthProvider = ({ children }) => {
         isLoggingOut,
         clearUser,
         forceLogout,
+        updateUser,
       }}
     >
       {children}

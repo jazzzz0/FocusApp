@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import { Alert, Snackbar } from '@mui/material'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Snackbar, Alert } from '@mui/material'
+import { AuthContext } from '../context/AuthContext'
 import '../styles/editar-perfil.css'
-import Navbar from './Navbar'
 import Footer from './Footer'
+import Navbar from './Navbar'
 
 const EditarPerfil = () => {
   const [userData, setUserData] = useState({
@@ -19,6 +20,7 @@ const EditarPerfil = () => {
     severity: 'success',
   })
   const navigate = useNavigate()
+  const { updateUser } = useContext(AuthContext)
 
   const handleCloseSnackbar = () => {
     setSnackbar(prev => ({ ...prev, open: false }))
@@ -128,6 +130,9 @@ const EditarPerfil = () => {
       const data = await response.json()
 
       if (response.ok && data.success) {
+        // Actualizar el usuario en el contexto para reflejar los cambios en el Navbar
+        await updateUser()
+
         setSnackbar({
           open: true,
           message: '✅ Perfil actualizado con éxito',
