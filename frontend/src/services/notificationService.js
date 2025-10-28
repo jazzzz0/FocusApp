@@ -1,18 +1,19 @@
-import axios from 'axios';
+import axios from 'axios'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/'
 
 // Variable para almacenar el callback de forceLogout
-let forceLogoutCallback = null;
-let isProcessingSessionExpired = false;
+let forceLogoutCallback = null
+let isProcessingSessionExpired = false
 
 /**
  * Configura el callback para forceLogout desde NotificationService
  * @param {Function} callback - Función que se ejecutará al detectar un 401
  */
-export const setNotificationLogoutCallback = (callback) => {
-  forceLogoutCallback = callback;
-};
+export const setNotificationLogoutCallback = callback => {
+  forceLogoutCallback = callback
+}
 
 class NotificationService {
   constructor() {
@@ -21,48 +22,47 @@ class NotificationService {
       headers: {
         'Content-Type': 'application/json',
       },
-    });
+    })
 
     // Interceptor para agregar el token de autenticación dinámicamente
     this.api.interceptors.request.use(
-      (config) => {
-        const token = localStorage.getItem('access');
+      config => {
+        const token = localStorage.getItem('access')
         if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
+          config.headers.Authorization = `Bearer ${token}`
         }
-        return config;
+        return config
       },
-      (error) => {
-        return Promise.reject(error);
+      error => {
+        return Promise.reject(error)
       }
-    );
+    )
 
     // Interceptor para manejar errores de respuesta
     this.api.interceptors.response.use(
-      (response) => response,
-      (error) => {
+      response => response,
+      error => {
         if (error.response?.status === 401 && !isProcessingSessionExpired) {
-          isProcessingSessionExpired = true;
-          console.warn('Sesión expirada.');
-          
-          // Limpiar localStorage
-          localStorage.removeItem('access');
-          localStorage.removeItem('refresh');
-          localStorage.removeItem('username');
-          
+          isProcessingSessionExpired = true
+          console.warn('Sesión expirada.')
+
+          localStorage.removeItem('access')
+          localStorage.removeItem('refresh')
+          localStorage.removeItem('username')
+
           // Llamar al callback de logout si está configurado
           if (forceLogoutCallback) {
-            forceLogoutCallback();
+            forceLogoutCallback()
           }
-          
+
           // Resetear el flag después de un tiempo
           setTimeout(() => {
-            isProcessingSessionExpired = false;
-          }, 500);
+            isProcessingSessionExpired = false
+          }, 500)
         }
-        return Promise.reject(error);
+        return Promise.reject(error)
       }
-    );
+    )
   }
 
   /**
@@ -71,11 +71,11 @@ class NotificationService {
    */
   async getAllNotifications() {
     try {
-      const response = await this.api.get('/');
-      return response.data.success ? response.data.data : [];
+      const response = await this.api.get('/')
+      return response.data.success ? response.data.data : []
     } catch (error) {
-      console.error('Error al obtener notificaciones:', error);
-      throw error;
+      console.error('Error al obtener notificaciones:', error)
+      throw error
     }
   }
 
@@ -85,11 +85,11 @@ class NotificationService {
    */
   async getUnreadNotifications() {
     try {
-      const response = await this.api.get('/unread/');
-      return response.data.success ? response.data.data : [];
+      const response = await this.api.get('/unread/')
+      return response.data.success ? response.data.data : []
     } catch (error) {
-      console.error('Error al obtener notificaciones no leídas:', error);
-      throw error;
+      console.error('Error al obtener notificaciones no leídas:', error)
+      throw error
     }
   }
 
@@ -99,11 +99,11 @@ class NotificationService {
    */
   async getUnreadCount() {
     try {
-      const response = await this.api.get('/count/');
-      return response.data.success ? response.data.unread_count : 0;
+      const response = await this.api.get('/count/')
+      return response.data.success ? response.data.unread_count : 0
     } catch (error) {
-      console.error('Error al obtener contador de notificaciones:', error);
-      return 0;
+      console.error('Error al obtener contador de notificaciones:', error)
+      return 0
     }
   }
 
@@ -114,11 +114,11 @@ class NotificationService {
    */
   async markAsRead(notificationId) {
     try {
-      const response = await this.api.patch(`/mark-as-read/${notificationId}/`);
-      return response.data.success;
+      const response = await this.api.patch(`/mark-as-read/${notificationId}/`)
+      return response.data.success
     } catch (error) {
-      console.error('Error al marcar notificación como leída:', error);
-      throw error;
+      console.error('Error al marcar notificación como leída:', error)
+      throw error
     }
   }
 
@@ -128,11 +128,14 @@ class NotificationService {
    */
   async markAllAsRead() {
     try {
-      const response = await this.api.patch('/mark-all-as-read/');
-      return response.data.success;
+      const response = await this.api.patch('/mark-all-as-read/')
+      return response.data.success
     } catch (error) {
-      console.error('Error al marcar todas las notificaciones como leídas:', error);
-      throw error;
+      console.error(
+        'Error al marcar todas las notificaciones como leídas:',
+        error
+      )
+      throw error
     }
   }
 
@@ -151,7 +154,7 @@ class NotificationService {
       actor: notification.actor,
       targetId: notification.target_id,
       targetType: notification.target_type,
-    };
+    }
   }
 
   /**
@@ -160,27 +163,27 @@ class NotificationService {
    * @returns {string} Fecha formateada
    */
   formatDate(date) {
-    const now = new Date();
-    const diffInSeconds = Math.floor((now - date) / 1000);
-    
+    const now = new Date()
+    const diffInSeconds = Math.floor((now - date) / 1000)
+
     if (diffInSeconds < 60) {
-      return 'Hace un momento';
+      return 'Hace un momento'
     } else if (diffInSeconds < 3600) {
-      const minutes = Math.floor(diffInSeconds / 60);
-      return `Hace ${minutes} minuto${minutes > 1 ? 's' : ''}`;
+      const minutes = Math.floor(diffInSeconds / 60)
+      return `Hace ${minutes} minuto${minutes > 1 ? 's' : ''}`
     } else if (diffInSeconds < 86400) {
-      const hours = Math.floor(diffInSeconds / 3600);
-      return `Hace ${hours} hora${hours > 1 ? 's' : ''}`;
+      const hours = Math.floor(diffInSeconds / 3600)
+      return `Hace ${hours} hora${hours > 1 ? 's' : ''}`
     } else if (diffInSeconds < 2592000) {
-      const days = Math.floor(diffInSeconds / 86400);
-      return `Hace ${days} día${days > 1 ? 's' : ''}`;
+      const days = Math.floor(diffInSeconds / 86400)
+      return `Hace ${days} día${days > 1 ? 's' : ''}`
     } else {
-      return date.toLocaleDateString('es-ES');
+      return date.toLocaleDateString('es-ES')
     }
   }
 }
 
-// Crear una instancia singleton del servicio
-const notificationService = new NotificationService();
+// Instancia Singleton del servicio
+const notificationService = new NotificationService()
 
-export default notificationService;
+export default notificationService

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../styles/RegisterForm.css';
-import { Link } from "react-router-dom";
-import { Snackbar, Alert } from '@mui/material';
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import '../styles/RegisterForm.css'
+import { Link } from 'react-router-dom'
+import { Snackbar, Alert } from '@mui/material'
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -13,70 +13,70 @@ const RegisterForm = () => {
     last_name: '',
     date_of_birth: '',
     profile_pic: null,
-  });
+  })
 
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
-    severity: 'success'
-  });
+    severity: 'success',
+  })
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const handleChange = (e) => {
-    const { name, value, files, type } = e.target;
-    if (type === "file") {
-      setFormData({ ...formData, [name]: files[0] });
+  const handleChange = e => {
+    const { name, value, files, type } = e.target
+    if (type === 'file') {
+      setFormData({ ...formData, [name]: files[0] })
     } else {
-      setFormData({ ...formData, [name]: value });
+      setFormData({ ...formData, [name]: value })
     }
-  };
+  }
 
   const showSnackbar = (message, severity = 'success') => {
     setSnackbar({
       open: true,
       message,
-      severity
-    });
-  };
+      severity,
+    })
+  }
 
   const handleCloseSnackbar = () => {
-    setSnackbar(prev => ({ ...prev, open: false }));
-  };
+    setSnackbar(prev => ({ ...prev, open: false }))
+  }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async e => {
+    e.preventDefault()
 
     try {
-      const formDataToSend = new FormData();
+      const formDataToSend = new FormData()
       Object.entries(formData).forEach(([key, value]) => {
-        if (value !== null && value !== "") {
-          formDataToSend.append(key, value);
+        if (value !== null && value !== '') {
+          formDataToSend.append(key, value)
         }
-      });
+      })
 
       const response = await fetch(
         `${import.meta.env.VITE_API_BASE_URL}users/register/`,
         {
-          method: "POST",
+          method: 'POST',
           body: formDataToSend,
         }
-      );
+      )
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (response.ok) {
-        showSnackbar("✅ Usuario registrado exitosamente", 'success');
-        setTimeout(() => navigate("/Login"), 700);
+        showSnackbar('✅ Usuario registrado exitosamente', 'success')
+        setTimeout(() => navigate('/Login'), 700)
       } else {
-        console.error("❌ Error al registrar:", data);
-        showSnackbar("Error: " + (data.detail || JSON.stringify(data)), 'error');
+        console.error('❌ Error al registrar:', data)
+        showSnackbar('Error: ' + (data.detail || JSON.stringify(data)), 'error')
       }
     } catch (error) {
-      console.error("🚨 Error de conexión:", error);
-      showSnackbar("Error de conexión con el servidor", 'error');
+      console.error('🚨 Error de conexión:', error)
+      showSnackbar('Error de conexión con el servidor', 'error')
     }
-  };
+  }
 
   return (
     <div className="register-form-center">
@@ -150,7 +150,6 @@ const RegisterForm = () => {
               required
             />
           </div>
-
         </div>
 
         <div className="form-field">
@@ -167,7 +166,9 @@ const RegisterForm = () => {
             <label htmlFor="profile_pic" className="file-input-label">
               <span className="file-input-icon">📷</span>
               <span className="file-input-text">
-                {formData.profile_pic ? formData.profile_pic.name : 'Seleccionar imagen'}
+                {formData.profile_pic
+                  ? formData.profile_pic.name
+                  : 'Seleccionar imagen'}
               </span>
             </label>
           </div>
@@ -179,15 +180,15 @@ const RegisterForm = () => {
           ¿Ya tienes cuenta? <Link to="/Login">Inicia sesión aquí</Link>
         </p>
       </form>
-      
+
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
+        <Alert
+          onClose={handleCloseSnackbar}
           severity={snackbar.severity}
           sx={{ width: '100%' }}
         >
@@ -195,7 +196,7 @@ const RegisterForm = () => {
         </Alert>
       </Snackbar>
     </div>
-  );
-};
+  )
+}
 
-export default RegisterForm;
+export default RegisterForm

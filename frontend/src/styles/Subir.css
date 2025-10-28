@@ -11,7 +11,7 @@
   background-color: white;
   padding: 2rem;
   border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   width: 100%;
   max-width: 700px;
   box-sizing: border-box;
@@ -32,10 +32,10 @@
   font-size: 0.9rem;
 }
 
-.subir-form input[type="text"],
-.subir-form input[type="email"],
-.subir-form input[type="password"],
-.subir-form input[type="date"] {
+.subir-form input[type='text'],
+.subir-form input[type='email'],
+.subir-form input[type='password'],
+.subir-form input[type='date'] {
   width: 100%;
   padding: 0.8rem;
   margin-bottom: 1rem;
@@ -101,14 +101,14 @@
 }
 
 .image-preview {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    border: 2px dashed #ccc;
-    border-radius: 8px;
-    padding: 0.5rem;
-    min-height: 150px;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 0.5rem;
+  min-height: 150px;
+  text-align: center;
   /* margin-top: 1rem; */
 }
 
@@ -122,24 +122,24 @@
   max-width: 100%;
   max-height: 300px;
   border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .image-preview .placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #888;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  height: 100%;
 }
 
 .placeholder span {
-    font-size: 2rem;
+  font-size: 2rem;
 }
 
 .placeholder p {
-    margin-top: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .subir-form textarea {
@@ -161,9 +161,8 @@
   border-color: #172ad4;
 }
 
-
 .subir-form select option {
-  color: #000; /* negro */
+  color: #000;
 }
 
 .subir-form select:focus {
@@ -183,59 +182,59 @@
   box-sizing: border-box;
 }
 
-.subir-form input[type="checkbox"] {
+.subir-form input[type='checkbox'] {
   margin-right: 0.5rem;
   transform: scale(1.2);
 }
 
 .checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    position: relative;
-    /* margin-top: 0.5rem; */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  /* margin-top: 0.5rem; */
 }
 
 .checkbox-label .tooltip {
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    font-size: 0.9rem;
-    color: #555;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  font-size: 0.9rem;
+  color: #555;
 }
 
 .checkbox-label .tooltip-text {
-    visibility: hidden;
-    width: 250px;
-    background-color: #333;
-    color: #fff;
-    text-align: justify;
-    border-radius: 5px;
-    padding: 0.5rem;
-    position: absolute;
-    z-index: 10;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity 0.3s;
-    font-size: 0.8rem;
+  visibility: hidden;
+  width: 250px;
+  background-color: #333;
+  color: #fff;
+  text-align: justify;
+  border-radius: 5px;
+  padding: 0.5rem;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 0.8rem;
 }
 
 .checkbox-label .tooltip-text::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #333 transparent transparent transparent;
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
 }
 
 .checkbox-label .tooltip:hover .tooltip-text {
-    visibility: visible;
-    opacity: 1;
+  visibility: visible;
+  opacity: 1;
 }
 
 /* Layout de dos columnas */
@@ -253,48 +252,48 @@
 }
 
 .left-column {
-    display: flex;
-    flex-direction: column;
-    /* gap: 1rem; */
+  display: flex;
+  flex-direction: column;
+  /* gap: 1rem; */
 }
 
 .description-suggestions-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Descripción más ancha que sugerencias */
-    gap: 1rem;
-    width: 100%;
-    align-items: start;
-    transition: all 0.3s ease; /* Suavidad general */
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Descripción más ancha que sugerencias */
+  gap: 1rem;
+  width: 100%;
+  align-items: start;
+  transition: all 0.3s ease; /* Suavidad general */
 }
 
 .description-suggestions-wrapper {
-    display: grid;
-    gap: 1rem;
-    width: 100%;
-    transition: all 0.3s ease; /* Suavidad general */
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  transition: all 0.3s ease; /* Suavidad general */
 }
 
 .description-suggestions-row.one-column {
-    grid-template-columns: 1fr;
-  }
-  
-.description-suggestions-row.two-columns {
-    grid-template-columns: 1fr 1fr;
-  }
-
-.description-box {
-    height: 80%;
+  grid-template-columns: 1fr;
 }
 
-.description-box textarea{
-    height: 100%;
+.description-suggestions-row.two-columns {
+  grid-template-columns: 1fr 1fr;
+}
+
+.description-box {
+  height: 80%;
+}
+
+.description-box textarea {
+  height: 100%;
 }
 
 /* Cada caja tenga transición suave */
 .description-box,
 .ai-suggestions {
   transition: all 0.3s ease;
-}  
+}
 
 .full-width {
   width: 100%;
@@ -302,80 +301,79 @@
 
 /* Contenedor de sugerencias de IA estilo chips */
 .ai-suggestions {
-    margin-top: 1.rem;
-    padding: 0.8rem;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    min-height: 150px;
-    max-height: 300px;
-    width: 100%;
-  }
-  
-  .ai-suggestions h3 {
-    text-align: center;
-    margin-top: 0.3rem;
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-    color: #333;
-  }
-  
-  /* Fila de chips */
-  .suggestions-row {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-  
-  /* Cada chip de sugerencia */
-  .suggestion-card-with-check {
-    position: relative;
-    background-color: white;
-    padding: 0.4rem 0.4rem;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    min-width: 100px;
-    max-width: 280px;
-    height: 30px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: 0.8rem;
-    cursor: pointer;
-    box-sizing: border-box;
-  }
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  min-height: 150px;
+  max-height: 300px;
+  width: 100%;
+}
+
+.ai-suggestions h3 {
+  text-align: center;
+  margin-top: 0.3rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* Fila de chips */
+.suggestions-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Cada chip de sugerencia */
+.suggestion-card-with-check {
+  position: relative;
+  background-color: white;
+  padding: 0.4rem 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 100px;
+  max-width: 280px;
+  height: 30px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 0.8rem;
+  cursor: pointer;
+  box-sizing: border-box;
+}
 
 .suggestion-card-with-check:hover {
-    background-color: #ccc;
-    transition: all 0.5s;
+  background-color: #ccc;
+  transition: all 0.5s;
 }
 
 .suggestion-card-with-check.selected {
-    background-color: #ccc;
+  background-color: #ccc;
 }
-  
-  /* Texto del chip */
-  .suggestion-card-with-check p {
-    color: #666;
-    margin: 0;
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  
-  
-  /* Loading sugerencias */
-  .loading-text {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: #555;
-    margin-top: 0.5rem;
-  }
+
+/* Texto del chip */
+.suggestion-card-with-check p {
+  color: #666;
+  margin: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Loading sugerencias */
+.loading-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 0.5rem;
+}
 
 /* Botón */
 .subir-btn {
@@ -406,21 +404,21 @@
   .subir-form-center {
     padding: 1rem 0.5rem;
   }
-  
+
   .subir-form {
     padding: 1.5rem;
     max-width: 100%;
   }
-  
+
   .suggestions-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .file-input-label {
     padding: 0.5rem;
     min-height: 35px;
   }
-  
+
   .form-row {
     grid-template-columns: 1fr;
     gap: 0.5rem;
