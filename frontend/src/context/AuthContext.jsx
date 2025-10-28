@@ -1,13 +1,14 @@
-import React, { createContext, useState, useEffect, useCallback } from 'react'
-import {
-  setForceLogoutCallback,
-  initializeFetchInterceptor,
-} from '../utils/fetchInterceptor'
+import React, { createContext, useCallback, useEffect, useState } from 'react'
 import { setNotificationLogoutCallback } from '../services/notificationService'
 import {
-  setAxiosForceLogoutCallback,
   initializeAxiosInterceptor,
+  setAxiosForceLogoutCallback,
 } from '../utils/axiosInterceptor'
+import {
+  initializeFetchInterceptor,
+  setForceLogoutCallback,
+} from '../utils/fetchInterceptor'
+// Nota: Todos los setters ahora apuntan al mismo callback centralizado desde sessionExpirationHandler
 
 export const AuthContext = createContext() // eslint-disable-line react-refresh/only-export-components
 
