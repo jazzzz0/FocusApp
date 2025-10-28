@@ -91,7 +91,61 @@ class PostListCreateView(APIView):
     def _get_posts_queryset(self):
         return Post.objects.annotate(ratings_count=Count("ratings")).order_by("-uploaded_at")
 
-    # --- Método GET para listar publicaciones --- #
+    def _sort_by_bayesian_rating(self, queryset):
+        """
+        Aplica la ordenación por Media Ponderada Regularizada (Bayesiana).
+        Ajusta la puntuación de los posts para priorizar los que tienen más votos.
+        Esto soluciona el problema de que los posts con pocas valoraciones aparezcan
+        por encima de los posts con muchas valoraciones y un buen promedio.
+        \nFórmula aplicada:
+            adjusted_score = ((V * R) + (M * C)) / (V + M)
+            \nDonde:
+            \n- V (ratings_count): Número de valoraciones del post.
+            \n- R (post_average): Promedio simple de valoración del post.
+            \n- M (MIN_VOTES, default: 10): Mínimo de valoraciones requeridas para "confiar" en el promedio.
+            \n- C (C_OVERALL_AVG, default: 3.5): Promedio general asumido de la plataforma.
+        """
+        from django.db.models import Avg, F, ExpressionWrapper, FloatField, Value, Case, When
+
+        # M: Mínimo de valoraciones requeridas
+        MIN_VOTES = 10
+
+        # C: Promedio general de la plataforma.
+        C_OVERALL_AVG = 3.5
+
+        queryset = queryset.annotate(
+            # R: post_average
+            post_average=Avg(
+                (
+                    F("ratings__composition")
+                    + F("ratings__clarity_focus")
+                    + F("ratings__lighting")
+                    + F("ratings__creativity")
+                    + F("ratings__technical_adaptation")
+                )
+                / 5.0
+            )
+        )
+
+        # Valoración normalizada: ((V * R) + (M * C)) / (V + M)
+        queryset = queryset.annotate(
+            adjusted_score=ExpressionWrapper(
+                (
+                    F("ratings_count") * F("post_average")  # V * R
+                    + Value(MIN_VOTES, output_field=FloatField())
+                    * Value(C_OVERALL_AVG, output_field=FloatField())  # M * C
+                )
+                / (F("ratings_count") + Value(MIN_VOTES, output_field=FloatField())),  # (V + M)
+                output_field=FloatField(),
+            )
+        ).order_by(
+            # Ordenar por la puntuación ajustada (la que prioriza posts con más votos)
+            F("adjusted_score").desc(nulls_last=True),
+            "-uploaded_at",
+        )
+
+        return queryset
+
     @extend_schema(
         operation_id="api_posts_list",
         summary="Obtener todas las publicaciones",
@@ -157,36 +211,23 @@ class PostListCreateView(APIView):
     )
     def get(self, request):
         """
-        Obtener publicaciones o una publicación por ID
+        Obtener una lista paginada de publicaciones.
+        Admite parámetros opcionales de filtrado y ordenamiento.
+        Requiere autenticación con token JWT.
+        Parámetros:
+        - sort: Ordenamiento: 'rating' para ordenar por promedio de valoraciones (opcional)
+        - category: Filtrar por ID de categoría (opcional)
+        - author: Filtrar por ID de autor (opcional)
+        - page_size: Tamaño de la página (opcional, por defecto 10)
+        - page: Número de página (opcional, por defecto 1)
         """
         try:
             posts = self._get_posts_queryset()
 
-            if request.query_params.get("sort") == "rating":
-                from django.db.models import Avg, F
-
-                posts = posts.annotate(
-                    # Calcular promedio de los 5 aspectos
-                    avg_rating=Avg(
-                        (
-                            F("ratings__composition")
-                            + F("ratings__clarity_focus")
-                            + F("ratings__lighting")
-                            + F("ratings__creativity")
-                            + F("ratings__technical_adaptation")
-                        )
-                        / 5.0
-                    )
-                ).order_by(
-                    # Primero ordenar por si tiene rating o no (posts con rating primero)
-                    F("avg_rating").desc(nulls_last=True),
-                    # Luego por promedio de rating descendente (mejor rating primero)
-                    "-avg_rating",
-                    # Finalmente por fecha descendente (más recientes primero) para posts sin rating
-                    "-uploaded_at",
-                )
-
             posts = self._apply_filters(posts, request)
+
+            if request.query_params.get("sort") == "rating":
+                posts = self._sort_by_bayesian_rating(posts)
 
             paginator = PostPagination()
             result_page = paginator.paginate_queryset(posts, request)
