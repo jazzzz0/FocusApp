@@ -7,25 +7,32 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 from email_validator import validate_email, EmailNotValidError
 from api.settings import AUTH_PASSWORD_VALIDATORS
 
+
 class UserSerializer(serializers.ModelSerializer):
     # Campo "password" para escritura, pero no para lectura
     # write_only=True -> el campo solo se usa para la entrada (crear/actualizar)
     # no se incluye en la respuesta JSON al leer un usuario
     # required=True -> el campo es obligatorio al crear/actualizar
     password = serializers.CharField(write_only=True, required=True)
-    
 
     class Meta:
         model = AppUser
         # Definir los campos que se exponen a la API
         # Se incluye "password"
         fields = [
-            'id', 'email', 'username', 'password', 'first_name', 'last_name',
-            'date_of_birth', 'profile_pic', 'bio'
+            "id",
+            "email",
+            "username",
+            "password",
+            "first_name",
+            "last_name",
+            "date_of_birth",
+            "profile_pic",
+            "bio",
         ]
         extra_kwargs = {
-            'email': {'required': True},
-            'date_of_birth': {'required': True},
+            "email": {"required": True},
+            "date_of_birth": {"required": True},
         }
 
     def validate_email(self, value):
@@ -33,47 +40,42 @@ class UserSerializer(serializers.ModelSerializer):
             emailinfo = validate_email(value, check_deliverability=True)
             value = emailinfo.normalized
 
-        except EmailNotValidError as e:
+        except EmailNotValidError:
             raise serializers.ValidationError("El email no es válido.")
 
         return value
 
-
     def validate_password(self, value):
         try:
             validate_password(value)
-        except DjangoValidationError as e:
-            raise serializers.ValidationError("La contraseña debe tener al menos 10 caracteres, no puede ser completamente numérica y no debe ser una contraseña común.")
+        except DjangoValidationError:
+            raise serializers.ValidationError(
+                "La contraseña debe tener al menos 10 caracteres, no puede ser completamente numérica y no debe ser una contraseña común."
+            )
         return value
 
     def validate_date_of_birth(self, value):
         today = date.today()
-        age = (
-            today.year
-            - value.year
-            - ((today.month, today.day) < (value.month, value.day))
-        )
+        age = today.year - value.year - ((today.month, today.day) < (value.month, value.day))
         if age < 18:
             raise serializers.ValidationError("El usuario debe ser mayor de edad.")
         return value
-    
+
     def validate_profile_pic(self, value):
         """Validar la foto de perfil usando la función compartida"""
-        if value: 
+        if value:
             from utils.image_validation import validate_profile_picture
-            
+
             is_valid, error_message = validate_profile_picture(value)
             if not is_valid:
                 raise serializers.ValidationError(error_message)
-        
-        return value
-        
 
-       
+        return value
+
     def create(self, validated_data):
-         # "pop" elimina el campo "password" de los datos validados
-         # y lo guarda en la variable "password"
-        password = validated_data.pop('password')
+        # "pop" elimina el campo "password" de los datos validados
+        # y lo guarda en la variable "password"
+        password = validated_data.pop("password")
 
         # "**validated_data" pasa los datos restantes al constructor de "AppUser"
         user = AppUser(**validated_data)
@@ -87,15 +89,22 @@ class UserSerializer(serializers.ModelSerializer):
         # "return user" devuelve el usuario creado
         return user
 
-
     def update(self, instance, validated_data):
         # Manejar la actualización segura de la contraseña
-        password = validated_data.pop('password', None)
+        password = validated_data.pop("password", None)
         if password:
             instance.set_password(password)
 
         # Lista de campos que NO se deben actualizar desde la API
-        protected_fields = ['is_superuser', 'is_staff', 'is_active', 'groups', 'user_permissions', 'last_login', 'date_joined']
+        protected_fields = [
+            "is_superuser",
+            "is_staff",
+            "is_active",
+            "groups",
+            "user_permissions",
+            "last_login",
+            "date_joined",
+        ]
 
         # Actualizar dinámicamente los demás campos permitidos
         for attr, value in validated_data.items():
@@ -105,34 +114,35 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = AppUser
-        fields = ['id', 'username', 'profile_pic', 'first_name', 'last_name', 'bio']
-    
+        fields = ["id", "username", "profile_pic", "first_name", "last_name", "bio"]
+
     def validate_profile_pic(self, value):
         """Validar la foto de perfil usando la función compartida"""
         if value:
             from utils.image_validation import validate_profile_picture
-            
+
             is_valid, error_message = validate_profile_picture(value)
             if not is_valid:
                 raise serializers.ValidationError(error_message)
-        
+
         return value
-    
+
     def update(self, instance, validated_data):
         """
         Actualiza la información del usuario, manejando especialmente la foto de perfil
         """
         # Obtener los datos originales de la request para detectar profile_pic: null
-        request = self.context.get('request')
-        
+        request = self.context.get("request")
+
         # Manejar la actualización de la foto de perfil
-        new_profile_pic = validated_data.get('profile_pic')
-        
+        new_profile_pic = validated_data.get("profile_pic")
+
         # Verificar si se envió profile_pic en la request (incluso como null)
-        if request and 'profile_pic' in request.data:
+        if request and "profile_pic" in request.data:
             if new_profile_pic:  # Si hay una nueva foto
                 # Usar el servicio para actualizar la foto de perfil
                 success = ProfilePhotoService.update_profile_photo(instance, new_profile_pic)
@@ -142,13 +152,13 @@ class UserProfileSerializer(serializers.ModelSerializer):
                 success = ProfilePhotoService.remove_profile_photo(instance)
                 if not success:
                     raise serializers.ValidationError("Error al eliminar la foto de perfil")
-            
+
             # Remover profile_pic de validated_data ya que se manejó por separado
-            validated_data.pop('profile_pic', None)
-        
+            validated_data.pop("profile_pic", None)
+
         # Actualizar los demás campos normalmente
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-        
+
         instance.save()
         return instance

@@ -1,34 +1,35 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from 'react'
 
-export const CategoriesContext = createContext();
+export const CategoriesContext = createContext() // eslint-disable-line react-refresh/only-export-components
 
 export const CategoriesProvider = ({ children }) => {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}posts/categories/`);
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        const data = await res.json();
-        setCategories(data);
+        const res = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}posts/categories/`
+        )
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
+        const data = await res.json()
+        setCategories(data)
       } catch (err) {
-        console.error("Error fetching categories:", err);
-      } 
-      finally {
-        setLoading(false);
+        console.error('Error fetching categories:', err)
+      } finally {
+        setLoading(false)
       }
-    };
+    }
 
-    fetchCategories();
-  }, []);
+    fetchCategories()
+  }, [])
 
   return (
     <CategoriesContext.Provider value={{ categories, loading }}>
       {children}
     </CategoriesContext.Provider>
-  );
-};
+  )
+}
 
-export default CategoriesProvider;
+export default CategoriesProvider

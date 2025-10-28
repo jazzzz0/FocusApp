@@ -1,75 +1,78 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { Snackbar, Alert } from "@mui/material";
-import { AuthContext } from "../context/AuthContext";
+import React, { useContext, useState, useEffect, useRef } from 'react'
+import { Navigate, useLocation } from 'react-router-dom'
+import { Snackbar, Alert } from '@mui/material'
+import { AuthContext } from '../context/AuthContext'
 
 const PrivateRoute = ({ children }) => {
-  const { user, loading, isLoggingOut } = useContext(AuthContext);
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const [shouldRedirect, setShouldRedirect] = useState(false);
-  const [message, setMessage] = useState("Debes iniciar sesión para acceder a esta página");
-  const location = useLocation();
-  const previousUserRef = useRef(user);
-  const hasShownSessionExpired = useRef(false);
+  const { user, loading, isLoggingOut } = useContext(AuthContext)
+  const [showSnackbar, setShowSnackbar] = useState(false)
+  const [shouldRedirect, setShouldRedirect] = useState(false)
+  const [message, setMessage] = useState(
+    'Debes iniciar sesión para acceder a esta página'
+  )
+  const location = useLocation()
+  const previousUserRef = useRef(user)
+  const hasShownSessionExpired = useRef(false)
 
-  // Detectar si el usuario pasó de autenticado a no autenticado (session expired)
+  // Este efecto detecta si el usuario tenía sesión y la pierde (por ejemplo, expiró el token),
+  // mostrando un mensaje de advertencia sólo una vez y redirigiendo al login.
+  // También resetea el flag si el usuario vuelve a autenticarse.
   useEffect(() => {
-    // Detectar sesión expirada: usuario tenía sesión pero ahora no la tiene
-    if (previousUserRef.current && !user && !isLoggingOut && !loading && !hasShownSessionExpired.current) {
-      hasShownSessionExpired.current = true;
-      setMessage("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
-      setShowSnackbar(true);
-      // Redirigir después de 1.5 segundos para que se vea el mensaje
+    if (
+      previousUserRef.current &&
+      !user &&
+      !isLoggingOut &&
+      !loading &&
+      !hasShownSessionExpired.current
+    ) {
+      hasShownSessionExpired.current = true
+      setMessage('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.')
+      setShowSnackbar(true)
       setTimeout(() => {
-        setShouldRedirect(true);
-      }, 1500);
+        setShouldRedirect(true)
+      }, 1500)
     }
-    
-    // También resetear el flag si el usuario cambia nuevamente
-    if (user && hasShownSessionExpired.current) {
-      hasShownSessionExpired.current = false;
-    }
-    
-    previousUserRef.current = user;
-  }, [user, isLoggingOut, loading]);
 
+    if (user && hasShownSessionExpired.current) {
+      hasShownSessionExpired.current = false
+    }
+
+    previousUserRef.current = user
+  }, [user, isLoggingOut, loading])
+
+  // Este efecto controla el acceso a rutas privadas mostrando un Snackbar de advertencia y redirigiendo al login
+  // si el usuario no está autenticado, excepto cuando se está realizando logout (lo cual lo maneja el Navbar)
+  // o si se encuentra en la página principal.
   useEffect(() => {
-    // Solo actuar si NO estamos haciendo logout
     if (!isLoggingOut) {
-      // Si no hay usuario y no está cargando, mostrar mensaje
-      // Y NO si estamos en la página principal (/)
-      if (!loading && !user && location.pathname !== "/") {
-        // Solo mostrar el snackbar si no viene de una sesión expirada
+      if (!loading && !user && location.pathname !== '/') {
         if (!showSnackbar) {
-          setShowSnackbar(true);
-          // Redirigir después de 2.5 segundos para que se vea el mensaje
+          setShowSnackbar(true)
           setTimeout(() => {
-            setShouldRedirect(true);
-          }, 2500);
+            setShouldRedirect(true)
+          }, 2500)
         }
       }
     }
-    // Si isLoggingOut es true, NO hacer NADA, dejar que el Navbar maneje todo
-  }, [user, loading, isLoggingOut, location.pathname]);
+  }, [user, loading, isLoggingOut, location.pathname]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCloseSnackbar = () => {
-    setShowSnackbar(false);
-    // Si el usuario cierra manualmente el snackbar de warning, redirigir inmediatamente
-    setShouldRedirect(true);
-  };
+    setShowSnackbar(false)
+    setShouldRedirect(true)
+  }
 
-  if (loading) return <p>Cargando...</p>;
-  
+  if (loading) return <p>Cargando...</p>
+
   // Si el usuario se está deslogueando, renderizar el contenido pero sin interferir
   if (isLoggingOut) {
-    return children; // Seguir mostrando el contenido para que el Navbar funcione
+    return children // Seguir mostrando el contenido para que el Navbar funcione
   }
-  
+
   // Si estamos en la página principal, no hacer nada, es pública
-  if (!user && location.pathname === "/") {
-    return null;
+  if (!user && location.pathname === '/') {
+    return null
   }
-  
+
   if (!user) {
     return (
       <>
@@ -79,8 +82,8 @@ const PrivateRoute = ({ children }) => {
           onClose={handleCloseSnackbar}
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
-          <Alert 
-            onClose={handleCloseSnackbar} 
+          <Alert
+            onClose={handleCloseSnackbar}
             severity="warning"
             variant="filled"
             sx={{ width: '100%' }}
@@ -88,11 +91,13 @@ const PrivateRoute = ({ children }) => {
             {message}
           </Alert>
         </Snackbar>
-        {shouldRedirect && <Navigate to="/Login" state={{ from: location }} replace />}
+        {shouldRedirect && (
+          <Navigate to="/Login" state={{ from: location }} replace />
+        )}
       </>
-    );
+    )
   }
-  return children;
-};
+  return children
+}
 
-export default PrivateRoute;
+export default PrivateRoute

@@ -1,6 +1,6 @@
 :root {
-  --primary-color: #176AB9;
-  --text-color: #241C24;
+  --primary-color: #176ab9;
+  --text-color: #241c24;
   --bg-color: #f8f9fb;
   --border-color: #e0e0e0;
   --button-hover: #125a99;
@@ -10,7 +10,6 @@
   --font: 'Inter', system-ui, sans-serif;
 }
 
-/* General */
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
@@ -26,11 +25,8 @@ body {
   min-height: 100vh;
   background-color: #0d1b2a;
   color: #fff;
-  font-family: "Roboto", sans-serif;
-
+  font-family: 'Roboto', sans-serif;
 }
-
-
 
 /* ====== CONTENEDOR DE EDICIÓN ====== */
 .editar-perfil {
@@ -75,7 +71,6 @@ body {
 .file-input-label {
   font-size: 0.9rem;
   cursor: pointer;
-  
   color: #5e5f5f;
   padding: 8px 15px;
   border-radius: 8px;

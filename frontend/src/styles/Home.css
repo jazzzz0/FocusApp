@@ -1,11 +1,11 @@
-/* --------- Reset --------- */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -22,15 +22,15 @@ body h3 {
 
 /* Pantalla completa */
 .welcome-screen {
-  width: 100vw; 
-  height: 100vh; 
+  width: 100vw;
+  height: 100vh;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 80px; 
+  padding-top: 80px;
   position: relative;
   overflow: hidden;
 }
@@ -50,7 +50,7 @@ body {
   left: 0;
   width: 100%;
   z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .header .container {
@@ -95,7 +95,7 @@ body {
 }
 
 .menu.open {
-  right: 0; 
+  right: 0;
 }
 .menu-icon {
   display: none;
@@ -129,7 +129,6 @@ body {
   color: white;
   z-index: 1100;
 }
-
 
 .overlay {
   background: rgba(0, 0, 0, 0.55);
@@ -171,8 +170,6 @@ body {
   background: #112d79;
   color: #ffffff;
 }
-
-
 
 /* --------- Sección de Bienvenida --------- */
 .welcome-section {
@@ -363,7 +360,8 @@ body {
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
   }
   25% {
@@ -413,7 +411,8 @@ body {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 0.3;
   }
@@ -536,88 +535,88 @@ body {
     min-height: 100vh;
     padding: 0;
   }
-  
+
   .welcome-container {
     padding: 1rem 0.5rem;
   }
-  
+
   .welcome-content {
     grid-template-columns: 1fr;
     gap: 2rem;
     text-align: center;
   }
-  
+
   .welcome-title {
     font-size: 2.5rem;
   }
-  
+
   .welcome-subtitle {
     font-size: 1.2rem;
   }
-  
+
   .welcome-description {
     font-size: 1rem;
   }
-  
+
   .welcome-actions {
     justify-content: center;
   }
-  
+
   .welcome-visual {
     width: 280px;
     height: 280px;
     margin: 0 auto;
   }
-  
+
   .center-focus {
     width: 120px;
     height: 120px;
   }
-  
+
   .focus-center {
     width: 50px;
     height: 50px;
   }
-  
+
   .focus-icon {
     font-size: 1.8rem;
   }
-  
+
   .floating-icon {
     font-size: 1.3rem;
   }
-  
+
   /* Ajustar posiciones de los iconos flotantes para móviles */
   .icon-camera {
     top: 5%;
     left: 10%;
   }
-  
+
   .icon-heart {
     top: 15%;
     right: 10%;
   }
-  
+
   .icon-star {
     top: 65%;
     left: 5%;
   }
-  
+
   .icon-trophy {
     top: 75%;
     right: 5%;
   }
-  
+
   .icon-globe {
     top: 35%;
     left: 0%;
   }
-  
+
   .icon-lightning {
     top: 25%;
     right: 0%;
   }
-  
+
   .overlay h1 {
     font-size: 2rem;
   }
@@ -636,75 +635,75 @@ body {
   .welcome-section {
     min-height: 100vh;
   }
-  
+
   .welcome-container {
     padding: 0.5rem 0.25rem;
   }
-  
+
   .welcome-title {
     font-size: 2rem;
   }
-  
+
   .welcome-subtitle {
     font-size: 1.1rem;
   }
-  
+
   .btn-primary,
   .btn-secondary {
     padding: 0.8rem 1.5rem;
     font-size: 1rem;
   }
-  
+
   .welcome-visual {
     width: 220px;
     height: 220px;
     margin: 0 auto;
   }
-  
+
   .center-focus {
     width: 100px;
     height: 100px;
   }
-  
+
   .focus-center {
     width: 40px;
     height: 40px;
   }
-  
+
   .focus-icon {
     font-size: 1.4rem;
   }
-  
+
   .floating-icon {
     font-size: 1rem;
   }
-  
+
   /* Ajustar posiciones para móviles pequeños */
   .icon-camera {
     top: 8%;
     left: 12%;
   }
-  
+
   .icon-heart {
     top: 18%;
     right: 12%;
   }
-  
+
   .icon-star {
     top: 68%;
     left: 8%;
   }
-  
+
   .icon-trophy {
     top: 78%;
     right: 8%;
   }
-  
+
   .icon-globe {
     top: 38%;
     left: 2%;
   }
-  
+
   .icon-lightning {
     top: 28%;
     right: 2%;

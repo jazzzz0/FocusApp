@@ -1,151 +1,151 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Snackbar, Alert } from "@mui/material";
-import "../styles/editar-perfil.css";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Snackbar, Alert } from '@mui/material'
+import '../styles/editar-perfil.css'
+import Navbar from './Navbar'
+import Footer from './Footer'
 
 const EditarPerfil = () => {
   const [userData, setUserData] = useState({
-    first_name: "",
-    last_name: "",
-    bio: "",
-    profile_pic: "",
-  });
-  const [preview, setPreview] = useState(null);
+    first_name: '',
+    last_name: '',
+    bio: '',
+    profile_pic: '',
+  })
+  const [preview, setPreview] = useState(null)
   const [snackbar, setSnackbar] = useState({
     open: false,
-    message: "",
-    severity: "success"
-  });
-  const navigate = useNavigate();
+    message: '',
+    severity: 'success',
+  })
+  const navigate = useNavigate()
 
   const handleCloseSnackbar = () => {
-    setSnackbar(prev => ({ ...prev, open: false }));
-  };
+    setSnackbar(prev => ({ ...prev, open: false }))
+  }
 
   useEffect(() => {
     const fetchUser = async () => {
-      const token = localStorage.getItem("access");
+      const token = localStorage.getItem('access')
 
       if (!token) {
         setSnackbar({
           open: true,
-          message: "Debes iniciar sesión para editar tu perfil.",
-          severity: "warning"
-        });
-        setTimeout(() => navigate("/login"), 2000);
-        return;
+          message: 'Debes iniciar sesión para editar tu perfil.',
+          severity: 'warning',
+        })
+        setTimeout(() => navigate('/login'), 2000)
+        return
       }
 
       try {
         const response = await fetch(
           `${import.meta.env.VITE_API_BASE_URL}users/me/`,
           { headers: { Authorization: `Bearer ${token}` } }
-        );
-        const data = await response.json();
+        )
+        const data = await response.json()
         if (response.ok && data && data.data) {
           const user = data.data
           setUserData({
-            first_name: user.first_name || "",
-            last_name: user.last_name || "",
-            bio: user.bio || "",
-            profile_pic: user.profile_pic || "",
-          });
-          setPreview(user.profile_pic);
+            first_name: user.first_name || '',
+            last_name: user.last_name || '',
+            bio: user.bio || '',
+            profile_pic: user.profile_pic || '',
+          })
+          setPreview(user.profile_pic)
         } else {
           setSnackbar({
             open: true,
-            message: "No se pudo cargar el perfil para editar.",
-            severity: "error"
-          });
+            message: 'No se pudo cargar el perfil para editar.',
+            severity: 'error',
+          })
         }
       } catch (error) {
-        console.error("Error al obtener datos del usuario:", error);
+        console.error('Error al obtener datos del usuario:', error)
       }
-    };
+    }
 
-    fetchUser();
-  }, [ navigate ]);
+    fetchUser()
+  }, [navigate])
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     setUserData({
       ...userData,
       [e.target.name]: e.target.value,
-    });
-  };
+    })
+  }
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+  const handleImageChange = e => {
+    const file = e.target.files[0]
     if (file) {
-      setUserData({ ...userData, profile_pic: file });
-      setPreview(URL.createObjectURL(file));
+      setUserData({ ...userData, profile_pic: file })
+      setPreview(URL.createObjectURL(file))
     }
-  };
+  }
 
   const handleRemovePhoto = () => {
-    setUserData({ ...userData, profile_pic: "" });
-    setPreview(null);
-  };
+    setUserData({ ...userData, profile_pic: '' })
+    setPreview(null)
+  }
 
-  const handleSave = async (e) => {
-    e.preventDefault();
+  const handleSave = async e => {
+    e.preventDefault()
 
-    const token = localStorage.getItem("access");
+    const token = localStorage.getItem('access')
     if (!token) {
       setSnackbar({
         open: true,
-        message: "Debes iniciar sesión para guardar los cambios.",
-        severity: "warning"
-      });
-      setTimeout(() => navigate("/login"), 2000);
-      return;
+        message: 'Debes iniciar sesión para guardar los cambios.',
+        severity: 'warning',
+      })
+      setTimeout(() => navigate('/login'), 2000)
+      return
     }
 
-    const formData = new FormData();
-    formData.append("first_name", userData.first_name);
-    formData.append("last_name", userData.last_name);
-    formData.append("bio", userData.bio);
+    const formData = new FormData()
+    formData.append('first_name', userData.first_name)
+    formData.append('last_name', userData.last_name)
+    formData.append('bio', userData.bio)
     // Si el usuario eliminó la foto
-    if (userData.profile_pic === "") {
-      formData.append("profile_pic", "");
+    if (userData.profile_pic === '') {
+      formData.append('profile_pic', '')
     }
     // Si el usuario seleccionó una nueva foto
     else if (userData.profile_pic instanceof File) {
-      formData.append("profile_pic", userData.profile_pic);
+      formData.append('profile_pic', userData.profile_pic)
     }
 
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_BASE_URL}users/me/update/`,
         {
-          method: "PUT",
+          method: 'PUT',
           headers: { Authorization: `Bearer ${token}` },
           body: formData,
         }
-      );
+      )
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (response.ok && data.success) {
         setSnackbar({
           open: true,
-          message: "✅ Perfil actualizado con éxito",
-          severity: "success"
-        });
-        setTimeout(() => navigate("/perfil"), 1500);
+          message: '✅ Perfil actualizado con éxito',
+          severity: 'success',
+        })
+        setTimeout(() => navigate('/perfil'), 1500)
       } else {
-        console.error("Error en la respuesta del servidor:", data);
+        console.error('Error en la respuesta del servidor:', data)
         setSnackbar({
           open: true,
-          message: "⚠️ Error al guardar los cambios.",
-          severity: "error"
-        });
+          message: '⚠️ Error al guardar los cambios.',
+          severity: 'error',
+        })
       }
     } catch (error) {
-      console.error("Error al guardar perfil:", error);
+      console.error('Error al guardar perfil:', error)
     }
-  };
+  }
 
   return (
     <>
@@ -159,7 +159,10 @@ const EditarPerfil = () => {
           <form className="editar-form" onSubmit={handleSave}>
             <div className="profile-pic-section">
               <img
-                src={preview || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
+                src={
+                  preview ||
+                  'https://cdn-icons-png.flaticon.com/512/149/149071.png'
+                }
                 alt="Vista previa"
                 className="profile-pic-preview"
               />
@@ -170,7 +173,7 @@ const EditarPerfil = () => {
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
-                    style={{ display: "none" }}
+                    style={{ display: 'none' }}
                   />
                 </label>
                 {preview && (
@@ -184,7 +187,6 @@ const EditarPerfil = () => {
                 )}
               </div>
             </div>
-
 
             <div className="form-group">
               <label>Nombre</label>
@@ -220,28 +222,30 @@ const EditarPerfil = () => {
               💾 Guardar cambios
             </button>
           </form>
-        </div >
-      </div >
-      
+        </div>
+      </div>
+
       {/* Snackbar para mensajes de éxito/error */}
       <Snackbar
         open={snackbar.open}
-        autoHideDuration={snackbar.message.includes("Debes iniciar sesión") ? 2000 : 4000}
+        autoHideDuration={
+          snackbar.message.includes('Debes iniciar sesión') ? 2000 : 4000
+        }
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
+        <Alert
+          onClose={handleCloseSnackbar}
           severity={snackbar.severity}
           sx={{ width: '100%' }}
         >
           {snackbar.message}
         </Alert>
       </Snackbar>
-      
+
       <Footer />
     </>
-  );
-};
+  )
+}
 
-export default EditarPerfil;
+export default EditarPerfil

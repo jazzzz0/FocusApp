@@ -55,13 +55,9 @@ class Rating(models.Model):
         help_text="Valoración de la adaptación técnica (1-5 estrellas)",
     )
 
-    created_at = models.DateTimeField(
-        auto_now_add=True, verbose_name="Fecha de valoración"
-    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de valoración")
 
-    updated_at = models.DateTimeField(
-        auto_now=True, verbose_name="Fecha de última actualización"
-    )
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Fecha de última actualización")
 
     class Meta:
         unique_together = ["post", "rater"]
@@ -86,7 +82,6 @@ class Rating(models.Model):
         self.full_clean()
         super().save(*args, **kwargs)
 
-
     def get_average_score(self):
         """Calcula la puntuación promedio de esta valoración individual"""
         scores = [
@@ -104,37 +99,41 @@ class Rating(models.Model):
 
         # Obtener todas las valoraciones de la foto
         ratings = cls.objects.filter(post=post)
-        
+
         if not ratings.exists():
-            return None # No hay valoraciones
-        
+            return None  # No hay valoraciones
 
         # Calcula promedios eficientemente
         averages = ratings.aggregate(
-            avg_composition=models.Avg('composition'),
-            avg_clarity_focus=models.Avg('clarity_focus'),
-            avg_lighting=models.Avg('lighting'),
-            avg_creativity=models.Avg('creativity'),
-            avg_technical_adaptation=models.Avg('technical_adaptation')
+            avg_composition=models.Avg("composition"),
+            avg_clarity_focus=models.Avg("clarity_focus"),
+            avg_lighting=models.Avg("lighting"),
+            avg_creativity=models.Avg("creativity"),
+            avg_technical_adaptation=models.Avg("technical_adaptation"),
         )
-        
+
         # Calcular promedio general de todos los aspectos
-        overall = sum([
-            averages['avg_composition'],
-            averages['avg_clarity_focus'],
-            averages['avg_lighting'],
-            averages['avg_creativity'],
-            averages['avg_technical_adaptation']
-        ]) / 5
-        
+        overall = (
+            sum(
+                [
+                    averages["avg_composition"],
+                    averages["avg_clarity_focus"],
+                    averages["avg_lighting"],
+                    averages["avg_creativity"],
+                    averages["avg_technical_adaptation"],
+                ]
+            )
+            / 5
+        )
+
         return {
-            'composition': round(averages['avg_composition'], 2),
-            'clarity_focus': round(averages['avg_clarity_focus'], 2),
-            'lighting': round(averages['avg_lighting'], 2),
-            'creativity': round(averages['avg_creativity'], 2),
-            'technical_adaptation': round(averages['avg_technical_adaptation'], 2),
-            'overall': round(overall, 2),
-            'total_ratings': ratings.count()
+            "composition": round(averages["avg_composition"], 2),
+            "clarity_focus": round(averages["avg_clarity_focus"], 2),
+            "lighting": round(averages["avg_lighting"], 2),
+            "creativity": round(averages["avg_creativity"], 2),
+            "technical_adaptation": round(averages["avg_technical_adaptation"], 2),
+            "overall": round(overall, 2),
+            "total_ratings": ratings.count(),
         }
 
     def __str__(self):

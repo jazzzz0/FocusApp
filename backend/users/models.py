@@ -5,15 +5,16 @@ from django.dispatch import receiver
 from django.core.files.storage import default_storage
 import logging
 
-logger = logging.getLogger('users')
+logger = logging.getLogger("users")
+
 
 class AppUser(AbstractUser):
     # Campo obligatorio: Email. Se sobreescribe de AbstractUser
     email = models.EmailField(
         unique=True,
         blank=False,  # obligatorio en forms
-        null=False,   # obligatorio en DB
-        verbose_name="Dirección de correo electrónico"
+        null=False,  # obligatorio en DB
+        verbose_name="Dirección de correo electrónico",
     )
 
     # Campo obligatorio: Fecha de nacimiento, por eso dejamos null&blank=False
@@ -43,7 +44,6 @@ class AppUser(AbstractUser):
         verbose_name="País",
         help_text="Opcional. País de residencia.",
     )
-    
 
     # Campo opcional: Provincia. Por defecto, se guarda None.
     # Es información que será útil en el futuro.
@@ -66,10 +66,9 @@ class AppUser(AbstractUser):
         help_text="Opcional. Biografía del usuario.",
     )
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'date_of_birth']
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email", "date_of_birth"]
 
-    
     def is_adult(self):
         from datetime import date
 
@@ -77,21 +76,18 @@ class AppUser(AbstractUser):
         age = (
             today.year
             - self.date_of_birth.year
-            - (
-                (today.month, today.day)
-                < (self.date_of_birth.month, self.date_of_birth.day)
-            )
+            - ((today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
         )
         return age >= 18
-        
-    
+
     class Meta:
         # Nombres legibles en el panel de administración
         verbose_name = "Usuario"
         verbose_name_plural = "Usuarios"
 
         # Orden por defecto al listar usuarios
-        ordering = ['username']
+        ordering = ["username"]
+
 
 @receiver(pre_delete, sender=AppUser)
 def delete_user_profile_pic(sender, instance, **kwargs):
@@ -105,4 +101,6 @@ def delete_user_profile_pic(sender, instance, **kwargs):
                 default_storage.delete(instance.profile_pic.name)
                 logger.info(f"Foto de perfil eliminada del storage: {instance.profile_pic.name}")
         except Exception as e:
-            logger.error(f"Error al eliminar la foto de perfil {instance.profile_pic.name}: {str(e)}")
+            logger.error(
+                f"Error al eliminar la foto de perfil {instance.profile_pic.name}: {str(e)}"
+            )

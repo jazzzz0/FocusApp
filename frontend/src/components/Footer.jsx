@@ -1,4 +1,4 @@
-import '../styles/Footer.css';
+import '../styles/Footer.css'
 
 const Footer = () => {
   return (
@@ -7,7 +7,7 @@ const Footer = () => {
         <span>FocusApp</span> - Todos los derechos reservados &copy; 2025
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer
