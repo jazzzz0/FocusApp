@@ -1,10 +1,10 @@
+import { Alert, Snackbar } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Snackbar, Alert } from '@mui/material'
 import '../styles/Perfil.css'
-import Navbar from './Navbar'
-import Footer from './Footer'
 import CategoryPhotos from './CategoryPhotos'
+import Footer from './Footer'
+import Navbar from './Navbar'
 const Perfil = () => {
   const [user, setUser] = useState(null)
   const [snackbar, setSnackbar] = useState({
@@ -64,7 +64,7 @@ const Perfil = () => {
     }
 
     fetchUser()
-  })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleEdit = () => {
     navigate('/editar-perfil')
