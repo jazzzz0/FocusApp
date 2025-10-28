@@ -1,13 +1,13 @@
-import React, { createContext, useState, useEffect, useCallback } from 'react'
-import {
-  setForceLogoutCallback,
-  initializeFetchInterceptor,
-} from '../utils/fetchInterceptor'
+import React, { createContext, useCallback, useEffect, useState } from 'react'
 import { setNotificationLogoutCallback } from '../services/notificationService'
 import {
-  setAxiosForceLogoutCallback,
   initializeAxiosInterceptor,
+  setAxiosForceLogoutCallback,
 } from '../utils/axiosInterceptor'
+import {
+  initializeFetchInterceptor,
+  setForceLogoutCallback,
+} from '../utils/fetchInterceptor'
 
 export const AuthContext = createContext() // eslint-disable-line react-refresh/only-export-components
 
@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('access')
     localStorage.removeItem('refresh')
     localStorage.removeItem('username')
-    // Limpiar el estado del usuario inmediatamente y sincrónicamente
+    // Limpiar el estado del usuario
     setUser(null)
     setIsLoggingOut(false)
     setLoading(false)
@@ -177,6 +177,18 @@ export const AuthProvider = ({ children }) => {
     }, 2000)
   }
 
+  const updateUser = async () => {
+    const access = localStorage.getItem('access')
+    const refresh = localStorage.getItem('refresh')
+
+    if (access && refresh) {
+      const userInfo = await fetchCurrentUser(access)
+      if (userInfo) {
+        setUser({ access, refresh, ...userInfo })
+      }
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -187,6 +199,7 @@ export const AuthProvider = ({ children }) => {
         isLoggingOut,
         clearUser,
         forceLogout,
+        updateUser,
       }}
     >
       {children}

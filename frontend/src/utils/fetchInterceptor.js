@@ -3,23 +3,20 @@
  * y llama a forceLogout cuando el token es inválido
  */
 
-let forceLogoutCallback = null
-let originalFetch = null
+import {
+  checkAndHandle401,
+  setSessionExpirationCallback,
+} from './sessionExpirationHandler'
 
-/**
- * Configura el callback que se ejecutará cuando haya un error 401
- * @param {Function} callback - Función que se ejecutará al detectar un 401
- */
-export const setForceLogoutCallback = callback => {
-  forceLogoutCallback = callback
-}
+// Re-exportar para mantener la interfaz pública compatible
+export const setForceLogoutCallback = setSessionExpirationCallback
+
+let originalFetch = null
 
 /**
  * Inicializa el interceptor de fetch global
  * Reemplaza la función fetch global con una versión que intercepta 401
  */
-let isProcessingSessionExpired = false
-
 export const initializeFetchInterceptor = () => {
   // Guardar el fetch original si aún no lo hemos interceptado
   if (originalFetch === null && typeof window !== 'undefined') {
@@ -30,23 +27,7 @@ export const initializeFetchInterceptor = () => {
   if (typeof window !== 'undefined' && originalFetch) {
     window.fetch = async (url, options = {}) => {
       const response = await originalFetch(url, options)
-
-      if (response.status === 401 && !isProcessingSessionExpired) {
-        isProcessingSessionExpired = true
-        console.warn('Sesión expirada.')
-
-        localStorage.removeItem('access')
-        localStorage.removeItem('refresh')
-        localStorage.removeItem('username')
-
-        if (forceLogoutCallback) {
-          forceLogoutCallback()
-        }
-
-        setTimeout(() => {
-          isProcessingSessionExpired = false
-        }, 500)
-      }
+      checkAndHandle401(response.status)
 
       return response
     }
