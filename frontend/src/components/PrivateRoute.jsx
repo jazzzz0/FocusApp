@@ -54,7 +54,7 @@ const PrivateRoute = ({ children }) => {
         }
       }
     }
-  }, [user, loading, isLoggingOut, location.pathname])
+  }, [user, loading, isLoggingOut, location.pathname]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCloseSnackbar = () => {
     setShowSnackbar(false)

@@ -9,7 +9,7 @@ import {
   initializeAxiosInterceptor,
 } from '../utils/axiosInterceptor'
 
-export const AuthContext = createContext()
+export const AuthContext = createContext() // eslint-disable-line react-refresh/only-export-components
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)

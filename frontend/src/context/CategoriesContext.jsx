@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react'
 
-export const CategoriesContext = createContext()
+export const CategoriesContext = createContext() // eslint-disable-line react-refresh/only-export-components
 
 export const CategoriesProvider = ({ children }) => {
   const [categories, setCategories] = useState([])

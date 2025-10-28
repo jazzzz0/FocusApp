@@ -254,7 +254,7 @@ const NotificationBell = () => {
       setUnreadCount(0)
       setNotifications([])
     }
-  }, [user?.access, isLoggingOut])
+  }, [user?.access, isLoggingOut]) // eslint-disable-line react-hooks/exhaustive-deps
 
   /**
    * Efecto para actualizar el cooldown cada segundo
@@ -265,7 +265,7 @@ const NotificationBell = () => {
     }, 1000)
 
     return () => clearInterval(interval)
-  }, [lastFetchTime])
+  }, [lastFetchTime]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Si no hay usuario autenticado, no mostrar nada
   if (!user) {

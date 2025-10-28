@@ -1,34 +1,33 @@
-// src/pages/PostDetail.jsx
-import React, { useEffect, useState, useContext } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import { AuthContext } from '../context/AuthContext'
-import { CategoriesContext } from '../context/CategoriesContext'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
-import {
-  Box,
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
-  Avatar,
-  Button,
-  IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  Rating,
-  Divider,
-  Snackbar,
-  Alert,
-} from '@mui/material'
-import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
 import RateReviewIcon from '@mui/icons-material/RateReview'
 import SendIcon from '@mui/icons-material/Send'
+import {
+  Alert,
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  IconButton,
+  Rating,
+  Snackbar,
+  TextField,
+  Typography,
+} from '@mui/material'
+import axios from 'axios'
+import React, { useContext, useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import Footer from '../components/Footer'
+import Navbar from '../components/Navbar'
+import { AuthContext } from '../context/AuthContext'
+import { CategoriesContext } from '../context/CategoriesContext'
 
 const API = import.meta.env.VITE_API_BASE_URL || '/api/'
 
@@ -103,14 +102,14 @@ export default function PostDetail() {
     if (!id) return
 
     fetchPost(id)
-  }, [id])
+  }, [id]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // useEffect separado para checkIfUserRated que depende de user
   useEffect(() => {
     if (!id || !user) return
 
     checkIfUserRated(id)
-  }, [id, user])
+  }, [id, user]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ---------- Fetch post + comments + ratings ----------
   const fetchPost = async postId => {
@@ -342,7 +341,7 @@ export default function PostDetail() {
     }
 
     try {
-      const res = await axios.post(`${API}ratings/`, payload, {
+      const _res = await axios.post(`${API}ratings/`, payload, {
         headers: { Authorization: `Bearer ${authToken}` },
       })
       setOpenRateDialog(false)
