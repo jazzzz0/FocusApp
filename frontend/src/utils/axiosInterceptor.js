@@ -3,7 +3,10 @@
  */
 
 import axios from 'axios'
-import { checkAndHandle401, setSessionExpirationCallback } from './sessionExpirationHandler'
+import {
+  checkAndHandle401,
+  setSessionExpirationCallback,
+} from './sessionExpirationHandler'
 
 // Re-exportar para mantener la interfaz pública compatible
 export const setAxiosForceLogoutCallback = setSessionExpirationCallback

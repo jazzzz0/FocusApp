@@ -34,12 +34,10 @@ export const handleSessionExpiration = ({ silent = false } = {}) => {
     console.warn('Sesión expirada.')
   }
 
-  // Limpiar tokens y datos del usuario
   localStorage.removeItem('access')
   localStorage.removeItem('refresh')
   localStorage.removeItem('username')
 
-  // Ejecutar el callback si está configurado
   if (forceLogoutCallback) {
     forceLogoutCallback()
   }

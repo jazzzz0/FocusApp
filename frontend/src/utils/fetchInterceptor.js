@@ -27,8 +27,6 @@ export const initializeFetchInterceptor = () => {
   if (typeof window !== 'undefined' && originalFetch) {
     window.fetch = async (url, options = {}) => {
       const response = await originalFetch(url, options)
-
-      // Manejar errores 401 usando la función centralizada
       checkAndHandle401(response.status)
 
       return response

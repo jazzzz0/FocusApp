@@ -8,7 +8,6 @@ import {
   initializeFetchInterceptor,
   setForceLogoutCallback,
 } from '../utils/fetchInterceptor'
-// Nota: Todos los setters ahora apuntan al mismo callback centralizado desde sessionExpirationHandler
 
 export const AuthContext = createContext() // eslint-disable-line react-refresh/only-export-components
 
@@ -21,7 +20,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('access')
     localStorage.removeItem('refresh')
     localStorage.removeItem('username')
-    // Limpiar el estado del usuario inmediatamente y sincrónicamente
+    // Limpiar el estado del usuario
     setUser(null)
     setIsLoggingOut(false)
     setLoading(false)
