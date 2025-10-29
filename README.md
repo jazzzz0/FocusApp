@@ -62,6 +62,15 @@ cd FocusApp
 
     **¡Importante!** No modifiques el archivo `.env.example`. Utilízalo como plantilla para tu propio `.env`. Copia su contenido y pegalo en tu nuevo archivo `.env` del directorio `backend/`.
 
+    - ***SECRET_KEY***: Clave secreta para la aplicación Django. Puedes generar una clave secreta aleatoria en cualquier generador de claves online.
+    - ***GEMINI_API_KEY***: Clave de API de Google Gemini para el uso de la API de generación de texto. Puedes obtener una clave de API de Google Gemini en el [Google AI Studio](https://aistudio.google.com/api-keys). Para esto debes tener una cuenta de Google.
+        1. Dirigete a [Google AI Studio](https://aistudio.google.com/api-keys).
+        2. Haz clic en *Crear clave de API*.
+        3. Asignale un nombre a la clave.
+        4. Crea un nuevo proyecto y asignale un nombre.
+        5. Presiona el botón *Crear clave*.
+        6. Copia la clave de API que aparece en la lista de claves y pegala en tu archivo .env como ***GEMINI_API_KEY***.
+
 5.  **Aplica las migraciones de la base de datos:** Esto creará las tablas necesarias en tu base de datos local.
     ```
     python manage.py makemigrations
