@@ -4,7 +4,7 @@ Este repositorio contiene la aplicación de backend desarrollada con **Django** 
 
 ## 1. Objetivo
 
-El objetivo de esta plataforma web colaborativa es proporcionar un espacio donde fotógrafos y aficionados puedan compartir sus trabajos, recibir retroalimentación constructiva, participar en concursos para desafiar su creatividad y mejorar sus habilidades fotográficas.
+El objetivo de esta plataforma web colaborativa es proporcionar un espacio donde fotógrafos y aficionados puedan compartir sus trabajos, recibir retroalimentación constructiva y mejorar sus habilidades fotográficas.
 
 A través de la interacción con la comunidad, los usuarios pueden aprender de otros, recibir consejos útiles y crecer en su técnica, así recibir apoyo y aprendizaje constante. Además, al fomentar la colaboración y el intercambio de conocimientos, contribuyen al desarrollo y la mejora continua de la fotografía como arte y habilidad.
 
@@ -13,6 +13,34 @@ Este proyecto combina:
 - Un **backend** robusto y escalable construido con **Django** y **Django REST Framework** para la gestión de datos, la lógica de negocio y la exposición de una API RESTful.
 - Un **frontend** interactivo y dinámico desarrollado con **React** para la interfaz de usuario, consumiendo la API proporcionada por el backend.
 
+### Stack Tecnológico
+#### Backend
+- **Python 3.12+**
+- **Django** - Framework web
+- **Django REST Framework** - API REST
+- **Google Gemini API** - Generación de descripciones con IA
+
+#### Frontend
+- **React 19**
+- **Vite** - Herramienta de construcción
+- **Material UI (MUI)** - Componentes de interfaz
+- **React Router** - Enrutamiento
+
+#### Almacenamiento de datos
+- **SQLite** - Base de datos para desarrollo.
+- **PostgreSQL** - Base de datos para producción.
+- **Google Cloud Storage** - Almacenamiento de archivos estáticos.
+
+#### Autenticación
+- **JWT** - JSON Web Tokens para la autenticación de usuarios.
+- **Multisession** - Gestión de sesiones múltiples para la autenticación de usuarios.
+
+#### Documentación de la API
+- **Drf Spectacular** - Generación de documentación de la API. Se puede acceder a la documentación de la API en los siguientes enlaces:
+  - [Documentación de la API en formato Swagger](http://localhost:8000/api/schema/swagger-ui/).
+  - [Documentación de la API en formato Redoc](http://localhost:8000/api/schema/redoc/).
+  - [Documentación de la API en formato JSON](http://localhost:8000/api/schema/).
+
 ## 2. Requisitos
 
 Antes de configurar el proyecto, asegúrate de tener instalados los siguientes programas en tu sistema:
@@ -20,7 +48,7 @@ Antes de configurar el proyecto, asegúrate de tener instalados los siguientes p
 - **Python 3.12+**
 - **pip** (gestor de paquetes de Python)
 - **Node.js 20+**
-- **npm 10+** (gestor de paquetes de Node.js)
+- **pnpm 10+** (gestor de paquetes de Node.js)
 - **Git**
 
 ## 3. Configuración del Entorno de Desarrollo
@@ -62,25 +90,20 @@ cd FocusApp
 
     **¡Importante!** No modifiques el archivo `.env.example`. Utilízalo como plantilla para tu propio `.env`. Copia su contenido y pegalo en tu nuevo archivo `.env` del directorio `backend/`.
 
-    - ***SECRET_KEY***: Clave secreta para la aplicación Django. Puedes generar una clave secreta aleatoria en cualquier generador de claves online.
-    - ***GEMINI_API_KEY***: Clave de API de Google Gemini para el uso de la API de generación de texto. Puedes obtener una clave de API de Google Gemini en el [Google AI Studio](https://aistudio.google.com/api-keys). Para esto debes tener una cuenta de Google.
-        1. Dirigete a [Google AI Studio](https://aistudio.google.com/api-keys).
-        2. Haz clic en *Crear clave de API*.
-        3. Asignale un nombre a la clave.
-        4. Crea un nuevo proyecto y asignale un nombre.
-        5. Presiona el botón *Crear clave*.
-        6. Copia la clave de API que aparece en la lista de claves y pegala en tu archivo .env como ***GEMINI_API_KEY***.
+    - **_SECRET_KEY_**: Clave secreta para la aplicación Django. Puedes generar una clave secreta aleatoria en cualquier generador de claves online.
+    - **_GEMINI_API_KEY_**: Clave de API de Google Gemini para el uso de la API de generación de texto. Puedes obtener una clave de API de Google Gemini en el [Google AI Studio](https://aistudio.google.com/api-keys). Para esto debes tener una cuenta de Google.
+      1. Dirigete a [Google AI Studio](https://aistudio.google.com/api-keys).
+      2. Haz clic en _Crear clave de API_.
+      3. Asignale un nombre a la clave.
+      4. Crea un nuevo proyecto y asignale un nombre.
+      5. Presiona el botón _Crear clave_.
+      6. Copia la clave de API que aparece en la lista de claves y pegala en tu archivo .env como **_GEMINI_API_KEY_**.
 
 5.  **Aplica las migraciones de la base de datos:** Esto creará las tablas necesarias en tu base de datos local.
     ```
     python manage.py makemigrations
     python manage.py migrate
     ```
-6.  **Crea un superusuario (opcional):** Necesitarás un superusuario para acceder al panel de administración de Django (`/admin`).
-    ```
-    python manage.py createsuperuser
-    ```
-    Sigue las instrucciones en la terminal para establecer el nombre de usuario, email y contraseña.
 
 ### 3.3 Configuración del Frontend (React)
 
@@ -148,23 +171,36 @@ Para que la aplicación funcione completamente, necesitarás ejecutar tanto el b
 
 **¡Asegúrate de que ambos servidores estén funcionando al mismo tiempo para que la aplicación web funcione correctamente!**
 
-## 5. Estructura del Proyecto
+## 5. Herramientas de Calidad de Código
 
-- **`backend/`**: Contiene todo el código del servidor Django.
-  - `api/`: Configuración principal del proyecto Django (`settings.py`, `urls.py`).
-  - `core/`: Una aplicación Django individual con modelos, serializadores, vistas, etc. Funcionalidades transversales para el funcionamiento de todo el proyecto, no contendrá la lógica de negocio principal (eso va en apps como users, posts, ratings).
-  - `requirements.txt`: Listado de todas las dependencias de Python.
-  - `.env`: Variables de entorno para el backend (ignoradas por Git).
-  - `env/`: Entorno virtual de Python (ignoradas por Git).
-- **`frontend/`**: Contiene todo el código de la aplicación React.
-  - `public/`: Archivos estáticos públicos (como `index.html`).
-  - `src/`: Código fuente principal de React (componentes, páginas, lógica de API).
-  - `package.json`: Configuración y dependencias de Node.js/npm.
-  - `.env`: Variables de entorno para el frontend (ignoradas por Git).
-  - `node_modules/`: Dependencias de Node.js (ignoradas por Git).
-  - `build/`: Archivos de la aplicación React compilada para producción (ignorados por Git).
-- **`.gitignore`**: Define los archivos y directorios que Git debe ignorar (ej. entornos virtuales, archivos `.env`, directorios de build).
-- **`README.md`**: Este archivo.
+Este proyecto utiliza herramientas de linting y formatting para mantener un código limpio y consistente entre todos los desarrolladores.
+
+### 5.1. Frontend (React + Vite)
+
+- **ESLint**: Linter para detectar errores de código y buenas prácticas en JavaScript/React.
+- **Prettier**: Formateador automático de código para mantener consistencia en el estilo.
+
+**Comandos disponibles:**
+
+```bash
+pnpm run lint           # Verifica el código con ESLint
+pnpm run lint:fix       # Corrige errores automáticamente (cuando es posible)
+pnpm run format         # Formatea todo el código con Prettier
+pnpm run format:check   # Verifica el formato sin modificar archivos
+```
+
+### 5.2. Backend (Django + Python)
+
+- **Flake8**: Linter para detectar errores, advertencias y problemas de estilo en Python.
+- **Black**: Formateador automático de código Python siguiendo el estilo PEP 8.
+
+**Comandos disponibles (con entorno virtual activado):**
+
+```bash
+flake8 .               # Verifica el código con Flake8
+black .                # Formatea todo el código con Black
+black --check .        # Verifica el formato sin modificar archivos
+```
 
 ## 6. Scripts Útiles
 
@@ -181,34 +217,3 @@ Para que la aplicación funcione completamente, necesitarás ejecutar tanto el b
 - `pnpm run dev`: Inicia el servidor de desarrollo de React.
 - `pnpm run build`: Compila la aplicación React para producción, creando una carpeta `build/`.
 - `pnpm install`: Instala todas las dependencias listadas en `package.json`.
-
-## 7. Herramientas de Calidad de Código
-
-Este proyecto utiliza herramientas de linting y formatting para mantener un código limpio y consistente entre todos los desarrolladores.
-
-### 7.1. Frontend (React + Vite)
-
-- **ESLint**: Linter para detectar errores de código y buenas prácticas en JavaScript/React.
-- **Prettier**: Formateador automático de código para mantener consistencia en el estilo.
-
-**Comandos disponibles:**
-
-```bash
-pnpm run lint           # Verifica el código con ESLint
-pnpm run lint:fix       # Corrige errores automáticamente (cuando es posible)
-pnpm run format         # Formatea todo el código con Prettier
-pnpm run format:check   # Verifica el formato sin modificar archivos
-```
-
-### 7.2. Backend (Django + Python)
-
-- **Flake8**: Linter para detectar errores, advertencias y problemas de estilo en Python.
-- **Black**: Formateador automático de código Python siguiendo el estilo PEP 8.
-
-**Comandos disponibles (con entorno virtual activado):**
-
-```bash
-flake8 .               # Verifica el código con Flake8
-black .                # Formatea todo el código con Black
-black --check .        # Verifica el formato sin modificar archivos
-```
