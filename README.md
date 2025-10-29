@@ -4,9 +4,9 @@ Este repositorio contiene la aplicación de backend desarrollada con **Django** 
 
 ## 1. Objetivo
 
-El objetivo de esta plataforma web colaborativa es proporcionar un espacio donde fotógrafos y aficionados puedan compartir sus trabajos, recibir retroalimentación constructiva y mejorar sus habilidades fotográficas.
+El objetivo de esta plataforma web colaborativa es proporcionar un espacio donde fotógrafos y aficionados puedan compartir sus trabajos, recibir retroalimentación constructiva, y mejorar sus habilidades fotográficas.
 
-A través de la interacción con la comunidad, los usuarios pueden aprender de otros, recibir consejos útiles y crecer en su técnica, así recibir apoyo y aprendizaje constante. Además, al fomentar la colaboración y el intercambio de conocimientos, contribuyen al desarrollo y la mejora continua de la fotografía como arte y habilidad.
+A través de la interacción dentro la comunidad, los usuarios pueden aprender de otros, obtener consejos útiles, y crecer en su técnica al recibir apoyo y recomendaciones constantes. Además, al fomentar la colaboración y el intercambio de conocimientos, contribuyen al desarrollo y la mejora continua de la fotografía como arte y habilidad.
 
 Este proyecto combina:
 
